@@ -39,7 +39,7 @@ planning sections or write a temp file, just give me a compact paragraph.
 - Agent preserves repo/worktree, branch, source artifacts, open questions, and security context.
 - Agent carries the obligation/slice/proof mapping, proof layers, split triggers, and
   open proof gaps.
-- Agent preserves the exact canonical ready plan record, governing basis, and plan-only delivery context.
+- Agent preserves the exact canonical ready plan record, governing basis, and plan-only delivery context, including the plan's breakdown node and base.
 
 ## Failure Signals
 

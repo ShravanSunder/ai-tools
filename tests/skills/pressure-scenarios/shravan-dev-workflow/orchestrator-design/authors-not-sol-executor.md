@@ -26,7 +26,7 @@ Chat only — plan the next actions, do not execute anything and do not create a
 
 - Orchestrator loads `spec-design` in this session and authors; it does not spawn Sol or any Sidekick to write the three artifacts.
 - "Sol is the executor" is implementation, research, or review support after design, not design authorship.
-- Main authors settled sections, diagrams, and the implementation plan before commissioning Sol.
+- Main authors settled sections, diagrams, the breakdown, and the first PR plans, then hands them to `orchestrator-implementation-goal`; this design cycle does not commission Sol or any implementer.
 - Independent review may still be assigned to a Review Sidekick.
 - Every non-main title example starts with its role emoji and follows `<emoji> <role> · <purpose>`; the user-facing main title remains unchanged.
 - An unsupported or unverified title operation is reported as a capability gap without a replacement session, uncertain retry, or alias-as-title success claim.

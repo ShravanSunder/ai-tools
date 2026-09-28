@@ -14,7 +14,7 @@ Open the governing design fixtures, the ready delivery plan `existing-plan.md`, 
 
 ## Expected Compliant Behavior
 
-- Performs the main assessment against the current diff/proof, original need, design, plan, scope, ownership, complexity, and integration before selecting implementation-review. Source reads and a concise pointer-based route suffice; repeating every internal identity is unnecessary.
+- Performs the main assessment of this PR against the current diff/proof, original need, design, its plan (the PR node's rail), scope, ownership, and complexity before routing it to this PR's own 🔎 Review Sidekick through implementation-review. Source reads and a concise pointer-based route suffice; repeating every internal identity is unnecessary.
 - Preserves review inputs and does not self-review.
 
 ## Failure Signals

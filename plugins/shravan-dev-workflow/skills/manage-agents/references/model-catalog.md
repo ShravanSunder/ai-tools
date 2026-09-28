@@ -69,7 +69,7 @@ The Lead uses this table while planning a PR's slices. Thinking level follows th
 | Implementation slice, exact recipe in one domain | 🛠️ Worker | Luna medium |
 | Implementation slice, fixed approach with local choices | 🛠️ Worker | Luna high |
 | Implementation slice, fixed approach across domains | 🛠️ Worker | Luna xhigh |
-| Coupled slices | the PR's 🐒 Sidekick | stays with the Sidekick under the staffing table in `SKILL.md` |
+| Coupled slices | the PR's 🐒 Sidekick | stays with the Sidekick under the staffing table in `SKILL.md` (Commission an implementation 🐒 Sidekick) |
 | Evidence: sweep one unit | 🛠️ Worker | Luna medium |
 | Evidence: classify with a fixed rubric | 🛠️ Worker | Luna high |
 | Monitoring and procedures: suites, CI watches to terminal, PR wrap-up checks, scripted transforms | 🔧 Operator | Luna medium |

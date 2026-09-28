@@ -1,6 +1,6 @@
 # Improvement Plan Template
 
-Each accepted improvement gets one breakdown under the canonical contract's breakdown record: one node, or one per independent outcome, and owner count does not decide. Write one plan file per breakdown node only when planning can return `ready`. For `revision-requested` or `blocked`, return `plan identity: none` with the result payload and do not instantiate this template.
+Each accepted improvement gets one breakdown under the canonical contract's breakdown record (`../../../shared-references/canonical-implementation-plan.md`): one node, or one per independent outcome, and owner count does not decide. Write one plan file per breakdown node only when planning can return `ready`. For `revision-requested` or `blocked`, return `plan identity: none` with the result payload and do not instantiate this template.
 
 ```markdown
 # <Improvement Title>

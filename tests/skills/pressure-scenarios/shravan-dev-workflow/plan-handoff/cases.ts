@@ -73,7 +73,7 @@ export const skillPressureCaseDefinitions = [
       },
       {
         name: "preserves-plan-and-proof-authority",
-        requirement: "Preserves the immutable handoff-plan.md ready record, originating planner plan-implementation, governing basis, plan-only delivery context, obligation/proof mapping, freshness guards, split triggers, gaps, and parent verification rule without a document digest.",
+        requirement: "Preserves the immutable handoff-plan.md ready record with its breakdown node and base, originating planner plan-implementation, governing basis, plan-only delivery context, obligation/proof mapping, freshness guards, split triggers, gaps, and parent verification rule without a document digest.",
         failureExample: "Reauthors the plan, drops proof metadata, or upgrades delivery intent during handoff.",
       },
     ],
@@ -90,7 +90,7 @@ export const skillPressureCaseDefinitions = [
       },
       {
         name: "preserves-obligation-proof-context",
-        requirement: "Preserves the immutable handoff-plan.md ready record, governing basis, plan-only delivery context, evidence sources, freshness guards, split triggers, open proof gaps, and parent-owned verification with the obligation-to-slice-to-proof mapping and each slice's executor record without a document digest.",
+        requirement: "Preserves the immutable handoff-plan.md ready record with its breakdown node, governing basis, plan-only delivery context, evidence sources, freshness guards, split triggers, open proof gaps, and parent-owned verification with the obligation-to-slice-to-proof mapping and each slice's executor record without a document digest.",
         failureExample: "Carries commands but drops ownership, freshness, slice executor records, or delegated-evidence verification.",
       },
     ],

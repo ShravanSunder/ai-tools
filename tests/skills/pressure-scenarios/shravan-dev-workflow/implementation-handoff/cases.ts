@@ -57,7 +57,7 @@ export const skillPressureCaseDefinitions = [
     semanticCriteria: [
       {
         name: "preserves-authority-in-the-real-prompt",
-        requirement: "Requires the unchanged exact canonical ready plan record, governing planning basis, and delivery context in the handoff artifact and selected context-free reviewer prompt.",
+        requirement: "Requires the unchanged exact canonical ready plan record with its breakdown node and base (the reviewed PR), governing planning basis, and delivery context in the handoff artifact and selected context-free reviewer prompt.",
         failureExample: "Leaves authority only in the artifact, summarizes it, or mutates delivery intent during handoff.",
       },
       {

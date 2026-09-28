@@ -8,15 +8,15 @@ The plugin is built around one idea: each workflow phase should have a clear own
 
 ```text
 shared understanding
-  -> orchestrator-implementation-goal: implementation planning, execution/proof, review, and delivery
+  -> orchestrator-implementation-goal: admits the breakdown and PR plans, then execution/proof, review per PR or stack, gates, and delivery
        -> orchestrator-design: coordinate and verify the design cycle
        -> spec-design: separate Requirements and Specification
        -> program-design: structural How
        -> spec-program-review: proportional independent three-artifact design review
        -> stop at reviewed three-artifact design or explicit gap; never enter planning automatically
-  -> plan-implementation: one canonical plan + proof mapping
+  -> plan-implementation: breakdown of PR nodes + one canonical plan and proof mapping per PR
   -> implement-plan: approved immutable plan + implementation proof
-  -> implementation-review: ordered checks in one independent 🔎 Review Sidekick session + rails reduction
+  -> implementation-review: ordered checks in an independent 🔎 Review Sidekick session per PR (one relationship per stack) + rails reduction
        -> stop before corrections and PR work
 ```
 
@@ -64,7 +64,7 @@ presentation-*       surface-matched presentation  presentation-tui
 flowchart LR
     pathfinding["discuss-pathfinding<br/>extract tacit or unmade understanding"]
     mentalModels["discuss-clarify-mental-models<br/>mental model reconvergence"]
-    deliveryGoal["orchestrator-implementation-goal<br/>plan, implement, prove, review, deliver"]
+    deliveryGoal["orchestrator-implementation-goal<br/>admit plans, implement, prove, review, gate, deliver"]
     designCycle["orchestrator-design<br/>reviewed design coordination"]
 
     specDesign["spec-design<br/>separate Requirements and Specification"]
@@ -72,7 +72,7 @@ flowchart LR
     specReview["spec-program-review<br/>independent review"]
     specHandoff["spec-handoff<br/>portable spec context"]
 
-    planImplementation["plan-implementation<br/>reviewed design to canonical plan"]
+    planImplementation["plan-implementation<br/>reviewed design to breakdown and PR plans"]
     planHandoff["plan-handoff<br/>portable plan context"]
 
     implementPlan["implement-plan<br/>ready delivery-plan execution"]
@@ -125,11 +125,11 @@ Use `practices-research` when the next step is to gather evidence: local code/do
 
 Skills are layered: orchestrators, then phases, then practices (with `ops-*` and `presentation-*`), then tool manuals. Skills in one layer may name each other freely; none names a higher layer. Work sent upward returns a token from `shared-references/phase-return-tokens.md`, which the orchestrator (or Main, for a direct phase) maps to the next owner without widening the requested task. Every phase opens or resumes the trace through `practices-show-me-your-work` at entry and checkpoints at completion.
 
-Use `manage-agents` when subordinate AI-agent mechanics are the work: spawning, calling, resuming, steering, queueing, monitoring, or reducing advisors, sidekicks, workers, operators, subagents, and swarms. The user-facing main remains the default conversation and author of governing design and implementation plans. After a ready plan, the persistent implementation Sidekick executes its assignment and associated proof directly by default; the owner may start direct contact with that assigned Sidekick without transferring authority or execution ownership, and helpers never start owner contact themselves. Material design/plan or integration questions return to Main with evidence, while Main does not relay every internal progress turn. The Sidekick delegates only bounded independent work, needed expertise, or large disposable output whose benefit exceeds coordination cost; standalone prescribed procedures use Operators. PR wrap-up may stay with the assigned implementation Sidekick or run as a prescribed Operator procedure; Main retains acceptance and the user retains merge authority. Seats by role belong to `practices-collaboration`. Its core skill owns authority, roles and titles, selection, and native, agent-router, or legacy ACPX routing; `references/model-catalog.md` owns the model tables; `acpx-legacy.md` owns provider-resolved ACPX calls and relationships; `acpx-provider-*` references own exact model ids and provider controls; persistent sessions are ledgered before follow-ups; and child output remains candidate evidence until verified.
+Use `manage-agents` when subordinate AI-agent mechanics are the work: spawning, calling, resuming, steering, queueing, monitoring, or reducing advisors, sidekicks, workers, operators, subagents, and swarms. The user-facing main remains the default conversation and author of governing design and implementation plans. After a PR's ready plan, one persistent implementation Sidekick owns that PR, and its tier and what it executes itself or hands to Luna Workers follow the staffing table in the Commission section, read from the plan's slice executor records; the owner may start direct contact with that assigned Sidekick without transferring authority or execution ownership, and helpers never start owner contact themselves. Material design/plan or integration questions return to Main with evidence, while Main does not relay every internal progress turn. Work that passes Workhorse fit runs on Luna, natively on Codex and through agent-router on Claude Code and Cursor; standalone prescribed procedures use Operators, and Workhorse assignments use the Workhorse packet. PR wrap-up may stay with the assigned implementation Sidekick or run as a prescribed Operator procedure; Main retains acceptance and the user retains merge authority. Seats by role belong to `practices-collaboration`. Its core skill owns authority, roles and titles, selection, and native, agent-router, or legacy ACPX routing; `references/model-catalog.md` owns the three task signals, Workhorse fit, the jobs-inside-a-PR table, and the model tables; `acpx-legacy.md` owns provider-resolved ACPX calls and relationships; `acpx-provider-*` references own exact model ids and provider controls; persistent sessions are ledgered before follow-ups; and child output remains candidate evidence until verified.
 
 Use `orchestrator-design` when the user asks to run or resume the full design cycle as one bounded workflow. The user-facing main loads `spec-design` and `program-design` and authors all governing artifacts, views, visual briefs, diagrams, and settled sections; helpers may gather evidence or execute a fixed rendering procedure, and an explicitly requested Advisor may advise. The workflow verifies meaningful visual coverage independently for each substantial Requirements, Specification, and Program Design artifact, preserves separate Requirements and Specification identities, follows compact handoffs through optional owner pathfinding and one three-artifact design review, then stops before planning. Review rounds continue while they converge; when they stop converging, or a correction would change design meaning, the owner gets a brief. When prior review evidence is unavailable, the current review sets the baseline.
 
-Use `orchestrator-implementation-goal` to carry implementation goals through main-authored planning, planned-PR implementation and proof, main assessment, independent review, accepted corrections, and the requested delivery boundary. Design stays with its own workflow when missing or contradicted. The default terminal is PR-ready and unmerged; merge requires explicit authority. Both orchestrators use `practices-show-me-your-work` for meaningful decision and evidence history, while checking current sources rather than replaying stored status. Direct one-phase requests bypass orchestration.
+Use `orchestrator-implementation-goal` to carry implementation goals from Main's ready breakdown and PR plans through per-PR implementation and proof, main assessment, independent review per PR or per stack, accepted corrections, integration gates, and the requested delivery boundary. It never writes plans; a missing plan returns `ready-for-planning` to Main. Design stays with its own workflow when missing or contradicted. The default terminal is PR-ready and unmerged; merge requires explicit authority. Both orchestrators use `practices-show-me-your-work` for meaningful decision and evidence history, while checking current sources rather than replaying stored status. Direct one-phase requests bypass orchestration.
 
 Use `practices-collaboration` at the start of a qualifying task to find the repository's board project and work thread, and whenever agents coordinate: seats, messages versus posts, waiting on another agent, and resolution. With no board project, helpers return `no-home` to their parent, Main names the gap once under Waiting on owner, and work continues.
 
@@ -149,17 +149,17 @@ Use `spec-handoff` to package spec/design context for a future session. It prese
 
 ### Plan boundary
 
-Use `plan-implementation` when the user-facing main translates one semantically current ready Requirements, Specification, and Program Design set into one repo-grounded canonical Markdown plan. Helpers may gather bounded repository/proof evidence, but the main authors every slice, dependency, proof row, and PR boundary. It stops before tickets, implementation, review, Git, or PR work.
+Use `plan-implementation` when the user-facing main translates one semantically current ready Requirements, Specification, and Program Design set into a breakdown of independently buildable PR nodes and one repo-grounded canonical Markdown plan per PR, written when that PR's base exists. Each slice records its executor tier, and each full plan gets Main's plan review before `ready`. Helpers may gather bounded repository/proof evidence, but the main authors the breakdown and every slice, dependency, and proof row. It stops before tickets, implementation, review, Git, or PR work.
 
 Use `plan-improve-repo` to audit a repo for high-leverage improvements without editing source. Delegated audit work returns evidence and candidates; the main admits findings and authors any canonical plan. It retains direct authority over admitted repository-improvement findings, including source-proven implementation-mechanics-only work, without taking reviewed-design planning away from `plan-implementation`. Direct work on one named runtime skill package routes through `skills-creation`.
 
-Use `plan-handoff` to package an existing implementation plan for another agent, CLI, machine, or future session. It preserves the exact canonical plan record, governing planning basis, delivery context, and current main's authorship. Only a named successor-main recipient, transferred planning scope, and explicit user direction transfer plan authorship. If no plan exists yet, use `spec-handoff` for portability or `plan-implementation` to create one from current ready design; never present design context as an existing plan.
+Use `plan-handoff` to package one existing PR implementation plan, with its breakdown node and base, for another agent, CLI, machine, or future session. It preserves the exact canonical plan record, governing planning basis, delivery context, and current main's authorship. Only a named successor-main recipient, transferred planning scope, and explicit user direction transfer plan authorship. If no plan exists yet, use `spec-handoff` for portability or `plan-implementation` to create one from current ready design; never present design context as an existing plan.
 
 ### Implementation boundary
 
 Use `implement-plan` to validate and execute one immutable-path canonical `draft` plan only after separate later owner approval names that exact path and current meaning. It re-anchors before edits, works inline by default, advances through the smallest ready proof-bearing slice, preserves proof gates, and stops with an exact semantic route when current reality breaks the plan or design. It stops before independent review and PR work.
 
-Use `implementation-review` for independent product implementation and proof review after execution. It admits exact governing authority, ready plan, source, diff, and proof identities. A different-lineage 🔎 Review Sidekick reads the whole map and walks spec-compliance, sequential overlapping chunk passes, proof challenge, dispel, and predicate-selected focused checks. It verifies candidates against the rails and routes corrections by semantic cause without editing. Runtime skill-package review remains under `skills-creation`.
+Use `implementation-review` for independent product implementation and proof review after execution. It admits exact governing authority, the ready plan of one PR node, source, diff, and proof identities. The review unit is one PR, or one stack layer against its parent; each independent PR gets its own different-lineage 🔎 Review Sidekick, and a stack keeps one. The lead reads the whole map and walks spec-compliance, sequential overlapping chunk passes, proof challenge, dispel, and predicate-selected focused checks. It verifies candidates against the rails and routes corrections by semantic cause without editing. Runtime skill-package review remains under `skills-creation`.
 
 Use `implementation-pr-wrapup` to finish the GitHub PR lifecycle after implementation, typically after independent review on a delivery goal: push/open/update the PR, write a why-and-shape description, monitor checks and comments, process existing review threads, prove mergeability with current GitHub state, and merge only when user authorization exists. Fresh code-review discovery routes to `implementation-review`; PR wrap-up does not substitute for it. Independent-review coverage is not a wrap-up ready gate.
 
@@ -185,7 +185,7 @@ normal review path
   spec-program-review
       -> bounded independent specification/program review
   implementation-review
-      -> one complete independent implementation/proof review
+      -> one complete independent implementation/proof review per PR, or per stack layer
 ```
 
 ## How To Use
@@ -199,8 +199,8 @@ Use spec-design to preserve separate Requirements and Specification identities: 
 Use program-design to turn this specification into structural How.
 Use spec-program-review to independently review these Requirements, Specification, and Program Design artifacts.
 Use spec-handoff to package this design for another agent without creating a plan.
-Use orchestrator-implementation-goal to carry this goal through planning, implementation, proof, review, and PR readiness.
-Use plan-implementation to create one repo-grounded proof-bearing plan from this reviewed design set.
+Use orchestrator-implementation-goal to carry this goal from its ready breakdown and PR plans through implementation, proof, review, and PR readiness; if no plans exist yet, it returns ready-for-planning to Main.
+Use plan-implementation to create the breakdown and the first-frontier PR plans from this reviewed design set.
 Use implement-plan to execute this ready canonical plan at its immutable path, current meaning, and `pr-ready-unmerged` delivery context, then return fresh implementation proof without starting review or PR work.
 Use implementation-review to independently review this implementation and proof without editing or starting PR lifecycle work.
 Use practices-research to gather source-grounded evidence into a tmp ledger.

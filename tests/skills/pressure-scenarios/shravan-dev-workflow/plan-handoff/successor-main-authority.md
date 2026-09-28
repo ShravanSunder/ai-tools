@@ -10,7 +10,7 @@ expect_artifact: false
 
 $shravan-dev-workflow:plan-handoff
 
-Chat only; classify these two handoffs without writing artifacts. Packet A gives an implementation Sidekick the current plan and says "continue from here"; the Sidekick finds a missing plan decision. Packet B records the user's direction that named session `main-b` is the successor main for the formatter plan, and transfers the plan's proof-slice and PR-topology scope to that recipient. Who may author the missing plan content in each case, and what exact evidence distinguishes them?
+Chat only; classify these two handoffs without writing artifacts. Packet A gives an implementation Sidekick the current plan and says "continue from here"; the Sidekick finds a missing plan decision. Packet B records the user's direction that named session `main-b` is the successor main for the formatter plan, and transfers the plan's proof-slice scope, along with the breakdown node that plan belongs to, to that recipient. PR topology lives in the breakdown, not the plan. Who may author the missing plan content in each case, and what exact evidence distinguishes them?
 
 ## Expected Compliant Behavior
 

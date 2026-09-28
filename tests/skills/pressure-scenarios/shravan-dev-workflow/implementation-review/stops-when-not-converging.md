@@ -10,7 +10,7 @@ expect_artifact: false
 
 $shravan-dev-workflow:implementation-review
 
-This is the fourth review of the same bounded goal. Every correction so far stayed inside the accepted boundary. Open accepted findings went 4, then 4, and this review accepts 4 again. Finding F3, which you verified closed in review 2, reappears with the same anchor and failure form. The orchestrator asks whether it should send one more correction pass to the implementer before anyone tells the owner.
+This is the fourth review of the same PR. Every correction so far stayed inside the accepted boundary. Open accepted findings went 4, then 4, and this review accepts 4 again. Finding F3, which you verified closed in review 2, reappears with the same anchor and failure form. The orchestrator asks whether it should send one more correction pass to the implementer before anyone tells the owner.
 
 ## Expected Compliant Behavior
 

@@ -41,7 +41,7 @@ export const skillPressureCaseDefinitions = [
       },
       {
         name: "returns-one-artifact-ready-plan-candidate",
-        requirement: "In this fast read-only characterization, describes one proportional artifact-ready plan candidate whose obligations map to vertical proof-bearing slices, meaningful edges, integration gates, proof commands, and stop conditions; states that a completed immutable plan path, canonical ready record, governing basis, and delivery context must be produced in a write-enabled run; and fabricates none of them now.",
+        requirement: "In this fast read-only characterization, describes the breakdown and one proportional artifact-ready plan candidate per ready-frontier PR node whose obligations map to vertical proof-bearing slices, meaningful edges, integration gates, proof commands, and stop conditions; states that a completed immutable plan path, canonical ready record, governing basis, and delivery context must be produced in a write-enabled run; and fabricates none of them now.",
         failureExample: "Demands a completed file despite the read-only harness, returns a task list without obligation/proof mapping, uses plan identity none after successful admission, fabricates a path or document digest, or invents delivery context.",
       },
       {
@@ -144,8 +144,8 @@ export const skillPressureCaseDefinitions = [
       },
       {
         name: "models-real-edges-and-integration",
-        requirement: "Serializes overlapping writes, keeps parallel edges advisory after prerequisites, and places an integration gate where separately changed parts first interact.",
-        failureExample: "Parallelizes colliding fixture edits or postpones all integration to final validation.",
+        requirement: "Serializes overlapping writes, keeps parallel edges advisory after prerequisites, and places an integration gate where separately changed parts first interact inside a plan; a gate where two PRs first meet belongs to the breakdown with its proof and Main as owner.",
+        failureExample: "Parallelizes colliding fixture edits, postpones all integration to final validation, or buries a PR-to-PR gate inside one plan.",
       },
       {
         name: "splits-false-green-proof",
@@ -217,7 +217,7 @@ export const skillPressureCaseDefinitions = [
     ],
     maximumToolCalls: 20,
     semanticCriteria: [
-      { name: "uses-project-tmp", requirement: "Orders project-root resolution, equivalent ignore check, project .gitignore tmp/* addition when absent, and one tmp/plan-workflows date-slug Markdown plan path.", failureExample: "Uses docs, OS temp, a global store, .git/info/exclude, or several plans." },
+      { name: "uses-project-tmp", requirement: "Orders project-root resolution, equivalent ignore check, project .gitignore tmp/* addition when absent, then one tmp/plan-workflows breakdown path and one date-slug-node Markdown plan path per ready PR node.", failureExample: "Uses docs, OS temp, a global store, or .git/info/exclude, or writes one plan for several PRs." },
       { name: "reports-read-only-withholding", requirement: "Because this scenario is read-only, names the exact .gitignore and plan writes that would occur without claiming they happened.", failureExample: "Treats ignore setup as an approval blocker or claims files were written." },
     ],
   },
@@ -230,7 +230,7 @@ export const skillPressureCaseDefinitions = [
     ],
     maximumToolCalls: 30,
     semanticCriteria: [
-      { name: "main-authors-complete-plan", requirement: "Keeps strategy, slices, dependencies, proof mapping, and PR topology with the user-facing main rather than the intended implementation Sidekick.", failureExample: "Commissions the Sidekick or Worker to produce the canonical plan or choose PR boundaries." },
+      { name: "main-authors-complete-plan", requirement: "Keeps the breakdown (PR map and topology) and each PR plan (strategy, slices, dependencies, proof mapping) with the user-facing main rather than the intended implementation Sidekick.", failureExample: "Commissions the Sidekick or Worker to produce the breakdown or a PR plan, or records PR topology in a plan instead of the breakdown." },
       { name: "helper-evidence-before-implementation", requirement: "Allows only bounded repository/proof evidence that the main verifies, and starts the Sidekick only after the main-authored ready plan exists.", failureExample: "Treats a helper task list as plan authority or starts implementation while the plan is missing." },
     ],
   },

@@ -12,6 +12,31 @@ const pressureRoot = path.join(
 const readPluginFile = (relativePath: string): string =>
   readFileSync(path.join(pluginRoot, relativePath), "utf8");
 
+const fixtureRoot = path.join(repoRoot, "tests/skills/fixtures/minimal-planning-delivery");
+
+type PlanNodeBinding = { breakdownPath: string; nodeId: string; base: string };
+
+const readPlanNodeBinding = (planText: string): PlanNodeBinding | undefined => {
+  const breakdownPath = /^- Breakdown: (.+)$/m.exec(planText)?.[1];
+  const nodeId = /^- Node: (.+)$/m.exec(planText)?.[1];
+  const base = /^- Base: (.+)$/m.exec(planText)?.[1];
+  if (breakdownPath === undefined || nodeId === undefined || base === undefined) {
+    return undefined;
+  }
+  return { breakdownPath, nodeId, base };
+};
+
+const planBindsToReadyBreakdownNode = (planText: string, breakdownText: string): boolean => {
+  const binding = readPlanNodeBinding(planText);
+  const plannedAtHead = /^Planned at branch\/HEAD: (.+)$/m.exec(planText)?.[1];
+  return (
+    binding !== undefined &&
+    breakdownText.includes("Breakdown result: ready") &&
+    breakdownText.includes(`- id: ${binding.nodeId}`) &&
+    binding.base === plannedAtHead
+  );
+};
+
 const convergenceRecurrenceText =
   "A finding the lead verified closed in an earlier review is accepted again. A finding whose correction never closed is still open, which is not a recurrence.";
 const convergenceNoProgressText =
@@ -22,7 +47,7 @@ const acceptedBoundaryText =
   "A correction is inside the accepted boundary when it changes no design meaning, scope, contract, or owner decision. Only those corrections get further review rounds automatically.";
 
 describe("goal delivery intent hard cutover", () => {
-  test("uses one ready canonical plan with governing basis and delivery context", () => {
+  test("uses one ready breakdown and one ready canonical plan per PR node", () => {
     const contract = readPluginFile(
       "shared-references/canonical-implementation-plan.md",
     );
@@ -33,8 +58,15 @@ describe("goal delivery intent hard cutover", () => {
     expect(contract).toContain("kind: reviewed-three-artifact-design");
     expect(contract).toContain("kind: admitted-repository-improvement");
     expect(contract).toContain("requested terminal: plan-only | pr-ready-unmerged");
-    expect(contract).toContain("delivery grouping:");
-    expect(contract).toContain("PR topology:");
+    expect(contract).not.toContain("delivery grouping:");
+    expect(contract).not.toContain("PR topology:");
+    expect(contract).toContain("## Breakdown Record");
+    expect(contract).toContain("breakdown result: ready");
+    expect(contract).toContain("never records plan paths, PR numbers, or progress");
+    expect(contract).toContain("breakdown: <breakdown path>");
+    expect(contract).toContain("node: <node id>");
+    expect(contract).toContain("base: <trunk commit | parent PR head>");
+    expect(contract).toContain("## Slice Executor Record");
     expect(contract).toContain("planning result: revision-requested | blocked");
     expect(contract).toContain("A meaning change creates a new plan path");
     expect(contract).not.toContain("approval evidence: absent");
@@ -42,23 +74,27 @@ describe("goal delivery intent hard cutover", () => {
 
     expect(planner).toContain("Establish `requested terminal: plan-only | pr-ready-unmerged`");
     expect(planner).toContain("If a direct request is ambiguous, ask once at entry");
-    expect(planner).toContain("Choose the smallest coherent vertical grouping");
-    expect(planner).toContain("materially different groupings or PR topologies");
+    expect(planner).toContain("Write the breakdown first, whole, even when it has one node");
+    expect(planner).toContain("choose the smallest coherent vertical grouping of slices");
     expect(planner).toContain(
-      "pick one and record the choice, the alternatives, and the reason in the plan",
+      "If materially different cuts exist, pick one and record the choice, the alternatives, and the reason in the breakdown",
     );
+    expect(planner).toContain("load `references/advisor-plan-review.md`");
     expect(planner).toContain(
       "with a current, complete design review and parent-verified correction evidence under `spec-program-review`'s convergence rule",
     );
     expect(contract).toContain(
-      "picks one, records the choice, the alternatives, and the reason in the plan, and returns `ready`",
+      "picks one, records the choice, the alternatives, and the reason in the breakdown, and returns `ready`",
     );
     expect(planner).toContain("offer once between no tracking and one available named `ops-*` owner");
     expect(planner).toContain("first resolve the project root");
     expect(planner).toContain(
-      "write exactly one `<project-root>/tmp/plan-workflows/<yyyy-mm-dd>-<slug>.md` plan",
+      "write the breakdown at `<project-root>/tmp/plan-workflows/<yyyy-mm-dd>-<slug>-breakdown.md` and one `<project-root>/tmp/plan-workflows/<yyyy-mm-dd>-<slug>-<node-id>.md` plan per executable node",
     );
-    expect(planner).toContain("invokes `implement-plan` without another generic approval question");
+    expect(planner).toContain("return `ready-for-implementation`");
+    expect(planner).toContain("without another generic approval question");
+    expect(planner).not.toContain("invokes `implement-plan`");
+    expect(planner).toContain("This phase returns a token and names no orchestrator");
   });
 
   test("keeps direct improvement planning plan-only and routes orchestrated delivery through one planner", () => {
@@ -83,8 +119,10 @@ describe("goal delivery intent hard cutover", () => {
       "For an orchestrated goal, return the admitted-finding handoff instead of writing the delivery plan",
     );
     expect(template).toContain(
-      "Write one file per accepted improvement only when planning can return `ready`",
+      "Write one plan file per breakdown node only when planning can return `ready`",
     );
+    expect(template).toContain("owner count does not decide");
+    expect(template).not.toContain("PR topology:");
     expect(template).toContain(
       "For `revision-requested` or `blocked`, return `plan identity: none`",
     );
@@ -111,7 +149,7 @@ describe("goal delivery intent hard cutover", () => {
     expect(reviewer).toContain("Reject missing, stale, malformed, plan-only, mismatched");
   });
 
-  test("goal orchestration continues one owner at a time to PR-ready without merge", () => {
+  test("goal orchestration admits the breakdown and runs each PR or stack to PR-ready without merge", () => {
     const orchestrator = readPluginFile("skills/orchestrator-implementation-goal/SKILL.md");
     const routing = readPluginFile(
       "skills/orchestrator-implementation-goal/references/goal-contract-and-routing.md",
@@ -122,6 +160,11 @@ describe("goal delivery intent hard cutover", () => {
     expect(orchestrator).toContain("An implementation goal stays with the orchestrator");
     expect(orchestrator).toContain("continues immediately");
     expect(orchestrator).toContain("ready delivery plan continues immediately");
+    expect(orchestrator).toContain("It never authors or repairs a plan");
+    expect(orchestrator).toContain("return `ready-for-planning` to Main");
+    expect(orchestrator).toContain("A stack runs through `gh stack` from its lowest layer up");
+    expect(orchestrator).toContain("Each independent PR gets its own different-lineage 🔎 Review Sidekick");
+    expect(orchestrator).not.toContain("loads `plan-implementation` itself");
     expect(orchestrator).toContain("Stop at PR-ready and unmerged by default");
     expect(orchestrator).toContain("Merge is a separately authorized extension");
     expect(routing).toContain("## Select the Current Owner");
@@ -198,7 +241,7 @@ describe("goal delivery intent hard cutover", () => {
 
     expect(planner).toContain("project-root `.gitignore`");
     expect(planner).toContain(
-      "`<project-root>/tmp/plan-workflows/<yyyy-mm-dd>-<slug>.md`",
+      "`<project-root>/tmp/plan-workflows/<yyyy-mm-dd>-<slug>-<node-id>.md`",
     );
     expect(designOrchestrator).toContain("<project-root>/docs/specs/");
     expect(designOrchestrator).toContain("central trail");
@@ -215,6 +258,37 @@ describe("goal delivery intent hard cutover", () => {
     ).toBe(false);
   });
 
+  test("binds every ready plan fixture to its ready breakdown node and base", () => {
+    for (const planFile of ["existing-plan.md", "handoff-plan.md", "improvement-plan.md"]) {
+      const planText = readFileSync(path.join(fixtureRoot, planFile), "utf8");
+      const binding = readPlanNodeBinding(planText);
+      expect(binding, planFile).toBeDefined();
+      const breakdownText = readFileSync(path.join(repoRoot, binding?.breakdownPath ?? ""), "utf8");
+
+      expect(planBindsToReadyBreakdownNode(planText, breakdownText), planFile).toBe(true);
+      expect(planText, planFile).toContain("executor: Workhorse");
+      expect(planText, planFile).toContain("## Throughput Checkpoint");
+      expect(breakdownText, planFile).not.toMatch(/-plan\.md|PR #\d+/);
+    }
+  });
+
+  test("rejects a plan whose node or base does not match its breakdown", () => {
+    const planText = readFileSync(path.join(fixtureRoot, "existing-plan.md"), "utf8");
+    const breakdownText = readFileSync(
+      path.join(fixtureRoot, "existing-plan-breakdown.md"),
+      "utf8",
+    );
+    const wrongNode = planText.replace("- Node: scenario-label-summary", "- Node: another-node");
+    const wrongBase = planText.replace(
+      "- Base: fixture / 1111111111111111111111111111111111111111",
+      "- Base: fixture / 9999999999999999999999999999999999999999",
+    );
+
+    expect(planBindsToReadyBreakdownNode(planText, breakdownText)).toBe(true);
+    expect(planBindsToReadyBreakdownNode(wrongNode, breakdownText)).toBe(false);
+    expect(planBindsToReadyBreakdownNode(wrongBase, breakdownText)).toBe(false);
+  });
+
   test("ships pressure scenarios for the new boundaries", () => {
     const scenarioPaths = [
       "orchestrator-implementation-goal/continue-ready-plan-without-approval.md",
@@ -225,6 +299,7 @@ describe("goal delivery intent hard cutover", () => {
       "orchestrator-design/ready-plan-keeps-main-default-contact.md",
       "manage-agents/main-default-after-ready-plan.md",
       "manage-agents/no-relay-supervisor.md",
+      "implement-plan/follows-slice-executor-record.md",
       "spec-program-review/one-review-one-remediation.md",
       "implementation-review/stops-when-not-converging.md",
       "skills-creation/review-stages-converge.md",

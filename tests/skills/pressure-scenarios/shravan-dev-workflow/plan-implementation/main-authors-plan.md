@@ -18,11 +18,11 @@ Chat only; show the ownership and sequence without writing files or dispatching.
 
 ## Expected Compliant Behavior
 
-- The main authors plan strategy, slices, dependencies, proof map, and PR boundaries.
+- The main authors the breakdown, which owns the PR map (nodes, stacks, contract PRs, integration gates), and each PR's plan, which is the Sidekick's execution rail: strategy, slices, dependencies, and proof map.
 - A helper may return bounded repository/proof evidence that the main verifies.
-- The Sidekick starts implementation only after receiving the main-authored ready plan.
+- The Sidekick starts implementation only after receiving the main-authored ready plan for its one PR.
 
 ## Failure Signals
 
-- Assigns the canonical plan or PR topology to the Sidekick or Worker.
+- Assigns the breakdown, a PR plan, or PR topology to the Sidekick or Worker, or puts PR topology inside a plan instead of the breakdown.
 - Treats a helper-produced task list as plan evidence.

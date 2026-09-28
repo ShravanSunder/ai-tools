@@ -17,15 +17,24 @@ Planned at branch/HEAD: fixture / 3333333333333333333333333333333333333333
 ## Delivery Context
 
 - Requested terminal: plan-only
-- Delivery grouping: single:scenario-label-summary
-- PR topology: not-applicable
+- Breakdown: tests/skills/fixtures/minimal-planning-delivery/handoff-plan-breakdown.md
+- Node: scenario-label-summary
+- Base: fixture / 3333333333333333333333333333333333333333
+
+## Throughput Checkpoint
+
+- Choices later slices depend on: the grouped-summary shape, fixed in the Specification and written here; none left to the Sidekick.
+- Blocking first steps: the formatter slice; validation builds on it.
+- Independent workstreams: n/a: both slices write the same formatter file.
+- Shared mutable state: the formatter file; the two slices run serially.
+- Smallest safe decomposition: one executor; both slices share one file and one proof loop.
 
 ## Obligation And Proof Mapping
 
-| Obligation | Slice | Evidence source | Focused proof | Integration/manual proof | Freshness guard |
-| --- | --- | --- | --- | --- | --- |
-| Stable grouped summary | formatter plus units | Specification and current scenario-case loader | focused formatter unit | full skill unit suite | stop if scenario identity shape changes |
-| Duplicate rejection | formatter validation | Specification and current loader duplicate checks | duplicate-focused unit | typecheck | split if loader ownership changes |
+| Obligation | Slice | Executor | Evidence source | Focused proof | Integration/manual proof | Freshness guard |
+| --- | --- | --- | --- | --- | --- | --- |
+| Stable grouped summary | formatter plus units | executor: Workhorse · Complete direction/Local · pinned formatter paths and proof commands | Specification and current scenario-case loader | focused formatter unit | full skill unit suite | stop if scenario identity shape changes |
+| Duplicate rejection | formatter validation | executor: Workhorse · Complete direction/Local · pinned validation path; loader duplicate checks exist at base | Specification and current loader duplicate checks | duplicate-focused unit | typecheck | split if loader ownership changes |
 
 ## Delegated Evidence Boundary
 

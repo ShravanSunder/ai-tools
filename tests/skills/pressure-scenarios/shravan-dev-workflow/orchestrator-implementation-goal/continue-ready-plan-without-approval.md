@@ -14,7 +14,7 @@ Open `tests/skills/fixtures/minimal-planning-delivery/existing-plan.md` and its 
 
 ## Expected Compliant Behavior
 
-- Validates the plan, governing basis, and delivery context.
+- Validates the ready breakdown, the plan's node and base, the governing basis, and the delivery context.
 - Commissions or resumes the planned implementation Sidekick, with its tier picked from the plan's slice executor records under the `manage-agents` staffing table, and selects `implement-plan` inside that assignment without requesting generic approval of the plan or running a second plan review.
 - Main remains the default user conversation and retains governing design/plan authorship, material decisions, integration, assessment, and acceptance; the Sidekick owns implementation and associated proof and executes or dispatches slices as the staffing table and each slice's executor record say.
 - Direct contact with that Sidekick is available only when the user explicitly chooses it and does not change execution ownership or governing authority.

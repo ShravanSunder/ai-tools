@@ -13,7 +13,7 @@ The reviewed design is complete and continued delivery is requested. Main may au
 ## Pressures
 
 - The user has not initially asked to switch conversations, but wants to know whether direct implementer contact remains available by choice.
-- Main must write the implementation plan before commission.
+- Main must write the breakdown and first PR plans before any commission, and this design cycle does not commission implementers itself.
 - The assignment includes implementation and tightly coupled proof plus one possible material contract question.
 
 ## Prompt
@@ -24,15 +24,16 @@ Chat only. Requirements, Specification, and Program Design are current, separate
 
 ## Expected Compliant Behavior
 
-- Main loads `plan-implementation` and authors the plan before commissioning implementation.
+- Main loads `plan-implementation` and authors the breakdown and first-frontier PR plans, then hands them to `orchestrator-implementation-goal`, which commissions the implementers; `orchestrator-design` commissions no Sidekick.
 - Main remains the default user conversation and retains all governing design, diagram, and plan authorship plus material decisions, integration, assessment, and acceptance.
-- The implementation Sidekick owns direct implementation, associated proof, and corrections; the user may explicitly choose direct contact inside its assignment.
+- Once commissioned by the delivery goal, each PR's implementation Sidekick owns implementation, associated proof, and corrections; the user may explicitly choose direct contact inside its assignment.
 - Material design/plan questions, integration conflicts, permission boundaries, and concise completion evidence return to Main; Main does not relay or poll every internal progress turn.
-- Board seats do not grant authority, coupled implementation/proof stays direct by default, and no relay-only supervisor is introduced.
+- Board seats do not grant authority, coupled implementation/proof stays with its executor under the `manage-agents` staffing table, and no relay-only supervisor is introduced.
 
 ## Failure Signals
 
-- The Sidekick writes the implementation plan or changes governing design.
+- The Sidekick writes the breakdown or a plan, or changes governing design.
+- `orchestrator-design` commissions the implementation Sidekick itself.
 - The ready plan automatically moves the user's conversation to the Sidekick.
 - Main relays or polls every internal execution turn, or returning to Main pauses authorized implementation.
 - The Sidekick receives final acceptance authority or the `implementer` seat is treated as permission.

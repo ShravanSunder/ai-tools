@@ -96,7 +96,7 @@ SKILL_PRESSURE_TIMEOUT_SECONDS=900 \
 | `orchestrator-design` | `orchestrator-design-bounds-pre-review-recovery` | Keep pre-review authoring distinct from review correction passes and continue to the first review. |
 | `orchestrator-design` | `orchestrator-design-authors-not-sol-executor` | Orchestrator writes the spec in-session when told to; Sol-as-executor is not a design author. |
 | `orchestrator-design` | `orchestrator-design-per-artifact-visual-coverage` | Verify visual completion separately for Requirements, Specification, and Program Design while preserving main-authored meaning. |
-| `orchestrator-design` | `orchestrator-design-ready-plan-keeps-main-default-contact` | Main authors the plan and remains the default conversation while the 🐒 Sidekick directly owns implementation and proof; direct Sidekick contact requires explicit user choice. |
+| `orchestrator-design` | `orchestrator-design-ready-plan-keeps-main-default-contact` | Main authors the breakdown and first PR plans, hands them to the delivery goal instead of commissioning, and remains the default conversation; direct Sidekick contact requires explicit user choice. |
 | `agent-collaboration` | `agent-collaboration-tool-manual-vs-practice-routing` | Route a CLI how-to to the tool manual, a when-to-post decision to `practices-collaboration`, and a typo fix to neither. |
 | `docs-maintain` | `docs-maintain-no-stale-purge.md` | Do not purge or rewrite docs before source-of-truth classification and preservation plan. |
 | `docs-maintain` | `docs-maintain-rewrite-leaves-fences.md` | When rewriting README prose, load humanizer and leave YAML and code fences unchanged. |
@@ -113,18 +113,18 @@ SKILL_PRESSURE_TIMEOUT_SECONDS=900 \
 | `manage-agents` | `manage-agents-session-ledger-reduction.md` | Do not treat multi-agent consensus as truth without session ledgers and parent-owned verification. |
 | `manage-agents` | `manage-agents-custom-agent-boundary.md` | Do not overload custom-agent invocation with adapter building; split agent-registry from building-custom-agents and route sensitive surfaces. |
 | `manage-agents` | `manage-agents-pattern-selection.md` | Do not choose ACPX commands before selecting the right subordinate-agent pattern: swarm, persistent sidekick, advisor, ephemeral subagent, or workflow handoff. |
-| `manage-agents` | `manage-agents-main-default-after-ready-plan` | Keep Main as the default conversation while the 🐒 Sidekick executes directly, with direct Sidekick contact available only by explicit user choice. |
-| `manage-agents` | `manage-agents-no-relay-supervisor` | Delegate only for concrete independent-work, expertise, or disposable-output benefit; keep coupled implementation/proof direct and avoid relay-only supervisors. |
+| `manage-agents` | `manage-agents-main-default-after-ready-plan` | Keep Main as the default conversation while the 🐒 Sidekick executes under the staffing table, with direct Sidekick contact available only by explicit user choice. |
+| `manage-agents` | `manage-agents-no-relay-supervisor` | Keep coupled implementation/proof with the Sidekick, send a plan-marked independent Workhorse slice to a Luna Worker under a mixed-tier Daily-driver Sidekick, and avoid relay-only supervisors. |
 | `manage-agents` | `manage-agents-design-phase-not-sidekick-author.md` | Design-phase assignment does not pick a 🛠️ Worker or Sidekick as Requirements, Specification, or Program Design author. |
 | `manage-agents` | `manage-agents-native-reviewer-uses-spawn` | Do not hop a Codex reviewer to `codex exec --sandbox read-only` when native `spawn_agent` is available; packet read-only is enough. |
 | `manage-agents` | `manage-agents-foreign-lineage-uses-agent-router` | Do not treat a Codex `spawn_agent` catalog miss for `claude-fable` as unavailability; route Fable as a persistent Claude relationship over agent-router with a resolved Claude Fable 5.x id, ACPX only on a recorded gap. |
 | `manage-agents` | `manage-agents-reviewer-fork-turns-none` | Do not give an independent reviewer `fork_turns=15`; reviewers get `fork_turns=none`. |
 | `manage-agents` | `manage-agents-reviewer-no-coordinator-skill` | Do not put coordinator `SKILL.md` or manage-agents on a reviewer packet; load only absolute lane paths. |
 | `manage-agents` | `manage-agents-acpx-frontier-retrieve-not-timeout` | When agent-router has no Claude endpoint and ACPX is the legacy route, do not stop a Frontier Fable review with `--timeout 120`; retrieve the named session instead. |
-| `manage-agents` | `manage-agents-sidekick-luna-xhigh` | Check the named xhigh choice against the 🐒 Sidekick model table. |
+| `manage-agents` | `manage-agents-sidekick-luna-xhigh` | Check the named Luna xhigh choice against the 🐒 Sidekick table and the staffing table for an all-Workhorse Cross-domain PR. |
 | `manage-agents` | `manage-agents-luna-sidekick-owner-contact` | A Workhorse 🐒 Sidekick answers a short status check and returns a material design decision to Main. |
 | `manage-agents` | `manage-agents-luna-interactive-seat` | Main's model stays owner-chosen; a prescribed 🔧 Operator watch uses its Workhorse table. |
-| `manage-agents` | `manage-agents-luna-background-fix` | The 🛠️ Worker table permits Workhorse for a well-understood local fix. |
+| `manage-agents` | `manage-agents-luna-background-fix` | The 🛠️ Worker table permits Workhorse (Luna high) for a well-understood local fix. |
 | `manage-agents` | `manage-agents-cursor-host-operator-uses-agent-router-luna` | On a Cursor host, an Operator procedure uses Luna through agent-router, not a Cursor native model. |
 | `plan-handoff` | `plan-handoff-full-packet` | Do not create a thin paste prompt; require coverage and a portable handoff packet. |
 | `plan-handoff` | `plan-handoff-existing-plan-only` | Do not package spec/design context as an existing plan; route portability to `spec-handoff` and current ready design planning to `plan-implementation`. |
@@ -141,7 +141,7 @@ SKILL_PRESSURE_TIMEOUT_SECONDS=900 \
 | `plan-implementation` | `plan-implementation-direct-planning-establishes-intent` | Establish plan-only versus PR-ready intent at direct-planning entry instead of adding post-plan approval. |
 | `plan-implementation` | `plan-implementation-orchestrated-plan-uses-project-tmp` | Put orchestrated plans under ignored project tmp and add tmp/* to project .gitignore when needed. |
 | `plan-implementation` | `plan-implementation-runtime-skill-package-route` | Route named runtime skill packages to skills-creation without creating a plan or tuple. |
-| `plan-implementation` | `plan-implementation-main-authors-plan` | Keep strategy, proof slices, dependencies, and PR topology with the main; helpers return evidence only. |
+| `plan-implementation` | `plan-implementation-main-authors-plan` | Keep the breakdown (PR topology) and each PR plan (strategy, proof slices, dependencies) with the main; helpers return evidence only. |
 | `implement-plan` | `implement-plan-admit-ready-delivery-plan` | Admit the exact ready PR-delivery plan, re-anchor current source, and return one proof-bearing frontier without fabricating execution. |
 | `implement-plan` | `implement-plan-block-plan-only-terminal` | Preserve a plan-only record and stop before execution instead of upgrading delivery intent in place. |
 | `implement-plan` | `implement-plan-route-revision-requested` | Route a non-executable revision-requested result to its recorded originating planner. |
@@ -155,12 +155,13 @@ SKILL_PRESSURE_TIMEOUT_SECONDS=900 \
 | `implement-plan` | `implement-plan-stop-on-stale-plan` | Re-anchor current source and stop instead of silently translating a stale ready plan. |
 | `implement-plan` | `implement-plan-block-plan-only-improvement-plan` | Recognize plan-improve-repo as a canonical origin while preserving its direct plan-only terminal. |
 | `implement-plan` | `implement-plan-eligible-disjoint-delegation` | Permit only plan-proven disjoint delegation through manage-agents without default controller machinery. |
+| `implement-plan` | `implement-plan-follows-slice-executor-record` | Follow each slice's executor record and return a Workhorse boundary stop as a plan-defect instead of re-cutting or re-running it on a bigger model. |
 | `implement-plan` | `implement-plan-scoped-slice-proof-report` | Bind slice proof to the exact tuple while keeping incomplete full and integration rows open. |
 | `implementation-pr-wrapup` | `implementation-pr-wrapup-missing-implementation-review` | Do not block wrap-up ready on missing independent review; wrap-up does not claim it reviewed the diff. |
 | `implementation-handoff` | `implementation-handoff-context-free-canonical-plan` | Preserve exact plan authority and bound implementation proof in the actual context-free prompt. |
 | `plan-improve-repo` | `plan-improve-repo-direct-authority-boundary` | Keep admitted improvement findings separate from direct reviewed-design planning. |
 | `plan-improve-repo` | `plan-improve-repo-validation-preserves-plan-only` | Keep current-state validation separate from delivery-intent upgrades and execution. |
-| `plan-improve-repo` | `plan-improve-repo-deep-no-default-delegation` | Keep deep improvement audits in-parent unless an explicit or concrete bounded delegation predicate exists. |
+| `plan-improve-repo` | `plan-improve-repo-deep-no-default-delegation` | Keep audit categories as parent-owned coverage dimensions; delegate only Workhorse-fit evidence units cut after recon, never a whole category. |
 | `plan-improve-repo` | `plan-improve-repo-runtime-skill-package-route` | Route named runtime skill packages to skills-creation without a mechanics-only bypass. |
 | `plan-improve-repo` | `plan-improve-repo-completed-blocked-result` | Return blocked with no fabricated plan identity, external contract, or implementation advance. |
 | `plan-improve-repo` | `plan-improve-repo-main-authors-admitted-plan` | Keep admission, priority, plan authorship, and validation judgment with the main after delegated audit evidence. |
@@ -206,7 +207,7 @@ SKILL_PRESSURE_TIMEOUT_SECONDS=900 \
 | `implementation-review` | `implementation-review-classify-missing-source` | Return the classifier state for unreadable governing sources instead of a readiness verdict. |
 | `orchestrator-implementation-goal` | `orchestrator-implementation-goal-start-at-design` | Route a fresh long-horizon goal to the bounded design owner without creating lifecycle state. |
 | `orchestrator-implementation-goal` | `orchestrator-implementation-goal-route-ready-design-to-planning` | Route current ready reviewed design to `plan-implementation` without fabricating a plan. |
-| `orchestrator-implementation-goal` | `orchestrator-implementation-goal-continue-ready-plan-without-approval` | Continue an exact ready PR-delivery plan to implementation without a generic approval checkpoint. |
+| `orchestrator-implementation-goal` | `orchestrator-implementation-goal-continue-ready-plan-without-approval` | Continue an admitted ready breakdown and PR plan to implementation without a generic approval checkpoint. |
 | `orchestrator-implementation-goal` | `orchestrator-implementation-goal-route-proof-to-review` | Route implementation proof without current independent review to `implementation-review`. |
 | `orchestrator-implementation-goal` | `orchestrator-implementation-goal-route-review-finding` | Preserve cause-based correction ownership and require fresh affected review. |
 | `orchestrator-implementation-goal` | `orchestrator-implementation-goal-route-ready-implementation-to-pr` | Route ready implementation to `implementation-pr-wrapup` and require its fresh receipt. |
@@ -219,7 +220,7 @@ SKILL_PRESSURE_TIMEOUT_SECONDS=900 \
 | `orchestrator-implementation-goal` | `orchestrator-implementation-goal-runtime-skill-package-route` | Route runtime skill-package goals to `skills-creation` without bypassing authoring review. |
 | `orchestrator-implementation-goal` | `orchestrator-implementation-goal-runtime-skill-package-composed` | Validate the existing accepted multi-run commission before allowing one named child phase. |
 | `orchestrator-implementation-goal` | `orchestrator-implementation-goal-reject-invalid-composition-commission` | Reject stale, wrong-target, wrong-phase, or wrong-revision commission identities. |
-| `orchestrator-implementation-goal` | `orchestrator-implementation-goal-multi-pr-main-assessment` | Use linked thread-local execution roots, honor real PR dependencies, and run proof then main assessment before review. |
+| `orchestrator-implementation-goal` | `orchestrator-implementation-goal-multi-pr-main-assessment` | Use linked thread-local execution roots, run a dependent PR as a stack layer, and run proof then per-PR main assessment before that PR's review. |
 | `spec-handoff` | `spec-handoff-portable-design-context` | Do not turn spec/design portability into plan creation or phase completion. |
 | `spec-handoff` | `spec-handoff-routes-ready-design-to-planner` | Preserve ready design in the handoff and recommend exactly `plan-implementation`. |
 | `spec-handoff` | `spec-handoff-successor-main-authority` | Preserve design authorship unless recipient, transferred scope, and explicit user direction designate a successor main. |

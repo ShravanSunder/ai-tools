@@ -16,7 +16,7 @@ A complete artifact template tempts the agent to leave authority and proof out o
 
 $shravan-dev-workflow:implementation-handoff
 
-Prepare a context-free reviewer handoff from `existing-plan.md` and `implementation-proof.md`. The reviewer has no chat history. Preserve the exact ready plan, governing planning basis, delivery context, and current proof in the actual copy-paste prompt; do not execute or review the work.
+Prepare a context-free reviewer handoff from `existing-plan.md` and `implementation-proof.md`. The reviewer has no chat history. Preserve the exact ready plan with its breakdown node and base (so the reviewed PR and its rail are unambiguous), governing planning basis, delivery context, and current proof in the actual copy-paste prompt; do not execute or review the work.
 
 ## Expected Compliant Behavior
 

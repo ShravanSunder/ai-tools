@@ -17,12 +17,22 @@ Planned at branch/HEAD: fixture / 1111111111111111111111111111111111111111
 ## Delivery Context
 
 - Requested terminal: pr-ready-unmerged
-- Delivery grouping: single:scenario-label-summary
-- PR topology: one-pr
+- Breakdown: tests/skills/fixtures/minimal-planning-delivery/existing-plan-breakdown.md
+- Node: scenario-label-summary
+- Base: fixture / 1111111111111111111111111111111111111111
+
+## Throughput Checkpoint
+
+- Choices later slices depend on: n/a: one slice.
+- Blocking first steps: n/a: one slice.
+- Independent workstreams: n/a: one slice.
+- Shared mutable state: n/a: no state beyond the slice's own files.
+- Smallest safe decomposition: one executor; the change is one pure owner with one proof loop.
 
 ## Change And Proof
 
 1. Add the pure formatter at `tests/skills/lib/skill-pressure-evaluation/scenario-cases/format-scenario-summary.ts` and focused unit tests at `tests/skills/lib/skill-pressure-evaluation/scenario-cases/format-scenario-summary.test.ts`.
+   executor: Workhorse · Complete direction/Local · pinned formatter and test paths, exact proof commands, named stops below; the scenario-case loader it reads exists at base
 2. Run focused proof with `pnpm --dir tests/skills exec vitest run lib/skill-pressure-evaluation/scenario-cases/format-scenario-summary.test.ts --config vitest.config.ts`.
 3. Run the full skill unit suite with `pnpm --dir tests/skills run test:unit` and quality proof with `pnpm --dir tests/skills run typecheck`.
 

@@ -327,7 +327,7 @@ export const skillPressureCaseDefinitions = [
       },
       {
         name: "names-implementation-over-delivery",
-        requirement: "Returns an over-delivery finding for the unrequested security-harness subsystem — delivered thing, absent anchor, smallest removal or owner decision-needed, consequence of keeping it unowned — from a whole-diff sweep; never dispositions it as rejected/non-defective because it is well built.",
+        requirement: "Returns an over-delivery finding for the unrequested security-harness subsystem — delivered thing, absent anchor, smallest removal or owner decision-needed, consequence of keeping it unowned — from a sweep of the reviewed PR's whole diff (or one stack layer against its parent) and its plan; never dispositions it as rejected/non-defective because it is well built.",
         failureExample: "Treats the unrequested subsystem as a bonus, calls it non-defective, or leaves it unexamined.",
       },
       {

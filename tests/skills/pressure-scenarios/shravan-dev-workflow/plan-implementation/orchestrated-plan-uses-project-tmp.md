@@ -14,7 +14,7 @@ An orchestrator-implementation-goal delivery supplies `requested terminal: pr-re
 
 ## Expected Compliant Behavior
 
-- Resolves the project root, adds `tmp/*` to project `.gitignore` before plan creation when writes are allowed, and chooses one `tmp/plan-workflows/<date>-<slug>.md` path.
+- Resolves the project root, adds `tmp/*` to project `.gitignore` before plan creation when writes are allowed, and chooses the breakdown path `tmp/plan-workflows/<date>-<slug>-breakdown.md` and one `tmp/plan-workflows/<date>-<slug>-<node-id>.md` path per ready-frontier PR node.
 - Does not use `.git/info/exclude`, checked-in docs, or a user-global plan home.
 - Names the withheld writes because this scenario is read-only.
 
