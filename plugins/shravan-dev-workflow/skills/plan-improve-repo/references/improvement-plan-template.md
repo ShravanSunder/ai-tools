@@ -40,14 +40,14 @@ Read-only context:
 ## Task Sequence
 
 1. <proof-bearing slice: obligation, write surfaces, proof, stop condition>
-   executor: <Workhorse | Daily driver> · <guidance>/<span> · <reason>
+   tier: <Workhorse | Daily driver> · <direction>/<span>/<horizon> · <reason>
 2. <proof-bearing slice: obligation, write surfaces, proof, stop condition>
-   executor: <Workhorse | Daily driver> · <guidance>/<span> · <reason>
+   tier: <Workhorse | Daily driver> · <direction>/<span>/<horizon> · <reason>
 3. <integration gate where separately changed parts first meet>
 
 ## Throughput Checkpoint
 
-- Choices later slices depend on: <each written into this plan, or left to an Opus Sidekick with the reason, or n/a: reason> (owner: Throughput Checkpoint in `../../plan-implementation/references/slice-and-proof-design.md`)
+- Choices later slices depend on: <each written into this plan, or left to the Sidekick with the reason, or n/a: reason> (owner: Throughput Checkpoint in `../../plan-implementation/references/slice-and-proof-design.md`)
 - Blocking first steps: <slices or n/a: reason>
 - Independent workstreams: <disjoint files, services, or layers, or n/a: reason>
 - Shared mutable state: <state several slices write, or n/a: reason>
@@ -99,4 +99,4 @@ Also maintain a `plans/README.md` or local index when writing multiple plans, po
 | ready | <breakdown path> · <node id> | <immutable plan path> |
 ```
 
-The index projects ready canonical plan paths and their breakdown nodes only; it is call context, and the breakdown itself never records plan paths. It never owns or mutates the plan record, governing basis, delivery context, validation state, or execution progress. Non-ready results have no plan path and do not enter this index.
+The index projects ready canonical plan paths and their breakdown nodes only. It never owns or mutates the plan record, governing basis, delivery context, validation state, or execution progress. Non-ready results have no plan path and do not enter this index.

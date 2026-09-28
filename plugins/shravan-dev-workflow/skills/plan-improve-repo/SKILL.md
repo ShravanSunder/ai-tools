@@ -7,7 +7,7 @@ description: "Use when auditing a repository for improvement opportunities, back
 
 IF no work reference is in context and the task qualifies, open or resume the trace through `practices-show-me-your-work` before phase work.
 
-Audit a repo like a senior advisor and let the user-facing main turn admitted findings into completed immutable canonical plans. Before admission, the product is a vetted finding or prioritized backlog routed to the missing semantic owner. Direct planning defaults to `plan-only`. In an orchestrated delivery goal, this skill returns the admitted finding and basis to `plan-implementation`, which the main loads to write the finding's breakdown (one node, or one per independent outcome) and its first-frontier plans. This skill does not edit product code.
+Audit a repo like a senior advisor and let the user-facing main turn admitted findings into completed immutable canonical plans. Before admission, the product is a vetted finding or prioritized backlog routed to the missing semantic owner. Direct planning defaults to `plan-only`. In an orchestrated delivery goal, this skill returns the admitted finding and basis to `plan-implementation`, which the main loads to write the finding's breakdown (one node, or one per independent outcome) and its plans for its first executable nodes. This skill does not edit product code.
 
 Its direct authority is the admitted repository-improvement finding. `plan-implementation` owns direct reviewed-design planning and the breakdown and plans for an orchestrated improvement delivery. Both use the same canonical plan contract without sharing audit authority.
 
@@ -52,7 +52,7 @@ Completion: target classification and, when applicable, the exact `skills-creati
 - Write plan artifacts only for admitted findings unless the user explicitly asks for chat-only output; preserve design-required findings in the shortlist/backlog and route them to their semantic owner.
 - Use the repository home and proportional Markdown form returned by `../../shared-references/canonical-implementation-plan.md`.
 - Read repo instructions, README/docs, package/tooling files, tests, CI, and recent git history before recommending work.
-- Audit categories are in-parent coverage dimensions, and a whole category is never the dispatch unit. After recon, the main may cut a selected category into independent evidence units (one owner, one question, pinned paths) and give each unit that passes Workhorse fit (`../manage-agents/references/model-catalog.md`) to a Luna 🛠️ Worker through `manage-agents` under the Workhorse packet (`../manage-agents/references/agent-job-packet.md`). A unit that fails fit stays in-parent or goes to a Daily-driver Worker. The main verifies each return before it counts toward the category. Agent availability, a broad flow name, or category count alone never justifies a cut.
+- Delegate audit work only by evidence unit, never by whole category (`references/audit-lanes.md`); the main verifies each return before it counts.
 - Treat subagent findings as candidates, not truth. Re-open cited files before accepting a finding.
 - Delegated audit work returns evidence and candidate findings only. Bounded mechanical validation or proof checks may also return observed results. The main performs admission, prioritization, all plan structure and prose, and the governing validation/acceptance judgment; no helper authors or accepts the plan.
 - Never quote or copy secret values. Report secret classes and file locations only when relevant.
@@ -107,7 +107,7 @@ Completion: target classification and, when applicable, the exact `skills-creati
    - write the breakdown under `../../shared-references/canonical-implementation-plan.md`; each plan records its breakdown, node, and base
    - instantiate the canonical plan record with originating planner `plan-improve-repo`
    - return `ready` with `requested terminal: plan-only`, or return `revision-requested | blocked` with `plan identity: none` and no artifact write
-   - include planning-basis identity, exact files, current-state evidence, proof-bearing slices each with its executor record (`../../shared-references/canonical-implementation-plan.md`), the throughput checkpoint, proof gates, and stop conditions
+   - include planning-basis identity, exact files, current-state evidence, proof-bearing slices each with its tier record (`../../shared-references/canonical-implementation-plan.md`), the throughput checkpoint, proof gates, and stop conditions
    - before returning `ready`, IF the plan is a full plan, load `../plan-implementation/references/advisor-plan-review.md` and return every review point's take or decline with its reason; a compact plan records its skip reason instead
 8. Validate each generated ready plan without changing its plan record or planning result. A new `revision-requested` or `blocked` result has `plan identity: none` and skips artifact validation:
    - read the plan back after writing it
