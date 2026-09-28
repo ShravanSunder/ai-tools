@@ -52,7 +52,7 @@ Completion: target classification and, when applicable, the exact `skills-creati
 - Write plan artifacts only for admitted findings unless the user explicitly asks for chat-only output; preserve design-required findings in the shortlist/backlog and route them to their semantic owner.
 - Use the repository home and proportional Markdown form returned by `../../shared-references/canonical-implementation-plan.md`.
 - Read repo instructions, README/docs, package/tooling files, tests, CI, and recent git history before recommending work.
-- Inspect audit categories in-parent by default. IF the user explicitly requests delegation, or current source reveals one concrete independently verifiable evidence question whose bounded handoff materially improves coverage, `manage-agents` owns that later handoff; agent availability or a broad flow name is never enough.
+- Audit categories are in-parent coverage dimensions, and a whole category is never the dispatch unit. After recon, the main may cut a selected category into independent evidence units (one owner, one question, pinned paths) and give each unit that passes Workhorse fit (`../manage-agents/references/model-catalog.md`) to a Luna 🛠️ Worker through `manage-agents` under the Workhorse packet. A unit that fails fit stays in-parent or goes to a Daily-driver Worker. The main verifies each return before it counts toward the category. Agent availability, a broad flow name, or category count alone never justifies a cut.
 - Treat subagent findings as candidates, not truth. Re-open cited files before accepting a finding.
 - Delegated audit work returns evidence and candidate findings only. Bounded mechanical validation or proof checks may also return observed results. The main performs admission, prioritization, all plan structure and prose, and the governing validation/acceptance judgment; no helper authors or accepts the plan.
 - Never quote or copy secret values. Report secret classes and file locations only when relevant.
@@ -63,7 +63,7 @@ Completion: target classification and, when applicable, the exact `skills-creati
 ## Normal Flows
 
 - `quick`: inspect instructions, README, manifests, tests, and churn; produce a short vetted shortlist and at most one admitted plan.
-- `deep`: inspect all relevant audit categories in-parent, verify candidates, and write admitted plans for the top 3-5 improvements unless the user picks different ones; route design-required findings without plan writing. Delegate only under the Core Rules predicate.
+- `deep`: cover all relevant audit categories, verify candidates, and write admitted plans for the top 3-5 improvements unless the user picks different ones; route design-required findings without plan writing. Delegate only evidence units cut under the Core Rules.
 - `focus <area>`: audit only the named area, such as security, tests, DX, performance, docs, architecture, or one package/module; apply the same admission gate.
 - `branch`: compare the current branch against its base and plan only admitted improvements for the branch's changed surface, not the whole repo.
 - `next`: choose the highest-leverage existing completed canonical plan and validate its planning basis and current-state readiness without mutating it.
@@ -106,7 +106,8 @@ Completion: target classification and, when applicable, the exact `skills-creati
    - one focused plan per finding, not a mega-plan
    - instantiate the canonical plan record with originating planner `plan-improve-repo`
    - return `ready` with `requested terminal: plan-only`, or return `revision-requested | blocked` with `plan identity: none` and no artifact write
-   - include planning-basis identity, exact files, current-state evidence, proof-bearing slices, proof gates, and stop conditions
+   - include planning-basis identity, exact files, current-state evidence, proof-bearing slices each with its executor record (`../../shared-references/canonical-implementation-plan.md`), the throughput checkpoint, proof gates, and stop conditions
+   - before returning `ready`, IF the plan is a full plan, load `../plan-implementation/references/advisor-plan-review.md` and return every review point's take or decline with its reason; a compact plan records its skip reason instead
 8. Validate each generated ready plan without changing its plan record or planning result. A new `revision-requested` or `blocked` result has `plan identity: none` and skips artifact validation:
    - read the plan back after writing it
    - confirm every write surface exists or is intentionally new
@@ -140,7 +141,7 @@ Use this for `validate-plan`, `next`, and pre-execution checks.
 
 ## Progressive Disclosure
 
-- IF performing a broad repo audit, load `references/audit-lanes.md` and return the selected in-parent categories, each category's inspected anchors, candidate or null result, and coverage limit. IF delegation qualifies under the Core Rules predicate, include the one bounded evidence handoff selected there and use `manage-agents`.
+- IF performing a broad repo audit, load `references/audit-lanes.md` and return the selected categories, each category's inspected anchors, candidate or null result, and coverage limit, plus every evidence unit cut under the Core Rules with its verified Worker return.
 - IF writing a plan artifact, load `references/improvement-plan-template.md` and return the proportional filled plan form selected under the shared canonical contract.
 - IF reconciling existing improvement plans or checking whether they remain current, load `references/reconcile-backlog.md` and return the separate reconciliation receipt, unchanged canonical plan record for each extant plan, and exact originating-planner correction route when applicable.
 - IF validating a plan, selecting `next`, or judging current execution readiness, load `references/validation-checklist.md` and return its separate current-state receipt without mutating the canonical plan record, governing basis, or delivery context.
@@ -151,7 +152,7 @@ Return:
 
 - repo coverage inspected
 - selected flow: quick, deep, focus, branch, next, validate-plan, or reconcile
-- categories inspected and skipped, plus any conditionally delegated evidence question
+- categories inspected and skipped, plus every delegated evidence unit and its verified return
 - accepted findings, rejected candidates, and unknowns
 - prioritized improvement shortlist
 - validation verdict for generated or existing plans

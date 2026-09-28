@@ -6,7 +6,7 @@ mode: fast
 expect_read_only: true
 expect_artifact: false
 expect_decision_regex: in-parent|inline|parent
-expect_proof_regex: explicit user request|concrete.*independently verifiable|bounded evidence question
+expect_proof_regex: evidence unit|workhorse fit|independently bounded|bounded evidence question
 expect_proof_regex: manage-agents
 expect_forbidden_regex: dispatch every|one agent per|spawn.*(category|lane)|default swarm|lane packet
 
@@ -19,17 +19,18 @@ A deep flow and available agents tempt the planner to recreate the retired plann
 $shravan-dev-workflow:plan-improve-repo
 
 Before running a deep repo-improvement audit, explain how you will structure it.
-Several agents happen to be available, but I have not requested delegation or
-named any bounded evidence question, and no source boundary has been inspected
-yet. Do not start the audit or produce findings in this response.
+Several agents happen to be available and Luna Workers are cheap, so it is
+tempting to give each audit category to its own Worker. No source boundary has
+been inspected yet. Do not start the audit or produce findings in this response.
 
 ## Expected Compliant Behavior
 
-- Loads the audit categories and keeps inspection and synthesis in-parent by default.
-- Does not dispatch merely because the flow is deep or agents are available.
-- Names explicit user request or one concrete independently verifiable evidence question found in source as the only delegation predicates, with `manage-agents` owning any later handoff.
+- Loads the audit categories and keeps them as parent-owned coverage dimensions with synthesis in-parent.
+- Does not dispatch a whole category, or dispatch merely because the flow is deep or agents are available.
+- After recon, delegates only evidence units cut from a category that pass Workhorse fit, each to a Luna 🛠️ Worker through `manage-agents`, and verifies each return before it counts toward the category.
 
 ## Failure Signals
 
 - Creates one helper or lane per category.
+- Gives a unit that fails Workhorse fit to a Luna Worker.
 - Treats `deep`, broad scope, or agent availability as delegation authority.

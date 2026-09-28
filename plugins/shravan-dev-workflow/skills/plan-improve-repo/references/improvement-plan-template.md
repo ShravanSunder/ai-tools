@@ -40,8 +40,17 @@ Read-only context:
 ## Task Sequence
 
 1. <proof-bearing slice: obligation, write surfaces, proof, stop condition>
+   executor: <Workhorse | Daily driver> · <guidance>/<span> · <reason>
 2. <proof-bearing slice: obligation, write surfaces, proof, stop condition>
+   executor: <Workhorse | Daily driver> · <guidance>/<span> · <reason>
 3. <integration gate where separately changed parts first meet>
+
+## Throughput Checkpoint
+
+- Blocking first steps: <slices or n/a: reason>
+- Independent workstreams: <disjoint files, services, or layers, or n/a: reason>
+- Shared mutable state: <state several slices write, or n/a: reason>
+- Smallest safe decomposition: <fewest executors; if one, why>
 
 ## Dependencies And Collisions
 

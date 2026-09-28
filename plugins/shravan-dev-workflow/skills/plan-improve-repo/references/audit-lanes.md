@@ -1,17 +1,20 @@
 # Audit Categories
 
-Use these categories to structure broad repo audits. The parent inspects them inline by default, keeps synthesis, and verifies every accepted candidate against current source.
+Use these categories to structure broad repo audits. They are coverage dimensions: the parent owns each one, keeps synthesis, and verifies every accepted candidate against current source.
 
-Delegation is conditional, never a flow default. IF the user explicitly requests delegation, or inspected source reveals one concrete independently verifiable evidence question whose bounded handoff materially improves coverage, `manage-agents` owns the later handoff for that question. Agent availability, `deep`, or category count does not satisfy the predicate. A delegated question stays read-only and returns candidate evidence only.
+Delegation happens by evidence unit, never by category. After recon, the parent may cut a selected category into independently bounded units: one owner, one question, pinned paths or commands. A unit that passes Workhorse fit (`../../manage-agents/references/model-catalog.md`) goes to a Luna 🛠️ Worker through `manage-agents` under the Workhorse packet; a unit that fails fit stays in-parent or goes to a Daily-driver Worker. A security or architecture category as a whole usually spans domains, so it is not itself a Workhorse unit. Agent availability, `deep`, or category count does not justify a cut. A delegated unit stays read-only and returns candidate evidence only.
 
-## Delegate One Bounded Question
+## Evidence Unit Packet
+
+Fill this for each unit, alongside the Workhorse packet fields (output file, VERIFY, TIMEBOX, REPORT).
 
 ```text
-You are a read-only improvement-audit lane.
+You are a read-only improvement-audit evidence unit.
 Do not edit files, stage changes, commit, or run mutating commands.
 
 Repo: <absolute path>
-Question: <bounded audit question>
+Category: <the category this unit covers part of>
+Question: <one bounded audit question, one owner>
 Parent needs: evidence-backed candidates only
 
 Inspect:
@@ -24,6 +27,8 @@ Return:
 - bounded affected surface and evidence-backed impact
 - proof gate that would validate the improvement
 - validation commands or checks the parent must confirm
+- null result, if nothing was found, with what was searched
+- coverage limit: what this unit did not inspect
 ```
 
 ## Audit Categories
@@ -36,7 +41,7 @@ Return:
 - `dx-tooling`: confusing scripts, validation friction, generated output drift.
 - `docs-onboarding`: README/AGENTS/runbook drift that blocks future agents or maintainers.
 
-Inspect these in-parent. Do not turn the category list into a default swarm.
+The parent owns every category. Do not turn the category list into a swarm; only evidence units cut from a category go to Workers.
 
 ## Flow Selection
 
@@ -47,4 +52,4 @@ Inspect these in-parent. Do not turn the category list into a default swarm.
 
 ## Category Pass Completion
 
-For every selected category, return the inspected source anchors, either an evidence-backed candidate or an explicit null result, and the coverage limit. The category pass is complete when every selected category has those three returns and the parent can begin candidate vetting without guessing what was inspected or omitted.
+For every selected category, return the inspected source anchors, either an evidence-backed candidate or an explicit null result, and the coverage limit. When units were cut from the category, combine each verified unit return (anchors, candidates or null result, limits) with the parent's own inspection into these three returns. The category pass is complete when every selected category has those three returns and the parent can begin candidate vetting without guessing what was inspected or omitted.
