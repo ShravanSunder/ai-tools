@@ -1,8 +1,6 @@
 # Audit Categories
 
-Use these categories to structure broad repo audits. The parent inspects them inline by default, keeps synthesis, and verifies every accepted candidate against current source.
-
-Delegation goes through `manage-agents`. A delegated question stays read-only and returns candidate evidence only.
+Use these categories to structure broad repo audits. `manage-agents` decides which categories go to 🛠️ Workers. A delegated category stays read-only and returns candidate evidence; the Lead keeps synthesis and verifies every accepted candidate against current source.
 
 ## Delegate One Bounded Question
 
