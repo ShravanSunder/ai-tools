@@ -17,7 +17,7 @@ Job to hand off: "Implement PR 1: its four slices, in order, from the plan."
 
 ### Orchestration: a slice blocked by a missing seam
 
-Main point: cut before escalating; the Lead makes the design choice, and helpers bring evidence.
+Main point: cut before escalating; the Lead makes the design choice, and other agents bring evidence.
 
 The PR 1 Sidekick stops at slice 4. The plan says the test waits for shutdown, but the service has no signal that shutdown finished, so the test could only sleep. It returns the gap to the Lead.
 
@@ -28,7 +28,7 @@ Job the Lead is tempted to hand off: "Make slice 4's test prove shutdown without
 3. Horizon: one slice, checked against its acceptance check. Task.
 4. Cut: the Lead makes that choice and writes it into the plan: the service emits a shutdown-finished event, and the test waits on it. Slice 4a adds the event; slice 4 waits on it. Both are Complete · Local, one Task each. If the Lead lacks the facts to choose, it first hands off "trace the service's shutdown sequence and report, with file:line, where it could signal completion", then decides.
 5. Role: more slices of the same PR go to the same 🐒 Sidekick; the evidence job is one Task that stands alone, so one 🛠️ Worker.
-6. Model: in the 🛠️ Worker and 🐒 Sidekick table, the tempting job's Partial matches a Daily-driver row. After the cut, Complete · Local matches the Workhorse row. The design choice itself goes to no helper, at any tier.
+6. Model: in the 🛠️ Worker and 🐒 Sidekick table, the tempting job's Partial · Local matches no row, so it is not ready to hand off. After the cut, Complete · Local matches the Workhorse row. The design choice itself goes to no other agent, at any tier.
 
 ### Orchestration: PR wrap-up
 
@@ -58,7 +58,7 @@ Job the Lead is tempted to hand off: "Find how libraries A, B, and C handle retr
 3. Horizon: three findings and a recommendation, checked only at the end. Milestone.
 4. Cut: the Lead keeps the choice and names the method. Three jobs: "in library A, trace the retry entry point through retryable-error classification, attempt limits, delay calculation, and the tests that cover them; report each with file:line", and the same for B and C. Each is Complete · Local, one Task checked against its report.
 5. Role: three Tasks that stand alone. Three 🛠️ Workers, fanned out.
-6. Model: in the 🛠️ Worker and 🐒 Sidekick table, the tempting job's Partial matches a Daily-driver row. After the cut, each job's Complete · Local matches the Workhorse row. The Lead compares the reports and proposes the policy.
+6. Model: in the 🛠️ Worker and 🐒 Sidekick table, the tempting job's Partial · Local matches no row, so it is not ready to hand off. After the cut, each job's Complete · Local matches the Workhorse row. The Lead compares the reports and proposes the policy.
 
 ### Research: questions that keep coming
 
@@ -77,7 +77,7 @@ Job to hand off: "For each question, trace the field's writes, reads, and serial
 
 ### Cross-system: split at the system boundary
 
-Main point: split a cross-system change at the boundary; the Daily-driver row is for work that cannot be split.
+Main point: split a cross-system change at the boundary; work that cannot be split goes to the owner.
 
 The server returns prices as floats, and the mobile app rounds them wrong. The plan moves prices to integer cents and fixes the new response shape. Old app versions would break, so the server and the app release together.
 
@@ -88,4 +88,4 @@ Job the Lead is tempted to hand off: "Move the server and the app to integer cen
 3. Horizon: both sides, checked together at release. Milestone.
 4. Cut: the contract is settled, so each side can be built against it. Two jobs: "change the server to return integer cents per the plan" and "change the app to read integer cents per the plan", each Complete · Local, one Task. Releasing together is a gate the Lead holds after both land, not a reason to keep one executor.
 5. Role: two Tasks that stand alone. Two 🛠️ Workers.
-6. Model: in the 🛠️ Worker and 🐒 Sidekick table, each job's Complete · Local matches the Workhorse row. Only if neither side can be built or tested without the other changing at the same time does the job stay Complete · Cross-system as one Milestone for a 🐒 Sidekick, matching the Daily-driver Cross-system row, with the reason recorded: the Workhorse lacks holding both sides of a contract that must change at once.
+6. Model: in the 🛠️ Worker and 🐒 Sidekick table, each job's Complete · Local matches the Workhorse row. The tempting job's Complete · Cross-system matches no row. If neither side can be built or tested without the other changing at the same time, the Lead brings it to the owner, who can name a model for one 🐒 Sidekick to hold both sides.

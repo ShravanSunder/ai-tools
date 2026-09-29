@@ -7,7 +7,7 @@ description: "Always use when delegating to subagents, agent teams, or parallel 
 
 Collaborate with other agents through a fixed structure: each job is classified, each agent has a role and a model, each handoff is a packet, and each result is checked against its evidence.
 
-The 🦁 Lead is the agent the owner talks to. It designs, plans, cuts the work, and accepts results. The owner decides tradeoffs, merges, and can override any pick. Other agents take jobs from the Lead or from a Sidekick, and return evidence, findings, or changes; they never write the design or the plan.
+The 🦁 Lead is the agent the owner talks to. It designs, plans, cuts the work, and accepts results. The owner decides tradeoffs, merges, and can override any pick. Other agents (the roles under Model Catalog & Roles) take jobs from the Lead, a Sidekick, or an Advisor, and return evidence, findings, or changes; they never write the design or the plan.
 
 ## Classify
 
@@ -20,7 +20,7 @@ Work nests like a project plan. At every level the agent works in a loop: do one
 | Project | milestones | the owner's definition of done |
 | Milestone, such as one PR | tasks | the plan's proof, then review |
 | Task, such as one slice | subtasks | its acceptance check |
-| Subtask, one step | edits or commands | its expected result |
+| Subtask, one step or one written procedure with no judgment between its steps | edits or commands | its expected result |
 
 ### Horizon
 
@@ -28,7 +28,7 @@ The highest work level the agent closes before handing back. Name the check that
 
 | Answer | The agent closes | Before handing back at |
 |---|---|---|
-| Subtask | one step | its expected result |
+| Subtask | one step, or one written procedure | its expected result |
 | Task | one result made of subtasks | its acceptance check |
 | Milestone | one deliverable made of tasks | the plan's proof |
 
@@ -40,7 +40,7 @@ How much of the job the brief decides.
 |---|---|---|---|
 | Exact | is a procedure; nothing is left to judge | could a script run it? | only an Exact job can go to a 🔧 Operator |
 | Complete | names the approach; the agent decides only details nothing else depends on | can you name the approach in one sentence? | ready to hand off |
-| Partial | gives only the outcome, so the agent would choose the approach | does the job hide a design choice? | the Lead names the approach and writes the choice into the plan; a design choice never goes to a helper |
+| Partial | gives only the outcome, so the agent would choose the approach | does the job hide a design choice? | the Lead writes any design choice into the plan, since a design choice never goes to another agent; what stays Partial after that, an approach inside choices nothing else builds on, takes the Partial row of the Worker and Sidekick catalog when it crosses domains or systems |
 
 Missing intent or a missing plan is missing input, not Partial.
 
@@ -52,7 +52,7 @@ What the agent must hold in its head to get the job right. Size and module count
 |---|---|---|---|
 | Local | one owner's code and the contracts it uses | is reading that owner and its contracts enough? | ready to hand off |
 | Cross-domain | two or more owners in one system whose shared contract must stay in step | would the change break another owner's code in this system? | write the shared contract into the plan |
-| Cross-system | a contract another system consumes: an API, a wire format, stored data another system reads | does another system read what changes? | split at the system boundary if you can |
+| Cross-system | a contract another system consumes: an API, a wire format, stored data another system reads | does another system read what changes? | split at the system boundary if you can; once the contract is written into the plan, each side built against it is Local |
 
 ### How they fit
 
@@ -79,7 +79,7 @@ Horizon limits the role; it does not pick it.
 | 🛠️ Worker | Task, Subtask |
 | 🔧 Operator | Subtask, only an Exact one |
 
-Among the roles a job's horizon allows, a job that needs context from related jobs goes to a Sidekick, a job that stands alone goes to a Worker, and a written procedure goes to an Operator.
+Among the roles a job's horizon allows, an Exact Subtask goes to an Operator, a job that needs context from related jobs goes to a Sidekick, and any other job that stands alone goes to a Worker.
 
 An Operator makes no judgment calls: it never decides what to run, what a result means, or how to fix it. It runs the suite and reports failures, watches CI until it finishes, pushes and publishes a verified file, applies a codemod, or collects logs; it does not fix a failing test or decide whether a failure matters. Judgment it meets goes back to whoever assigned it. Tests and proof for an agent's own change stay with that agent; an Operator takes only a procedure assigned on its own, such as a suite run or a CI watch. The 🦁 Lead assigns every role. A 🐒 Sidekick or a 🦉 Advisor may also start 🛠️ Workers and 🔧 Operators for its own work.
 
@@ -95,7 +95,7 @@ Title every non-Lead thread `<emoji> <role> · <purpose>`.
 | Daily driver | execution or synthesis that needs judgment |
 | Frontier | demanding judgment, design, or review |
 
-A Daily-driver row needs one recorded reason: the owner recommends it, the Lead says what the Workhorse lacks, or the Workhorse failed after corrections. Rows marked `User must authorize` are used only when the owner names them. Effort is the most a row allows; use less when the job needs less.
+A Daily-driver row needs one recorded reason: the owner recommends it, the Lead says what the Workhorse lacks, or the Workhorse failed after corrections. Rows marked `User must authorize` are used only when the owner names them. Effort is the most a row allows; use less when the job needs less. A job that matches no row is not ready: cut it until it matches one, or bring it to the owner, who can name a model.
 
 ### 🔧 Operator
 
@@ -107,13 +107,13 @@ A Daily-driver row needs one recorded reason: the owner recommends it, the Lead 
 
 | Tier | Model | Max effort | Direction | Span |
 |---|---|---|---|---|
-| Workhorse | OpenAI Luna | xhigh | Complete | Local, Cross-domain |
+| Workhorse | OpenAI Luna | xhigh | Exact, Complete | Local, Cross-domain |
 | Daily driver | OpenAI Sol | high | Complete | Cross-domain |
 | Daily driver | Claude Opus | high to xhigh | Partial | Cross-domain, Cross-system |
 
 ### 🔎 Review Sidekick
 
-Review comes after the 🦁 Lead has verified the work against the plan and its proof, asking the 🦉 Advisor to check it too when one exists. Review Sidekicks then review each Project and Milestone, never a single Task or Subtask. Every reviewer is from a different lineage (OpenAI, Claude, xAI) than the author and gets no author history.
+Implementation review comes after the 🦁 Lead has verified the work against the plan and its proof, asking the 🦉 Advisor to check it too when one exists. Review Sidekicks then review each Project and Milestone, never a single Task or Subtask. Design and proposal reviews happen where their owning phase says and use the same reviewers. Every reviewer is from a different lineage (OpenAI, Claude, xAI) than the author and gets no author history; when the author is xAI, the owner picks the every-review reviewer and one security reviewer.
 
 | Reviewer | Tier | Model | Max effort | When |
 |---|---|---|---|---|
@@ -121,7 +121,7 @@ Review comes after the 🦁 Lead has verified the work against the plan and its 
 | Security | Frontier | OpenAI Astra | high to xhigh | the review touches auth, secrets, untrusted input, parsing, filesystem, network, subprocess, plugins, agents, or external services, and the author is not OpenAI |
 | Security | Frontier | Claude Opus | xhigh | the same surfaces, and the author is not Claude |
 
-A second reviewer joins only when the owner asks for one and names its model.
+Beyond the rows above, another reviewer joins only when the owner asks for one and names its model.
 
 ### 🦉 Advisor
 
@@ -133,8 +133,7 @@ A second reviewer joins only when the owner asks for one and names its model.
 
 ## Work with an agent
 
-Classify the job, pick its role and model from the catalogs above, then launch, hand off, wait, and check the result's evidence (files, exit codes, diff scope) against its claim. The Lead gives the overall verdict.
-
+Classify the job (the Examples at the end show how), pick its role and model from the catalogs above, then launch, hand off, wait, and check the result's evidence (files, exit codes, diff scope) against its claim. The Lead gives the overall verdict.
 
 ### Launch
 
