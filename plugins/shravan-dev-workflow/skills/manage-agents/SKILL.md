@@ -78,8 +78,7 @@ A Daily-driver row needs one recorded reason: the owner recommends it, the Lead 
 |---|---|---|---|---|
 | Workhorse | OpenAI Luna | xhigh | Complete | Local, Cross-domain |
 | Daily driver | OpenAI Sol | high | Complete | Cross-domain |
-| Daily driver | Claude Opus | xhigh | Partial | Local, Cross-domain, Cross-system |
-| Daily driver | Claude Opus | xhigh | Complete | Cross-system |
+| Daily driver | Claude Opus | high to xhigh | Partial | Cross-domain, Cross-system |
 
 ### 🔎 Review Sidekick
 
