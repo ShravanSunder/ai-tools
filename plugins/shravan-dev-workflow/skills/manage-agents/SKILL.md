@@ -95,7 +95,7 @@ Title every non-Lead thread `<emoji> <role> · <purpose>`.
 | Daily driver | execution or synthesis that needs judgment |
 | Frontier | demanding judgment, design, or review |
 
-A Daily-driver row needs one recorded reason: the owner recommends it, the Lead says what the Workhorse lacks, or the Workhorse failed after corrections. Rows marked `User must authorize` are used only when the owner names them. Thinking Effort lists the allowed value or inclusive range for each row; a single value is exact. A job that matches no row is not ready: cut it until it matches one, or bring it to the owner, who can name a model.
+A Daily-driver row needs one recorded reason: the owner recommends it, the Lead says what the Workhorse lacks, or the Workhorse failed after corrections. Rows marked `User must authorize` are used only when the owner names them. Thinking Effort lists the allowed value or inclusive range for each row. A job that matches no row is not ready: cut it until it matches one, or bring it to the owner, who can name a model.
 
 ### 🔧 Operator
 
