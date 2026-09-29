@@ -81,7 +81,7 @@ Horizon limits the role; it does not pick it.
 
 Among the roles a job's horizon allows, a job that needs context from related jobs goes to a Sidekick, a job that stands alone goes to a Worker, and a written procedure goes to an Operator.
 
-An Operator makes no judgment calls: it never decides what to run, what a result means, or how to fix it. It runs the suite and reports failures, watches CI until it finishes, pushes and publishes a verified file, applies a codemod, or collects logs; it does not fix a failing test or decide whether a failure matters. Judgment it meets goes back to whoever assigned it. Tests and proof for an agent's own change stay with that agent; an Operator takes only a procedure assigned on its own, such as a suite run or a CI watch. Only the Lead and a Sidekick assign other agents.
+An Operator makes no judgment calls: it never decides what to run, what a result means, or how to fix it. It runs the suite and reports failures, watches CI until it finishes, pushes and publishes a verified file, applies a codemod, or collects logs; it does not fix a failing test or decide whether a failure matters. Judgment it meets goes back to whoever assigned it. Tests and proof for an agent's own change stay with that agent; an Operator takes only a procedure assigned on its own, such as a suite run or a CI watch. The 🦁 Lead assigns every role. A 🐒 Sidekick or a 🦉 Advisor may also start 🛠️ Workers and 🔧 Operators for its own work.
 
 Delegate only independent work that costs less to hand off than to do. Work that splits into independent units (an audit, a migration, a review across files) fans out: one Worker per unit, one table at the end.
 
@@ -152,7 +152,7 @@ Exact id: the host's row in `~/.config/agent-context/model-map.md`; otherwise th
 
 ### Hand off
 
-MUST load `references/agent-job-packet.md` and return the packet, plus the session row when the role runs in its own session.
+Whoever assigns the job writes its prompt: the 🦁 Lead for every role, or a Sidekick or Advisor for the Workers and Operators it starts. MUST load `references/agent-job-packet.md` and return the packet, opened with the role's opening, plus the session row when the role runs in its own session.
 
 A Review Sidekick gets no author history: no fork, no resume. Its packet carries the sources. When an agent drifts, send it a correction; don't restart it.
 
