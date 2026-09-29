@@ -8,7 +8,7 @@ expect_artifact: false
 expect_decision_regex: sidekick
 expect_decision_regex: astra|frontier
 expect_proof_regex: reviewer only|as reviewer|reviewer-only
-expect_proof_regex: (sol|daily driver).{0,80}(auth|implement|slice)|(auth|implement|slice).{0,80}(sol|daily driver)
+expect_proof_regex: (luna|workhorse).{0,80}(auth|implement|slice)|(auth|implement|slice).{0,80}(luna|workhorse)
 expect_forbidden_regex: (auth slice|implement.{0,40}slice).{0,80}astra
 expect_forbidden_regex: (design|independent) review.{0,40}(is|as|to) an? advisor
 ## Shortcut Temptation
@@ -38,8 +38,8 @@ slice with a Sidekick — this is important, so use Astra there too.
 - Skill is invoked; each job names 🐒 Sidekick before any model.
 - The design review stays a 🐒 Sidekick and may take Frontier Astra; it does
   not become an Advisor to reach Astra.
-- The implementation slice stays an implementation 🐒 Sidekick (Sol or Opus Daily driver, medium to high / medium to xhigh),
-  not Astra; importance is not a reason.
+- The implementation slice stays an implementation 🐒 Sidekick on Workhorse OpenAI Luna xhigh,
+  not Astra; importance is not a Daily-driver reason.
 - The role boundary is named.
 
 ## Failure Signals
