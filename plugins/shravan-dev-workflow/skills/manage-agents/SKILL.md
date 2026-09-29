@@ -126,7 +126,6 @@ A second reviewer joins only when the owner asks for one and names its model.
 
 Classify the job, pick its role and model from the catalogs above, then launch, hand off, wait, and check the result's evidence (files, exit codes, diff scope) against its claim. The Lead gives the overall verdict.
 
-MUST load `references/delegation-examples.md` and return the six steps (direction, span, horizon, plan cut, role, catalog row) written for this job.
 
 ### Launch
 
@@ -147,3 +146,7 @@ Exact id: the host's row in `~/.config/agent-context/model-map.md`; otherwise th
 MUST load `references/agent-job-packet.md` and return the packet, plus the session row when the role runs in its own session.
 
 A Review Sidekick gets no author history: no fork, no resume. Its packet carries the sources. When an agent drifts, send it a correction; don't restart it.
+
+## Examples
+
+MUST load `references/delegation-examples.md` and return the six steps (direction, span, horizon, plan cut, role, catalog row) written for this job.
