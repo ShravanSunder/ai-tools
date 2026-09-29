@@ -22,13 +22,21 @@ Work nests like a project plan. At every level the agent works in a loop: do one
 
 An agent can drive only as far as there is a check to verify against. If the Lead cannot name the check for a level, the job is cut smaller.
 
-| Criterion | Answers |
-|---|---|
-| **Direction**: how much the brief decides | Exact: every step is given · Complete: the approach is named · Partial: only the outcome is given |
-| **Span**: what the agent must hold | Local: one owner and the contracts it uses · Cross-domain: several owners in one system · Cross-system: a contract another system consumes |
-| **Horizon**: the highest level of the work the agent closes before handing back | Subtask · Task · Milestone |
+**Horizon**: the highest level of the work the agent closes before handing back: Subtask, Task, or Milestone. Name the check that ends each job.
 
-Before picking, cut the plan toward Complete and Local where you can: name the approach, write shared contracts and open choices into the plan, split at a system boundary, and name the check that ends each job. Size does not set span; missing intent or a missing plan is missing input, not Partial.
+**Direction**: how much of the job the brief decides.
+
+- Exact: the brief is a procedure; nothing is left to judge. Test: could a script run it? Only an Exact job can go to a 🔧 Operator.
+- Complete: the brief names the approach; the agent decides only details nothing else depends on. Test: can you name the approach in one sentence?
+- Partial: the brief gives only the outcome, so the agent would choose the approach. Cut it: the Lead names the approach and writes the choice into the plan. A design choice never goes to a helper. Missing intent or a missing plan is missing input, not Partial.
+
+**Span**: what the agent must hold in its head to get the job right.
+
+- Local: one owner's code and the contracts it uses. Test: is reading that owner and its contracts enough? Size and module count don't change it.
+- Cross-domain: two or more owners in one system whose shared contract must stay in step. Cut it: write the shared contract into the plan.
+- Cross-system: a contract another system consumes (an API, a wire format, stored data another system reads). Cut it: split at the system boundary if you can.
+
+Horizon caps the role, direction decides whether an Operator can take the job, and direction and span pick the Models row.
 
 ## Roles
 
