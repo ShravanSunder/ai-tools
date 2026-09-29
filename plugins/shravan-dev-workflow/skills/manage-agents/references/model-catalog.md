@@ -17,12 +17,10 @@ A tier (model category) is a cost and capability grouping of a model and its eff
 | Model category | Model lineage | Thinking | Use |
 |----------------|---------------|----------|-----|
 | Workhorse | OpenAI Luna | medium | |
-| Workhorse | OpenAI Luna | high | |
 | Workhorse | OpenAI Luna | xhigh | |
-| Workhorse | OpenAI Luna | max | |
 | Daily driver | Claude Opus | medium | |
 | Daily driver | Claude Opus | high | |
-| Daily driver | OpenAI Sol | medium | |
+| Daily driver | OpenAI Sol | medium | User must authorize |
 | Daily driver | OpenAI Sol | high | |
 | Daily driver | xAI Grok | medium | |
 | Daily driver | xAI Grok | high | |
@@ -33,40 +31,38 @@ A tier (model category) is a cost and capability grouping of a model and its eff
 
 ## Effort bands
 
-Every 🔧 Operator, 🛠️ Worker, and 🐒 Sidekick job starts on the Workhorse tier. The role sets the effort band; the job's demanding signals pick the effort inside it.
+Every 🔧 Operator, 🛠️ Worker, and 🐒 Sidekick job starts on the Workhorse tier. The role sets the effort.
 
-| Role | Effort band | Effort |
-|---|---|---|
-| 🔧 Operator | medium | always medium |
-| 🛠️ Worker | high to xhigh | high; xhigh when any signal is demanding |
-| 🐒 Sidekick | high to max | high; xhigh with one demanding signal; max with two or more |
+| Role | Effort |
+|---|---|
+| 🔧 Operator | medium |
+| 🛠️ Worker | xhigh |
+| 🐒 Sidekick | xhigh |
 
-Demanding signals: Partial direction; Cross-domain or Cross-system span; Run or Open horizon (definitions in `SKILL.md` Select an agent).
-
-**Escalation.** Partial direction, Cross-system span, and Open horizon are flags, not routes. For a flagged job, Main first fixes the cut: write the open choice into the plan, split at the system boundary, or fix the diagnostic approach. A Daily-driver model takes a job only with one recorded escalation reason: `owner recommended`; `judged tough: <missing condition>`, when Main judges it too tough for the Workhorse tier at its band's top; or `Workhorse failed: <evidence>`, after a failed check or result through corrections (a boundary stop is a plan defect instead). Escalated work takes Opus medium for open judgment (Opus high on evidence) and Sol medium otherwise; a Cursor-native 🛠️ Worker may take Grok medium. Record it in the slice's tier record or the assignment.
+**Escalation.** Partial direction, Cross-system span, and Open horizon are flags, not routes. For a flagged job, Main first fixes the cut: write the open choice into the plan, split at the system boundary, or fix the diagnostic approach. A Daily-driver model takes a job only with one recorded escalation reason: `owner recommended`; `judged tough: <missing condition>`, when Main judges it too tough for the Workhorse tier at its role's effort; or `Workhorse failed: <evidence>`, after a failed check or result through corrections (a boundary stop is a plan defect instead). Escalated work takes Sol high when the approach is fixed and Opus high for open judgment; a Cursor-native 🛠️ Worker may take Grok medium. Record it in the slice's tier record or the assignment.
 
 Sidekick examples (use them to classify any assignment):
 
-| Assignment | Signals | Effort |
-|---|---|---|
-| "Implement slice 3 of this PR (add the config field and its tests), then report back." | Complete · Local · Task | high |
-| "Fix this bug in one module; the cause is known and the fix approach is in the brief." | Complete · Local · Task | high |
-| "Implement this PR: four slices in one module, every choice written in the plan." | Complete · Local · Run | xhigh |
-| "Take slice 2, which changes the orders and billing domains' shared contract as the plan specifies, then report back." | Complete · Cross-domain · Task | xhigh |
-| "Implement this PR: three planned slices, one domain publishes a new event and another consumes it; the event contract and both sides' approach are in the plan." | Complete · Cross-domain · Run | max |
-| "Find why sync drops messages under load, fix it, and choose the retry policy the next two slices build on." | Partial · Local · Open | max; flagged: fix the diagnostic approach or the retry choice in the plan first, or escalate with a reason |
-| "Move the client and the server to the new wire format: the plan names the format and the migration approach in four ordered slices." | Complete · Cross-system · Run | max; flagged (Escalation) |
+| Assignment | Signals |
+|---|---|
+| "Implement slice 3 of this PR (add the config field and its tests), then report back." | Complete · Local · Task |
+| "Fix this bug in one module; the cause is known and the fix approach is in the brief." | Complete · Local · Task |
+| "Implement this PR: four slices in one module, every choice written in the plan." | Complete · Local · Run |
+| "Take slice 2, which changes the orders and billing domains' shared contract as the plan specifies, then report back." | Complete · Cross-domain · Task |
+| "Implement this PR: three planned slices, one domain publishes a new event and another consumes it; the event contract and both sides' approach are in the plan." | Complete · Cross-domain · Run |
+| "Find why sync drops messages under load, fix it, and choose the retry policy the next two slices build on." | Partial · Local · Open; flagged: fix the diagnostic approach or the retry choice in the plan first, or escalate with a reason |
+| "Move the client and the server to the new wire format: the plan names the format and the migration approach in four ordered slices." | Complete · Cross-system · Run; flagged (Escalation) |
 
 Worker and Operator examples:
 
-| Job | Role · signals | Effort |
-|---|---|---|
-| Classify these findings with this rubric | 🛠️ · Complete · Local · Task | high |
-| Read one service and list each call to X with file:line | 🛠️ · Complete · Local · Task | high |
-| Implement one slice whose fixed approach keeps the orders and billing domains' contract in step | 🛠️ · Complete · Cross-domain · Task | xhigh |
-| Diagnose a failing test without a known cause | 🛠️ · Partial · Local · Task | xhigh; flagged: fix the diagnostic approach first, or escalate with a reason |
-| Run a suite, watch CI to terminal, apply a scripted transform, run PR wrap-up checks | 🔧 · Exact · any · Step | medium |
-| Independent review | 🔎 Review Sidekick table; never the Workhorse tier | — |
+| Job | Role · signals |
+|---|---|
+| Classify these findings with this rubric | 🛠️ · Complete · Local · Task |
+| Read one service and list each call to X with file:line | 🛠️ · Complete · Local · Task |
+| Implement one slice whose fixed approach keeps the orders and billing domains' contract in step | 🛠️ · Complete · Cross-domain · Task |
+| Diagnose a failing test without a known cause | 🛠️ · Partial · Local · Task; flagged: fix the diagnostic approach first, or escalate with a reason |
+| Run a suite, watch CI to terminal, apply a scripted transform, run PR wrap-up checks | 🔧 · Exact · any · Step |
+| Independent review | 🔎 Review Sidekick table; never the Workhorse tier |
 
 ## Workhorse fit
 
