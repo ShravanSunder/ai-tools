@@ -319,9 +319,12 @@ describe("goal delivery intent hard cutover", () => {
     const catalog = readPluginFile("skills/manage-agents/references/model-catalog.md");
     const canonical = readPluginFile("shared-references/canonical-implementation-plan.md");
 
-    expect(catalog).toContain("| 🔧 Operator | medium | always medium |");
-    expect(catalog).toContain("| 🛠️ Worker | high to xhigh | high; xhigh when any signal is demanding |");
-    expect(catalog).toContain("| 🐒 Sidekick | high to max | high; xhigh with one demanding signal; max with two or more |");
+    expect(catalog).toContain("| 🔧 Operator | medium |");
+    expect(catalog).toContain("| 🛠️ Worker | xhigh |");
+    expect(catalog).toContain("| 🐒 Sidekick | xhigh |");
+    expect(catalog).not.toContain("| Workhorse | OpenAI Luna | high |");
+    expect(catalog).not.toContain("| Workhorse | OpenAI Luna | max |");
+    expect(catalog).toContain("| Daily driver | OpenAI Sol | medium | User must authorize |");
     expect(catalog).toContain("Partial direction, Cross-system span, and Open horizon are flags, not routes.");
     expect(catalog).not.toContain("Each Luna row is a ceiling");
     expect(catalog).not.toContain("off-Luna row");

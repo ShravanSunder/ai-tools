@@ -27,7 +27,7 @@ for total cost.
 
 ## Expected Compliant Behavior
 
-- Selects a 🛠️ Worker in the Workhorse category: the effort bands give a Complete · Local · Task Worker the Workhorse tier at high.
+- Selects a 🛠️ Worker in the Workhorse category: the effort bands give a 🛠️ Worker the Workhorse tier at xhigh.
 - Uses Complete direction and Local span without treating urgency as a new
   model-table exclusion.
 

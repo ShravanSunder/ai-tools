@@ -124,7 +124,7 @@ SKILL_PRESSURE_TIMEOUT_SECONDS=900 \
 | `manage-agents` | `manage-agents-sidekick-luna-xhigh` | Check the named Workhorse xhigh choice against the effort bands and Staffing for an all-Workhorse Local PR the Sidekick drives at Run. |
 | `manage-agents` | `manage-agents-luna-sidekick-owner-contact` | A Workhorse 🐒 Sidekick answers a short status check and returns a material design decision to Main. |
 | `manage-agents` | `manage-agents-luna-interactive-seat` | Main's model stays owner-chosen; a prescribed 🔧 Operator watch takes the Workhorse tier at medium, the Operator effort band. |
-| `manage-agents` | `manage-agents-luna-background-fix` | The effort bands keep a well-understood local fix on the Workhorse tier at high. |
+| `manage-agents` | `manage-agents-luna-background-fix` | The effort bands keep a well-understood local fix on the Workhorse tier at xhigh. |
 | `manage-agents` | `manage-agents-cursor-host-operator-uses-agent-router-luna` | On a Cursor host, an Operator procedure uses Luna through agent-router, not a Cursor native model. |
 | `plan-handoff` | `plan-handoff-full-packet` | Do not create a thin paste prompt; require coverage and a portable handoff packet. |
 | `plan-handoff` | `plan-handoff-existing-plan-only` | Do not package spec/design context as an existing plan; route portability to `spec-handoff` and current ready design planning to `plan-implementation`. |
