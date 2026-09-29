@@ -14,14 +14,14 @@ Task may omit a sandbox or `workspace_readonly` flag. Do not hop to Cursor CLI t
 
 | Role | Model | Route |
 | --- | --- | --- |
-| 🛠️ Worker | xAI Grok 4.6, medium; or Claude Opus, low | native Task |
-| 🔧 Operator | OpenAI Luna | agent-router (see Runtime in `SKILL.md`) |
+| 🛠️ Worker | xAI Grok 4.6, medium, in place of a Daily-driver row; or Claude Opus, when the Models row picks it | native Task |
+| 🔧 Operator | OpenAI Luna | agent-router (see Launch in `SKILL.md`) |
 
-Other Claude Opus efforts and Claude Fable only on owner request. Resolve the exact id with the Runtime rule in `SKILL.md`. Treat `agent --list-models` short names as CLI labels, not native Task ids, unless the host requires them.
+Other Claude Opus efforts and Claude Fable only on owner request. Resolve the exact id with the exact-id rule in `SKILL.md` Launch. Treat `agent --list-models` short names as CLI labels, not native Task ids, unless the host requires them.
 
 ## Workspace Access
 
-Reader and writer authority details are owned by `agent-job-packet.md`.
+Access limits: `agent-job-packet.md` Limits.
 
 - Readers: assignment contract `workspace read-only`, spawned as a new Task with no `resume` — `resume: "self"` forks the parent's history and is never used for review. Parent verifies the repo worktree is unchanged after the receipt.
 - Writers: assignment contract `write <paths> (declared)`. Cursor Task does not path-scope writes. Parent verifies the receipt's diff stayed inside the declared scope.

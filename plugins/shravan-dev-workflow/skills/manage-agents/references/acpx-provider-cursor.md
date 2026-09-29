@@ -12,9 +12,9 @@ Cursor is a multi-model ACPX provider. It owns a catalog mapping, not a single m
 
 Pass the exact advertised ACP id from `session/new` / `configOptions.model` with `--model` at session creation or `acpx cursor set model <id> -s <name>` afterward.
 
-Examples: Grok 4.6, Claude Opus 5.5, and Claude Fable 5.x ACP ids; catalogs change. Resolve the exact id with the Runtime rule in `SKILL.md`.
+Examples: Grok 4.6, Claude Opus 5.5, and Claude Fable 5.x ACP ids; catalogs change. Resolve the exact id with the exact-id rule in `SKILL.md` Launch.
 
-- Select the model and effort from the `model-catalog.md` role table and task signals, then use the exact live-advertised ACP id. If the selected effort is unavailable, report that gap; do not silently change effort.
+- Select the model and effort from the `SKILL.md` Models table, then use the exact live-advertised ACP id. If the selected effort is unavailable, report that gap; do not silently change effort.
 
 Treat the short names from `agent --list-models` as Cursor CLI labels. Use and record the ACP-advertised id for ACPX calls.
 
