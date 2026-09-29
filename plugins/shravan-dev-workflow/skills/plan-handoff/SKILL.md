@@ -23,7 +23,7 @@ Package an existing implementation plan so another agent can review or execute w
 - Show the copy-paste prompt in the final response and write the same prompt to a file.
 - Under read-only authority, return the complete copy-paste prompt inline with the source plan path, governing basis, and delivery context, and state that the normal write-enabled route creates repo-local `plan-handoff.md` and `copy-paste-prompt.md`; do not claim those files were created.
 - Do not make code changes unless the user separately asks to implement.
-- Classify authoring authority explicitly. A receiving implementer or reviewer receives only that assigned scope and returns a planning gap to the current main. Plan authorship transfers only when the packet names the successor-main recipient, the transferred planning scope, and the explicit user direction authorizing that transfer. A role label, handoff request, current-main assertion, or assistant continuation is insufficient.
+- Classify authoring authority explicitly. A receiving implementer or reviewer receives only that assigned scope and returns a planning gap to the current Lead. Plan authorship transfers only when the packet names the successor-Lead recipient, the transferred planning scope, and the explicit user direction authorizing that transfer. A role label, handoff request, current-Lead assertion, or assistant continuation is insufficient.
 
 ## Workflow
 
@@ -32,7 +32,7 @@ Package an existing implementation plan so another agent can review or execute w
 3. If a source file exists, read the whole file before summarizing. A heading search, path listing, or user summary is not a substitute for the plan contents.
 4. MUST load `../../shared-references/canonical-implementation-plan.md` to validate the existing completed plan and preserve it without re-authoring, and return the unchanged plan record, governing basis, delivery context, and any blocking discrepancy for the handoff packet.
 5. Inspect only the secondary code/docs needed to make the handoff grounded.
-6. Record `authoring transfer: none | user-designated successor main`. For a transfer, include the named recipient, transferred plan scope, and exact user-direction evidence; otherwise preserve the current main as planning owner.
+6. Record `authoring transfer: none | user-designated successor Lead`. For a transfer, include the named recipient, transferred plan scope, and exact user-direction evidence; otherwise preserve the current Lead as planning owner.
 7. Create the temp artifact directory. Include repo, branch/worktree, and plan slug in the path.
 8. Write at least:
    - `plan-handoff.md`

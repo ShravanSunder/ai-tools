@@ -2,7 +2,7 @@
 
 This shared runtime reference owns medium selection, rendering fallback, semantic-preservation inspection, and visual-check results for views whose predicate and required fields were selected by a consuming skill.
 
-Expected inputs: destination, repository rendering capabilities, user-requested format when present, and one or more view requests containing the fired predicate plus required semantic fields. A generated-image request also supplies the artifact identity and main-authored visual brief or its source pointer.
+Expected inputs: destination, repository rendering capabilities, user-requested format when present, and one or more view requests containing the fired predicate plus required semantic fields. A generated-image request also supplies the artifact identity and Lead-authored visual brief or its source pointer.
 
 Return per view: selected medium, fallback decision, semantic-preservation result, visual-check result, and exact gap when no supported medium passes.
 

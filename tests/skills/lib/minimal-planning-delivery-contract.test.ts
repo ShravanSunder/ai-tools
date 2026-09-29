@@ -185,7 +185,7 @@ describe("goal delivery intent hard cutover", () => {
     expect(skillsCreation).toContain(convergenceBaselineText);
     expect(skillsCreation).toContain(acceptedBoundaryText);
     expect(skillsCreation).toContain(
-      "IF a review stage returns `not-converging` or a semantic change outside the accepted boundary, Main loads `../../shared-references/owner-decision-brief.md` and returns the brief",
+      "IF a review stage returns `not-converging` or a semantic change outside the accepted boundary, the Lead loads `../../shared-references/owner-decision-brief.md` and returns the brief",
     );
   });
 

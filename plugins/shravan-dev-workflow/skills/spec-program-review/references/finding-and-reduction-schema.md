@@ -128,7 +128,7 @@ Convergence (this reference is its home for design review):
 
 Accepted boundary:
 
-> A correction is inside the accepted boundary when it changes no design meaning, scope, contract, or owner decision. Only those corrections get further review rounds automatically. A correction that changes, or might change, any of those returns to Main, which brings the owner a brief. Once the owner settles it, review continues under the convergence rule without a permission prompt.
+> A correction is inside the accepted boundary when it changes no design meaning, scope, contract, or owner decision. Only those corrections get further review rounds automatically. A correction that changes, or might change, any of those returns to the Lead, which brings the owner a brief. Once the owner settles it, review continues under the convergence rule without a permission prompt.
 
 After each correction round, the 🔎 Review Sidekick records whether each accepted finding was corrected and cites the current anchors. Do not rerun affected coverage automatically. A concrete source-backed substantive residual inside the accepted boundary admits another round under the convergence rule above; pedantic, stylistic, already-satisfied, confidence-only, and generic-freshness concerns do not qualify.
 

@@ -11,7 +11,7 @@ Implementation executes one immutable ready plan against current authority and r
 
 ## Execution Responsibility
 
-Use the ready plan, selected slice, and any scoped handoff as the implementation phase context. In an orchestrated project flow, the persistent implementation 🐒 Sidekick is the implementer and may execute and prove directly or select a bounded native Worker. An assigned Worker executes its slice and fitting proof without creating another Sidekick; a direct bounded implementation assignment remains direct. Reuse an existing suitable executor through its corrections. The orchestrator retains design decisions and final disposition.
+Use the ready plan, selected slice, and any scoped handoff as the implementation phase context. In an orchestrated project flow, the persistent implementation 🐒 Sidekick is the implementer; it executes and proves directly or delegates through `manage-agents`. Reuse an existing suitable executor through its corrections. The orchestrator retains design decisions and final disposition.
 
 ## Validate Before Editing
 
@@ -25,7 +25,7 @@ Completion: the unchanged ready plan record, governing basis, delivery context, 
 ## Execute and Prove
 
 1. MUST load `references/execution-and-proof.md` to validate current branch/HEAD, instructions, diff, named paths, dependencies, write scopes, commands, security assumptions, proof feasibility, and completion-report shape.
-2. Under the resolved execution owner, select the smallest ready frontier. IF the owner assigns a separate executor or procedure, MUST load `manage-agents` at that assignment point; otherwise continue with the existing assigned executor or direct implementation. Assignment may cover serial work. Parallelism is only eligible for plan-identified independent slices with disjoint writes after proven prerequisites. Route standalone procedures or long watches through `manage-agents` only when they are actually separately assigned, never once per test or proof command.
+2. Under the resolved execution owner, select the smallest ready frontier. IF the owner assigns a separate executor or procedure, MUST load `manage-agents` at that assignment point; otherwise continue with the existing assigned executor or direct implementation. Assignment may cover serial work. Parallelism is only eligible for plan-identified independent slices with disjoint writes after proven prerequisites.
 3. Execute one slice inside its write scope, using red/green when required and preserving every proof gate. When a dependency the slice needs is missing, put a contract-honoring stand-in at a boundary the plan names, record it as a stand-in through `practices-show-me-your-work`, and continue the slice. Claim no proof for the stubbed interaction. Route a replan only when the stand-in would change a public contract, persisted data format, or ownership.
 4. Re-anchor and prove the slice before advancing; integrate only at the plan's named gate.
 5. Classify surprises as `reversible drift | design break | plan defect | out-of-scope infrastructure failure | evidence gap`. Correct reversible drift inside scope and route every other class to its owner before building on it.

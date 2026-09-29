@@ -7,7 +7,7 @@ description: "Use when independently reviewing implemented code, proof, a branch
 
 IF no work reference is in context and the task qualifies, open or resume the trace through `practices-show-me-your-work` before phase work.
 
-The caller commissions a different-lineage persistent 🔎 Review Sidekick with no author or orchestrator history. That lead reads every governing source and the complete diff, walks the checks below in its own session, and reduces findings against the rails. The orchestrator disposes and routes the assessment.
+The caller commissions a 🔎 Review Sidekick through `manage-agents`. That lead reads every governing source and the complete diff, walks the checks below in its own session, and reduces findings against the rails. The orchestrator disposes and routes the assessment.
 
 The rails are the confirmed requirements, Specification obligations, Program Design elements, and goal boundary. A finding that cannot be anchored to a quoted clause from them is not accepted, however well-argued or however many reviewers agree.
 
@@ -21,7 +21,7 @@ The rails are the confirmed requirements, Specification obligations, Program Des
 
 Completion: classification, governing sources, base and reviewed commits, diff and proof boundary, prior-findings evidence (or the missing-evidence reason), and `admit | blocked-input` are stated.
 
-The caller completes admission. A non-substantial or blocked exit commissions no lead. For an admitted meaningful review, the caller uses `manage-agents` to commission or resume one persistent, different-lineage 🔎 Review Sidekick with no author or orchestrator history. The assigned lead executes this method and never commissions another lead.
+The caller completes admission. A non-substantial or blocked exit commissions no lead. For an admitted meaningful review, the caller uses `manage-agents` to commission or resume one 🔎 Review Sidekick. The assigned lead executes this method and never commissions another lead.
 
 ## Read the Whole Map
 
@@ -50,7 +50,6 @@ MUST load `references/lanes/lane-schema.md` and record `complete | partial | blo
 5. IF reduction leaves a named material risk, load `references/lanes/focused-reviewer.md` and answer one falsifiable question per risk. Stop when no named risk remains.
 6. List every stand-in in the diff and receipts, and check that none is counted as proof of the real interaction; a claim that rests on a stand-in is a finding.
 
-When the review includes auth, secrets, untrusted input, parsing, filesystem, network, subprocess, plugin, agent, or external-service surfaces, the caller selects a Frontier 🔎 Review Sidekick from a different author lineage at commission time through `manage-agents`.
 
 ## Reduce on the Rails
 

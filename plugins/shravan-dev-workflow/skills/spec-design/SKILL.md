@@ -27,7 +27,7 @@ Program Design
 
 A specification is the observable contract for authorized product meaning. It never substitutes for the separately identifiable Requirements source that authorizes it.
 
-The user-facing main loads this skill and authors the Requirements and Specification itself, including their views, diagrams, organization, settled sections and visual briefs. Bounded helpers may return evidence. A rendering tool may realize pixels, typography, spacing and style from an unchanged main-authored brief, but the main chooses the reader question, exact labels and relationships, semantic composition, invariants and exclusions and accepts or corrects the candidate. Neither route transfers governing authorship or makes an image the normative home.
+The Lead loads this skill and authors the Requirements and Specification itself, including their views, diagrams, organization, settled sections and visual briefs. Bounded helpers may return evidence. A rendering tool may realize pixels, typography, spacing and style from an unchanged Lead-authored brief, but the Lead chooses the reader question, exact labels and relationships, semantic composition, invariants and exclusions and accepts or corrects the candidate. Neither route transfers governing authorship or makes an image the normative home.
 
 It turns evidence and authorized decisions into a contract that another capable agent can realize without inventing product meaning:
 
@@ -284,7 +284,7 @@ The first internal component, owner, dependency edge, state store, or enforcemen
 
 There is no default swarm. IF one bounded evidence, observable-surface, product-intent, or contract question benefits from independent work, use `manage-agents` to select the agent pattern and runtime.
 
-The packet names the exact evidence question, sources, maximum authority, non-goals, and expected anchors. Delegation is parallel-safe only after the source inventory and semantic boundary exist. Instance authority is equal to or narrower than the packet and never includes Requirements or Specification meaning, prose, organization, views, diagrams, or integration. Return a `complete | partial | blocked` evidence receipt; the main opens the decisive sources, verifies the result, and authors the artifact itself.
+The packet names the exact evidence question, sources, maximum authority, non-goals, and expected anchors. Delegation is parallel-safe only after the source inventory and semantic boundary exist. Instance authority is equal to or narrower than the packet and never includes Requirements or Specification meaning, prose, organization, views, diagrams, or integration. Return a `complete | partial | blocked` evidence receipt; the Lead opens the decisive sources, verifies the result, and authors the artifact itself.
 
 ## Completion Blockers
 
