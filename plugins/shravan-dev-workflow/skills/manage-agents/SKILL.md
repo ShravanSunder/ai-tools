@@ -79,7 +79,7 @@ Horizon limits the role; it does not pick it.
 | 🛠️ Worker | Task, Subtask |
 | 🔧 Operator | Subtask, only an Exact one |
 
- Among the roles a job's horizon allows, a job that needs context from related jobs goes to a Sidekick, a job that stands alone goes to a Worker, and a written procedure goes to an Operator.
+Among the roles a job's horizon allows, a job that needs context from related jobs goes to a Sidekick, a job that stands alone goes to a Worker, and a written procedure goes to an Operator.
 
 An Operator makes no judgment calls: it never decides what to run, what a result means, or how to fix it. It runs the suite and reports failures, watches CI until it finishes, pushes and publishes a verified file, applies a codemod, or collects logs; it does not fix a failing test or decide whether a failure matters. Judgment it meets goes back to whoever assigned it. Tests and proof for an agent's own change stay with that agent; an Operator takes only a procedure assigned on its own, such as a suite run or a CI watch. Only the Lead and a Sidekick assign other agents.
 
