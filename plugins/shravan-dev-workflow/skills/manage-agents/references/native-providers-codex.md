@@ -15,7 +15,7 @@ Resolve the exact id with the exact-id rule in `SKILL.md` Launch. If the host re
 
 ## Effort
 
-`none` | `minimal` | `low` | `medium` (default) | `high` | `xhigh` | `max` | `ultra` | custom string. The allowed model-and-effort combinations in the `model-catalog.md` role table still apply.
+`none` | `minimal` | `low` | `medium` (default) | `high` | `xhigh` | `max` | `ultra` | custom string. The model-and-effort pairs in the `SKILL.md` Models tables still apply.
 
 ## Conversation History
 

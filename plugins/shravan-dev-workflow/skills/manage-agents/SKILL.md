@@ -68,7 +68,7 @@ Pick a different lineage (OpenAI, Claude, xAI) from the author's.
 | Tier | Model | Effort | Use |
 |---|---|---|---|
 | Daily driver | xAI Grok | high | usual pick, a third lineage |
-| Frontier | OpenAI Astra | high | |
+| Frontier | OpenAI Astra | high | reviews touching auth, secrets, untrusted input, parsing, filesystem, network, subprocess, plugins, agents, or external services |
 | Daily driver | Claude Opus | medium | |
 | Daily driver | Claude Opus | high | |
 | Frontier | OpenAI Astra | xhigh | User must authorize |
