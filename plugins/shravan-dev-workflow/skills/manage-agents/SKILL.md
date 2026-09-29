@@ -15,7 +15,7 @@ The 🦁 Lead is the agent the owner talks to. It designs, plans, cuts the work,
 |---|---|
 | **Direction**: how much the brief decides | Exact: every step is given · Complete: the approach is named · Partial: only the outcome is given |
 | **Span**: what the agent must hold | Local: one owner and the contracts it uses · Cross-domain: several owners in one system · Cross-system: a contract another system consumes |
-| **Horizon**: how long the agent drives before its next check | Step: one command, then report · Planned: the plan already made its choices · Open: it makes choices later work builds on |
+| **Horizon**: how long the agent drives before its next check | Step: a given procedure, then report · Planned: the plan already made its choices · Open: it makes choices later work builds on |
 
 Before picking, cut the plan toward Complete, Local, and Planned where you can: name the approach, write shared contracts in, split at a system boundary, and write open choices into the plan. Size does not set span; missing intent or a missing plan is missing input, not Partial.
 
@@ -89,6 +89,8 @@ Pick a different lineage (OpenAI, Claude, xAI) from the author's.
 
 Classify the job, pick its role and model from the catalogs above, then launch, hand off, wait, and check the result's evidence (files, exit codes, diff scope) against its claim. The Lead gives the overall verdict.
 
+MUST load `references/delegation-examples.md` and return the six steps (direction, span, horizon, plan cut, role, Models row) written for this job.
+
 ### Launch
 
 Operators and Workers run as native subagents. Sidekicks, Review Sidekicks, and Advisors run in their own sessions; reuse a session by its address, and keep the model and effort it was created with.
@@ -108,15 +110,3 @@ Exact id: the host's row in `~/.config/agent-context/model-map.md`; otherwise th
 MUST load `references/agent-job-packet.md` and return the packet, plus the session row when the role runs in its own session.
 
 A Review Sidekick gets no author history: no fork, no resume. Its packet carries the sources. When an agent drifts, send it a correction; don't restart it.
-
-## Examples
-
-| Job | Classify | Plan cut | Role | Models row |
-|---|---|---|---|---|
-| Run the suite and watch CI until it finishes | Exact · Local · Step | none | 🔧 Operator | Workhorse |
-| Add a config field and its tests; the plan says where and how | Complete · Local · Planned | none | 🛠️ Worker | Workhorse |
-| A PR of four planned slices across two domains | Complete · Cross-domain · Planned | write the shared contract into the plan | 🐒 Sidekick, for related jobs | Workhorse |
-| Find why sync drops messages and choose the retry policy later slices use | Partial · Local · Open | name the diagnostic approach and write the retry policy in; it becomes Complete · Planned | 🛠️ Worker | Workhorse; if it can't be cut, Daily driver, Partial row, with a reason |
-| Move a client and a server to a new wire format, with no seam to split at | Complete · Cross-system · Planned | none possible | 🐒 Sidekick | Daily driver, Cross-system row, with a reason |
-| Audit twelve services for the same pattern | each unit: Complete · Local · Planned | one unit per service | twelve 🛠️ Workers | Workhorse |
-| Review this PR | not classified | none | 🔎 Review Sidekick | a different lineage from the author |

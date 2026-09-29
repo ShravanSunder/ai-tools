@@ -5,6 +5,7 @@
 - The user-facing agent is the 🦁 Lead in every skill, reference, and shared reference ("Main", "the main", "main assessment", "Main-authored" all cut over). "main path", "main entry", and the `main` branch are unchanged.
 - The reviewing agent that several skills called the "review lead" is now the 🔎 Review Sidekick, so "the Lead" has one meaning.
 - Skills stop restating delegation policy: tiers, models, effort, lineage, history, and which role takes a job now live only in `manage-agents`, and callers name the role and delegate through it. Security-surface reviews rely on the `manage-agents` review row.
+- `manage-agents` gains `references/delegation-examples.md`: six situations from orchestration and research, each walked through direction, span, horizon, plan cut, role, and Models row; `SKILL.md` loads it for every job. Horizon Step now reads "a given procedure, then report", matching the Operator role.
 - `plan-improve-repo` follows the `manage-agents` fan-out rule for audits.
 - Contract tests changed only where they pin a renamed sentence. Pressure-scenario prose still says Main (not updated here).
 
