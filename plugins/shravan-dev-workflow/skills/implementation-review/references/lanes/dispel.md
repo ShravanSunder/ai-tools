@@ -6,7 +6,7 @@ Expected inputs: the current review context with `chunk: whole-diff`, the comple
 
 Prerequisites: the governing basis and complete diff are inspectable; chunk passes are complete. An empty candidate set does not block this check — the over-delivery sweep runs regardless.
 
-Check boundary: read-only review. Read-only discovery commands and a tmp scratchpad only; no proof-generation commands, edits, or workflow decisions. Classifications are candidate evidence for the review lead, never dispositions.
+Check boundary: read-only review. Read-only discovery commands and a tmp scratchpad only; no proof-generation commands, edits, or workflow decisions. Classifications are candidate evidence for the 🔎 Review Sidekick, never dispositions.
 
 ## Challenge the Candidates
 

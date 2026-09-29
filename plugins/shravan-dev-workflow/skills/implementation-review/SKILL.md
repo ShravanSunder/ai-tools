@@ -7,7 +7,7 @@ description: "Use when independently reviewing implemented code, proof, a branch
 
 IF no work reference is in context and the task qualifies, open or resume the trace through `practices-show-me-your-work` before phase work.
 
-The caller commissions a 🔎 Review Sidekick through `manage-agents`. That lead reads every governing source and the complete diff, walks the checks below in its own session, and reduces findings against the rails. The orchestrator disposes and routes the assessment.
+The caller commissions a 🔎 Review Sidekick through `manage-agents`. That Review Sidekick reads every governing source and the complete diff, walks the checks below in its own session, and reduces findings against the rails. The orchestrator disposes and routes the assessment.
 
 The rails are the confirmed requirements, Specification obligations, Program Design elements, and goal boundary. A finding that cannot be anchored to a quoted clause from them is not accepted, however well-argued or however many reviewers agree.
 
@@ -21,7 +21,7 @@ The rails are the confirmed requirements, Specification obligations, Program Des
 
 Completion: classification, governing sources, base and reviewed commits, diff and proof boundary, prior-findings evidence (or the missing-evidence reason), and `admit | blocked-input` are stated.
 
-The caller completes admission. A non-substantial or blocked exit commissions no lead. For an admitted meaningful review, the caller uses `manage-agents` to commission or resume one 🔎 Review Sidekick. The assigned lead executes this method and never commissions another lead.
+The caller completes admission. A non-substantial or blocked exit commissions no 🔎 Review Sidekick. For an admitted meaningful review, the caller uses `manage-agents` to commission or resume one Review Sidekick. The assigned Review Sidekick executes this method and never commissions another Review Sidekick.
 
 ## Read the Whole Map
 

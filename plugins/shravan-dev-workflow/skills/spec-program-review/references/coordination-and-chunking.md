@@ -1,8 +1,8 @@
 # Coordination and Chunking for Design Review
 
-This reference owns how the review lead splits a large design review into chunks and which checks it runs.
+This reference owns how the 🔎 Review Sidekick splits a large design review into chunks and which checks it runs.
 
-Expected inputs: the review lead's own whole-artifact read of the complete target set and governing sources, the selected mode, the confirmed goal boundary and accepted requirements set, and any proof claims the design cites.
+Expected inputs: the 🔎 Review Sidekick's own whole-artifact read of the complete target set and governing sources, the selected mode, the confirmed goal boundary and accepted requirements set, and any proof claims the design cites.
 
 Return: the chunk plan — each chunk's seam, its listed sections, mapped dimensions, and overlap seams, or the decision that the mode-complete check alone covers the artifacts — and the checks to run with the reason for each.
 

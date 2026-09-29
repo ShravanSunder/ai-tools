@@ -1,8 +1,8 @@
 # Coordination and Chunking
 
-This reference owns how the review lead splits a review into chunks and which checks it runs.
+This reference owns how the 🔎 Review Sidekick splits a review into chunks and which checks it runs.
 
-Expected inputs: the review lead's own whole-map read (complete governing basis and diff) and the proof claims.
+Expected inputs: the 🔎 Review Sidekick's own whole-map read (complete governing basis and diff) and the proof claims.
 
 Return: the chunk plan — each chunk's complete file set, mapped obligations, and overlap seams, or one chunk spanning the whole diff — and the checks to run with the reason for each.
 
@@ -16,7 +16,7 @@ Never split these across chunks without an overlap seam: a call path from entryp
 
 ## Overlap Seams
 
-A seam is the complete text both adjacent chunks receive — the changed contract file with its governing obligation, a caller/callee boundary file, a proof claim with its evidence. A shared requirement label is not a seam. If the review lead on either side would still need unseen code to judge the interaction, the plan is wrong. Plan the unsplittable units first, then assign files so each unit lives whole in one chunk or rides a seam in full; a per-file split is acceptable only when every file contains a complete independent unit.
+A seam is the complete text both adjacent chunks receive — the changed contract file with its governing obligation, a caller/callee boundary file, a proof claim with its evidence. A shared requirement label is not a seam. If the 🔎 Review Sidekick on either side would still need unseen code to judge the interaction, the plan is wrong. Plan the unsplittable units first, then assign files so each unit lives whole in one chunk or rides a seam in full; a per-file split is acceptable only when every file contains a complete independent unit.
 
 Signs the plan is wrong — fix the plan, do not push the review through: a chunk pass says it cannot judge without files outside its assignment; a candidate finding's evidence sits outside the reporting chunk; adjacent passes reach opposite conclusions about one edge neither fully holds.
 
