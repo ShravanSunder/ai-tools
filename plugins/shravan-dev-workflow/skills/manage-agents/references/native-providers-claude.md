@@ -21,7 +21,7 @@ Resolve the exact id with the exact-id rule in `SKILL.md` Launch.
 
 ## Workspace Access
 
-Reader and writer authority details are owned by `agent-job-packet.md`.
+Access limits: `agent-job-packet.md` Limits.
 
 - Readers: assignment contract `workspace read-only`. Parent verifies the repo worktree is unchanged after the receipt.
 - Writers: assignment contract `write <paths>`. Path-scoped enforcement: `dontAsk` with `Edit(<paths>/**)` allow rules. Prefer that when enforcement matters; otherwise declared. Parent verifies the receipt's diff stayed inside the declared scope.

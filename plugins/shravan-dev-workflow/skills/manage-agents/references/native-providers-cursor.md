@@ -21,7 +21,7 @@ Other Claude Opus efforts and Claude Fable only on owner request. Resolve the ex
 
 ## Workspace Access
 
-Reader and writer authority details are owned by `agent-job-packet.md`.
+Access limits: `agent-job-packet.md` Limits.
 
 - Readers: assignment contract `workspace read-only`, spawned as a new Task with no `resume` — `resume: "self"` forks the parent's history and is never used for review. Parent verifies the repo worktree is unchanged after the receipt.
 - Writers: assignment contract `write <paths> (declared)`. Cursor Task does not path-scope writes. Parent verifies the receipt's diff stayed inside the declared scope.
