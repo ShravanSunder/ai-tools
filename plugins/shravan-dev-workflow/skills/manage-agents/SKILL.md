@@ -111,12 +111,59 @@ A Review Sidekick gets no author history: no fork, no resume. Its packet carries
 
 ## Examples
 
-| Job | Classify | Plan cut | Role | Models row |
-|---|---|---|---|---|
-| Run the suite and watch CI until it finishes | Exact · Local · Step | none | 🔧 Operator | Workhorse |
-| Add a config field and its tests; the plan says where and how | Complete · Local · Planned | none | 🛠️ Worker | Workhorse |
-| A PR of four planned slices across two domains | Complete · Cross-domain · Planned | write the shared contract into the plan | 🐒 Sidekick, for related jobs | Workhorse |
-| Find why sync drops messages and choose the retry policy later slices use | Partial · Local · Open | name the diagnostic approach and write the retry policy in; it becomes Complete · Planned | 🛠️ Worker | Workhorse; if it can't be cut, Daily driver, Partial row, with a reason |
-| Move a client and a server to a new wire format, with no seam to split at | Complete · Cross-system · Planned | none possible | 🐒 Sidekick | Daily driver, Cross-system row, with a reason |
-| Audit twelve services for the same pattern | each unit: Complete · Local · Planned | one unit per service | twelve 🛠️ Workers | Workhorse |
-| Review this PR | not classified | none | 🔎 Review Sidekick | a different lineage from the author |
+Real jobs from past sessions. Each one runs the same six steps.
+
+### "Procedure only. Do not interpret style; report measurements and exceptions." (download each video, record ids, titles, durations, and shot cuts)
+
+1. Direction: every step is given. Exact.
+2. Span: one report from two tools. Local.
+3. Horizon: run the procedure, then report. Step.
+4. Plan cut: none needed.
+5. Role: a Step job goes to a 🔧 Operator.
+6. Model: the Operator row.
+
+What happened: no video matched the range; the Operator reported the exception instead of choosing a substitute.
+
+### "The defect is already located to the pattern level"; the brief names the exact source line and the fix.
+
+1. Direction: the fix is named. Complete.
+2. Span: one filter in one module. Local.
+3. Horizon: one job the plan already decided. Planned.
+4. Plan cut: none needed.
+5. Role: one job, no earlier context. 🛠️ Worker.
+6. Model: the Workhorse row.
+
+What happened: the Worker fixed it and added behavioral tests.
+
+### "W1 addDrawerPane, W2 quit, W3 full key parity" for one drawer PR.
+
+1. Direction: each step is named. Complete.
+2. Span: the drawer and keyboard input, two owners in one app. Cross-domain.
+3. Horizon: three related jobs, each building on the last. Planned.
+4. Plan cut: write the shared key contract into the plan, and say in the Stop whether to run the full suite and push.
+5. Role: related jobs that need earlier context. 🐒 Sidekick.
+6. Model: the Workhorse row.
+
+What happened: the work landed, but the commit stayed local and unpushed; the packet never said whether push was in scope.
+
+### "Recommend the smallest safe set of crates/APIs" for passing file descriptors to a child process.
+
+1. Direction: only the outcome is given. Partial.
+2. Span: the host process, its child, and the OS contract between them. Cross-system.
+3. Horizon: the recommendation is a choice later work builds on. Open.
+4. Plan cut: the Lead keeps the choice. The job becomes "answer with a verdict and file:line evidence, inference marked", which is Complete, Local to the crates' docs and source, and Planned.
+5. Role: one research job. 🛠️ Worker.
+6. Model: the Workhorse row.
+
+What happened: the Worker returned the evidence report, and the Lead made the choice.
+
+### "The goal is a root cause, with evidence, for the hangs"; the test lane has to build first.
+
+1. Direction: only the outcome is given. Partial.
+2. Span: the test, its vendor setup, and the test lane. Cross-domain.
+3. Horizon: the diagnosis decides what gets fixed next. Open.
+4. Plan cut: split off the setup as its own Step (build the lane, run the target test, report), and name the diagnostic approach. If the Lead can't name it, the Partial row, with the reason recorded.
+5. Role: the setup goes to a 🔧 Operator; the diagnosis goes to a 🛠️ Worker once the lane runs.
+6. Model: the Operator row, then the Workhorse row or the Partial row.
+
+What happened: without the cut, setup failed at preflight, 0 tests ran, and the whole job stalled.
