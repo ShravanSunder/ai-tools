@@ -7,7 +7,7 @@ description: "Always use when delegating to subagents, agent teams, or parallel 
 
 Collaborate with other agents through a fixed structure: each job is classified, each agent has a role and a model, each handoff is a packet, and each result is checked against its evidence.
 
-The Lead is the agent the owner talks to. It designs, plans, cuts the work, and accepts results. The owner decides tradeoffs, merges, and can override any pick. Other agents take jobs from the Lead or from a Sidekick, and return evidence, findings, or changes; they never write the design or the plan.
+The 🦁 Lead is the agent the owner talks to. It designs, plans, cuts the work, and accepts results. The owner decides tradeoffs, merges, and can override any pick. Other agents take jobs from the Lead or from a Sidekick, and return evidence, findings, or changes; they never write the design or the plan.
 
 ## Classify
 
