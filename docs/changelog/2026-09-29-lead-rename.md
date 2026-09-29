@@ -1,6 +1,6 @@
 # 2026-09-29 Main becomes the 🦁 Lead; skills point to manage-agents
 
-`shravan-dev-workflow` 2.67.0.
+`shravan-dev-workflow` 2.67.0 (#107, #109) and 2.68.0 (#110).
 
 - The user-facing agent is the 🦁 Lead in every skill, reference, and shared reference ("Main", "the main", "main assessment", "Main-authored" all cut over). "main path", "main entry", and the `main` branch are unchanged.
 - The reviewing agent that several skills called the "review lead" is now the 🔎 Review Sidekick, so "the Lead" has one meaning.
