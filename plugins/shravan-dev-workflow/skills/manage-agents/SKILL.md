@@ -108,19 +108,19 @@ A Daily-driver row needs one recorded reason: the owner recommends it, the Lead 
 | Tier | Model | Thinking Effort | Direction | Span |
 |---|---|---|---|---|
 | Workhorse | OpenAI Luna | xhigh | Exact, Complete | Local, Cross-domain |
-| Daily driver | OpenAI Sol | high | Complete | Cross-domain |
+| Daily driver | OpenAI Sol | medium to high | Partial | Cross-domain, Cross-system |
 | Daily driver | Claude Opus | medium to xhigh | Partial | Cross-domain, Cross-system |
 
 ### 🔎 Review Sidekick
 
 Implementation review comes after the 🦁 Lead has verified the work against the plan and its proof, asking the 🦉 Advisor to check it too when one exists. Review Sidekicks then review each Project and Milestone, never a single Task or Subtask. Design and proposal reviews happen where their owning phase says and use the same reviewers. Every review should have at least one reviewer from a different lineage (OpenAI, Claude, xAI) than the Lead or author.
 
-| Tier | Model | Thinking Effort |
-|---|---|---|
-| Daily driver | xAI Grok | high |
-| Daily driver | OpenAI Sol | xhigh |
-| Frontier | OpenAI Astra | high to xhigh |
-| Frontier | Claude Opus | xhigh |
+| Tier | Model | Thinking Effort | Use |
+|---|---|---|---|
+| Daily driver | xAI Grok | high | |
+| Daily driver | OpenAI Sol | xhigh | |
+| Daily driver | Claude Opus | xhigh | |
+| Frontier | OpenAI Astra | high to xhigh | User must authorize |
 
 Beyond the rows above, another reviewer joins only when the owner asks for one and names its model.
 
@@ -128,8 +128,9 @@ Beyond the rows above, another reviewer joins only when the owner asks for one a
 
 | Tier | Model | Thinking Effort | Use |
 |---|---|---|---|
+| Daily driver | OpenAI Sol | xhigh | |
+| Daily driver | Claude Opus | xhigh | |
 | Frontier | OpenAI Astra | xhigh | User must authorize |
-| Frontier | Claude Opus | xhigh | User must authorize |
 | Frontier | Claude Fable | high | User must authorize |
 
 ## Work with an agent

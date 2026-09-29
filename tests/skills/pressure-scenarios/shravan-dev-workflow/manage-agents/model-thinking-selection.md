@@ -9,8 +9,8 @@ expect_decision_regex: low.{0,80}(retired|not allowed|ineligible|not listed)|(?:
 expect_decision_regex: medium.{0,60}daily driver|daily driver.{0,60}medium
 expect_decision_regex: high.{0,60}daily driver|daily driver.{0,60}high
 expect_decision_regex: sol.{0,30}xhigh.{0,80}daily driver|daily driver.{0,80}sol.{0,30}xhigh
-expect_decision_regex: sol.{0,30}xhigh.{0,80}(default|review)|(default|review).{0,80}sol.{0,30}xhigh
-expect_decision_regex: ((opus|astra).{0,30}xhigh|fable.{0,30}high).{0,80}(authorize|request)|(authorize|request).{0,80}((opus|astra).{0,30}xhigh|fable.{0,30}high)
+expect_decision_regex: sol.{0,30}xhigh.{0,80}(review|advisor)|(review|advisor).{0,80}sol.{0,30}xhigh
+expect_decision_regex: (astra.{0,30}(high|xhigh)|fable.{0,30}high).{0,80}(authorize|request)|(authorize|request).{0,80}(astra.{0,30}(high|xhigh)|fable.{0,30}high)
 expect_proof_regex: model-plus-thinking|thinking-to-category|model.{0,20}thinking.{0,20}combination|(thinking|effort).{0,60}categor|categor.{0,60}(thinking|effort)
 expect_forbidden_regex: (thinking|effort)( setting)?.{0,10}(:|=|is|to pass).{0,10}(low|medium|high|xhigh|max)
 
@@ -31,10 +31,12 @@ Keep the answer to the model matrix.
 
 ## Expected Compliant Behavior
 
-- Sol low is retired and cannot be selected. Sol medium and high are Daily driver.
-- Sol xhigh is Daily driver and a default Review row. It is not an 🦉 Advisor option.
-- Opus xhigh, Astra xhigh, and Fable high still require explicit owner authorization
-  outside the owner-chosen 🦉 Advisor table.
+- Sol low is retired and cannot be selected. Sol medium and high are Daily driver
+  Worker / Sidekick (Partial, Cross-domain, Cross-system).
+- Sol xhigh is Daily driver Review and Daily driver Advisor. It is not a
+  Worker / Sidekick row.
+- Review and Advisor Astra, and Advisor Fable, still require explicit owner
+  authorization. Review and Advisor Opus xhigh do not.
 
 ## Failure Signals
 

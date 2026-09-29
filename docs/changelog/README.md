@@ -1,5 +1,6 @@
 # Changelog
 
+- [2026-09-29 manage-agents Sol and Opus Daily driver](2026-09-29-manage-agents-sol-opus-daily.md)
 - [2026-09-29 manage-agents Thinking Effort](2026-09-29-manage-agents-thinking-effort.md)
 - [2026-09-29 Main becomes the Lead; skills point to manage-agents](2026-09-29-lead-rename.md)
 - [2026-09-29 manage-agents: classify, roles, models by role](2026-09-29-manage-agents-progressive.md)
