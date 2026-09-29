@@ -56,9 +56,11 @@ What the agent must hold in its head to get the job right. Size and module count
 
 ### How they fit
 
-Horizon caps the role, direction decides whether an Operator can take the job, and direction and span pick the Models row.
+Horizon caps the role, direction decides whether an Operator can take the job, and direction and span pick the catalog row.
 
-## Roles
+## Model Catalog & Roles
+
+### Roles
 
 | Role | Owns | Lives for | Runs as |
 |---|---|---|---|
@@ -76,7 +78,7 @@ Delegate only independent work that costs less to hand off than to do. Work that
 
 Title every non-Lead thread `<emoji> <role> · <purpose>`.
 
-## Models
+### Tiers
 
 | Tier | Definition |
 |---|---|
@@ -102,16 +104,15 @@ A Daily-driver row needs one recorded reason: the owner recommends it, the Lead 
 
 ### 🔎 Review Sidekick
 
-Pick a different lineage (OpenAI, Claude, xAI) from the author's.
+Review comes after the 🦁 Lead has verified the work against the plan and its proof, asking the 🦉 Advisor to check it too when one exists. Review Sidekicks then review each Project and Milestone, never a single Task or Subtask. Every reviewer is from a different lineage (OpenAI, Claude, xAI) than the author and gets no author history.
 
-| Tier | Model | Max effort | Use |
-|---|---|---|---|
-| Daily driver | xAI Grok | high | usual pick |
-| Frontier | OpenAI Astra | high | usual pick; required when the review touches auth, secrets, untrusted input, parsing, filesystem, network, subprocess, plugins, agents, or external services |
-| Daily driver | Claude Opus | high | |
-| Frontier | OpenAI Astra | xhigh | User must authorize |
-| Frontier | Claude Opus | xhigh | User must authorize |
-| Frontier | Claude Fable | high | User must authorize |
+| Reviewer | Tier | Model | Max effort | When |
+|---|---|---|---|---|
+| Every review | Daily driver | xAI Grok | high | every Project and Milestone review |
+| Security | Frontier | OpenAI Astra | high to xhigh | the review touches auth, secrets, untrusted input, parsing, filesystem, network, subprocess, plugins, agents, or external services, and the author is not OpenAI |
+| Security | Frontier | Claude Opus | xhigh | the same surfaces, and the author is not Claude |
+
+A second reviewer joins only when the owner asks for one and names its model.
 
 ### 🦉 Advisor
 
@@ -125,13 +126,13 @@ Pick a different lineage (OpenAI, Claude, xAI) from the author's.
 
 Classify the job, pick its role and model from the catalogs above, then launch, hand off, wait, and check the result's evidence (files, exit codes, diff scope) against its claim. The Lead gives the overall verdict.
 
-MUST load `references/delegation-examples.md` and return the six steps (direction, span, horizon, plan cut, role, Models row) written for this job.
+MUST load `references/delegation-examples.md` and return the six steps (direction, span, horizon, plan cut, role, catalog row) written for this job.
 
 ### Launch
 
 Operators and Workers run as native subagents. Sidekicks, Review Sidekicks, and Advisors run in their own sessions; reuse a session by its address, and keep the model and effort it was created with.
 
-Exact id: the host's row in `~/.config/agent-context/model-map.md`; otherwise the host's current-generation id for the Models row, never an older generation or a `-fast` variant; otherwise report the gap.
+Exact id: the host's row in `~/.config/agent-context/model-map.md`; otherwise the host's current-generation id for the catalog row, never an older generation or a `-fast` variant; otherwise report the gap.
 
 - IF the role runs in its own session, load `agent-collaboration` and return the session address.
 - IF Codex spawns it, load `references/native-providers-codex.md` and return the spawn encoding.
