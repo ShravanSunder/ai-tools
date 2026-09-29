@@ -43,7 +43,7 @@ Title every non-Lead thread `<emoji> <role> · <purpose>`.
 | Daily driver | execution or synthesis that needs judgment |
 | Frontier | demanding judgment, design, or review |
 
-A Daily-driver row needs one recorded reason: the owner recommends it, the Lead says what the Workhorse lacks, or the Workhorse failed after corrections. Owner-only rows are used only when the owner names them.
+A Daily-driver row needs one recorded reason: the owner recommends it, the Lead says what the Workhorse lacks, or the Workhorse failed after corrections. Rows marked `User must authorize` are used only when the owner names them.
 
 ### 🔧 Operator
 
@@ -53,13 +53,13 @@ A Daily-driver row needs one recorded reason: the owner recommends it, the Lead 
 
 ### 🛠️ Worker and 🐒 Sidekick
 
-| Tier | Model | Effort | Direction | Span | Horizon |
-|---|---|---|---|---|---|
-| Workhorse | OpenAI Luna | xhigh | Complete | Local, Cross-domain | Planned |
-| Daily driver | OpenAI Sol | high | Complete | Cross-system | Planned |
-| Daily driver | Claude Opus | high | Partial | any | any |
-| Daily driver | Claude Opus | high | any | any | Open |
-| Daily driver | OpenAI Sol | medium | owner-only | | |
+| Tier | Model | Effort | Direction | Span | Horizon | Use |
+|---|---|---|---|---|---|---|
+| Workhorse | OpenAI Luna | xhigh | Complete | Local, Cross-domain | Planned | |
+| Daily driver | OpenAI Sol | high | Complete | Cross-system | Planned | |
+| Daily driver | Claude Opus | high | Partial | any | any | |
+| Daily driver | Claude Opus | high | any | any | Open | |
+| Daily driver | OpenAI Sol | medium | any | any | any | User must authorize |
 
 ### 🔎 Review Sidekick
 
@@ -69,21 +69,21 @@ Pick a different lineage (OpenAI, Claude, xAI) from the author's.
 |---|---|---|---|
 | Daily driver | xAI Grok | high | usual pick, a third lineage |
 | Frontier | OpenAI Astra | high | |
-| Daily driver | Claude Opus | medium or high | |
-| Frontier | OpenAI Astra, Claude Opus | xhigh | owner-only |
-| Frontier | Claude Fable | high | owner-only |
+| Daily driver | Claude Opus | medium | |
+| Daily driver | Claude Opus | high | |
+| Frontier | OpenAI Astra | xhigh | User must authorize |
+| Frontier | Claude Opus | xhigh | User must authorize |
+| Frontier | Claude Fable | high | User must authorize |
 
 ### 🦉 Advisor
 
-The owner picks.
-
-| Tier | Model | Effort |
-|---|---|---|
-| Frontier | OpenAI Astra | high |
-| Frontier | OpenAI Astra | xhigh |
-| Daily driver | Claude Opus | high |
-| Frontier | Claude Opus | xhigh |
-| Frontier | Claude Fable | high |
+| Tier | Model | Effort | Use |
+|---|---|---|---|
+| Frontier | OpenAI Astra | high | User must authorize |
+| Frontier | OpenAI Astra | xhigh | User must authorize |
+| Daily driver | Claude Opus | high | User must authorize |
+| Frontier | Claude Opus | xhigh | User must authorize |
+| Frontier | Claude Fable | high | User must authorize |
 
 ## Work with an agent
 
