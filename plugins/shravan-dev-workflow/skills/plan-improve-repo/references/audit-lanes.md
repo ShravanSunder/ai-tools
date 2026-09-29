@@ -1,8 +1,6 @@
 # Audit Categories
 
-Use these categories to structure broad repo audits. The parent inspects them inline by default, keeps synthesis, and verifies every accepted candidate against current source.
-
-Delegation is conditional, never a flow default. IF the user explicitly requests delegation, or inspected source reveals one concrete independently verifiable evidence question whose bounded handoff materially improves coverage, `manage-agents` owns the later handoff for that question. Agent availability, `deep`, or category count does not satisfy the predicate. A delegated question stays read-only and returns candidate evidence only.
+Use these categories to structure broad repo audits. `manage-agents` decides which categories go to 🛠️ Workers. A delegated category stays read-only and returns candidate evidence; the Lead keeps synthesis and verifies every accepted candidate against current source.
 
 ## Delegate One Bounded Question
 
@@ -36,7 +34,6 @@ Return:
 - `dx-tooling`: confusing scripts, validation friction, generated output drift.
 - `docs-onboarding`: README/AGENTS/runbook drift that blocks future agents or maintainers.
 
-Inspect these in-parent. Do not turn the category list into a default swarm.
 
 ## Flow Selection
 

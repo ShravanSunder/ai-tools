@@ -4,13 +4,13 @@ Review the intended skill design before implementation. This reference judges wh
 
 Return a spec-review verdict, blocker overrides, rubric evidence, accepted and rejected findings, first required revision, and proof or retest implication.
 
-The persistent independent review lead executes this stage and returns its result to the orchestrator for acceptance.
+The persistent independent 🔎 Review Sidekick executes this stage and returns its result to the orchestrator for acceptance.
 
 ## Spec Artifact
 
 A proposal that meets none of the doc predicates below stays conversational: it lives in the run's messages and the review packet carries it.
 
-If the spec spans more than one update run, carries user decisions a later run must honor, or must survive a session boundary, the author or orchestrator writes it as a spec doc before commissioning the review lead and makes the doc the reviewed artifact; the review packet's `review target` carries the doc's path and revision. Home: the repo's skill-work wip location (`docs/wip/skills-authoring/` here). The independent lead reviews the provided artifact and reports a missing required spec as blocked; it does not author the target. The doc is working memory that outlives the conversation, not durable truth: after its last run lands, the wip folder's own rules and `docs-maintain` own its disposition. The doc is one draft — acceptance covers it as a whole — and each run in its sequence names exactly one skill target; a run naming more is split before acceptance. It carries:
+If the spec spans more than one update run, carries user decisions a later run must honor, or must survive a session boundary, the author or orchestrator writes it as a spec doc before commissioning the 🔎 Review Sidekick and makes the doc the reviewed artifact; the review packet's `review target` carries the doc's path and revision. Home: the repo's skill-work wip location (`docs/wip/skills-authoring/` here). The independent Review Sidekick reviews the provided artifact and reports a missing required spec as blocked; it does not author the target. The doc is working memory that outlives the conversation, not durable truth: after its last run lands, the wip folder's own rules and `docs-maintain` own its disposition. The doc is one draft — acceptance covers it as a whole — and each run in its sequence names exactly one skill target; a run naming more is split before acceptance. It carries:
 
 ```text
 targets and owner plugin, with the runs in sequence
@@ -30,7 +30,7 @@ Each decisions row records the default taken and its rationale so the user can s
 
 The artifact is a proposal, conversational or in a spec doc. The independent 🔎 Review Sidekick loads `lanes/lane-schema.md` and walks these references in order in its own session: `lanes/mental-model-fit.md`, `lanes/trigger-routing.md`, `lanes/rule-agreement.md`, and `lanes/depth-coverage.md`. The proposal contains the lens, trigger, rules, promised stages, and planned reference tree those checks need. Line-level checks wait for implementation review.
 
-For a scoped change, the lead still checks the proposal against the Verdicts and Rubric below, and records why each other check was not selected. IF the proposal changes an output or tool shape, load `../reference-lanes-design.md` and return its shape-consumer contract. Each selected check records `complete | partial | blocked`; an unselected check records `complete` with `not selected: <reason>`. Return the per-check status block before the verdict.
+For a scoped change, the 🔎 Review Sidekick still checks the proposal against the Verdicts and Rubric below, and records why each other check was not selected. IF the proposal changes an output or tool shape, load `../reference-lanes-design.md` and return its shape-consumer contract. Each selected check records `complete | partial | blocked`; an unselected check records `complete` with `not selected: <reason>`. Return the per-check status block before the verdict.
 
 ## Verdicts
 
@@ -55,11 +55,11 @@ Cover each item with source-backed evidence. When a check result already covers 
 
 ## Reduction
 
-The executing review lead reduces candidate findings into the spec-review result before remediation. Reject pedantic, stylistic, already-satisfied, or otherwise non-semantic findings with source evidence and continue. Accepted findings that remain inside the settled mental model return to the design step for remediation under the convergence rule and accepted boundary in the `SKILL.md` Review section. A finding that breaks a load-bearing assumption or exposes unmade owner meaning stops with the failed assumption, evidence, consequence, and exact owner; do not force it through remediation. The same lead verifies corrected anchors against the original bounded findings and returns its result to the orchestrator, which accepts the proposal without another review. `significant-rewrite`, `reject-or-restart`, an expanded correction, or uncertain effect returns to Main for an owner brief before another review.
+The executing 🔎 Review Sidekick reduces candidate findings into the spec-review result before remediation. Reject pedantic, stylistic, already-satisfied, or otherwise non-semantic findings with source evidence and continue. Accepted findings that remain inside the settled mental model return to the design step for remediation under the convergence rule and accepted boundary in the `SKILL.md` Review section. A finding that breaks a load-bearing assumption or exposes unmade owner meaning stops with the failed assumption, evidence, consequence, and exact owner; do not force it through remediation. The same Review Sidekick verifies corrected anchors against the original bounded findings and returns its result to the orchestrator, which accepts the proposal without another review. `significant-rewrite`, `reject-or-restart`, an expanded correction, or uncertain effect returns to the Lead for an owner brief before another review.
 
 ### Acceptance Binding
 
-The review lead closes a review with the original review record plus its verification of each remediation. Never compute or maintain a document hash or digest. Review-lead-verified formatting, typo, link, process-only changes, and exact accepted remediation preserve closure without another review. This stage-specific closure overrides generic changed-text freshness rules. A semantic change outside the accepted boundary, or of uncertain effect, returns to Main for an owner brief before another proposal review (see the `SKILL.md` Review section).
+The 🔎 Review Sidekick closes a review with the original review record plus its verification of each remediation. Never compute or maintain a document hash or digest. When the Review Sidekick has verified them, formatting, typo, link, process-only changes, and exact accepted remediation preserve closure without another review. This stage-specific closure overrides generic changed-text freshness rules. A semantic change outside the accepted boundary, or of uncertain effect, returns to the Lead for an owner brief before another proposal review (see the `SKILL.md` Review section).
 
 Report with these exact labels:
 

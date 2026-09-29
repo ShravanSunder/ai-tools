@@ -1,6 +1,6 @@
 # Finding And Reduction
 
-This reference owns parent verification, the rails re-anchor, finding semantics, cause-based routing, affected coverage, and the final review result. `parent` means the immediate review lead for the ordered checks; the orchestrator later owns final disposition and delivery routing.
+This reference owns parent verification, the rails re-anchor, finding semantics, cause-based routing, affected coverage, and the final review result. `parent` means the immediate 🔎 Review Sidekick for the ordered checks; the orchestrator later owns final disposition and delivery routing.
 
 Expected inputs: the current review context, per-check results including the dispel classification, current governing sources and diff, proof evidence, and any prior coverage record.
 
@@ -30,7 +30,7 @@ Two kinds of scope expansion get two different dispositions, and confusing them 
 - A **reviewer candidate that proposes adding scope** with no rail anchor — a circuit breaker, a hardening layer, an abstraction for imagined consumers — is `rejected: scope expansion` and listed for the owner as an observation. It never produces `decision-needed`; a suggestion is not a decision the owner owes an answer to. Anchoring it one altitude up ("the spec says return a typed error on provider outage") does not rescue it when `mechanism necessity` says the mechanism is one of several ways to serve the clause — then the accepted finding, if any, names the unrealized obligation and its failure and routes to its owner; the mechanism choice is not the reviewer's to make and never rides into the handoff.
 - A **delivered item the diff already contains** that dispel mapped `absent` (or spec-compliance classified `extra`/`scope overreach`) is never `rejected` as "non-defective" — being well built is not a disposition. Its only dispositions are `accepted` (removal, owner `implement-plan`) or `decision-needed` with deletion as the default recommendation when the owner may want to adopt it as a scope expansion.
 
-When the parent's disposition contradicts dispel's correction class, record the quoted rail text that overrides it. A candidate is a mental-model break — not an ordinary design finding — when its correction cannot be expressed inside the current governing basis because an assumption the basis itself relies on is false: the design assumes an interface, ordering, ownership, or guarantee the current system does not provide. A defect the basis already forbids and can name the fix for routes to its semantic owner as usual; a break stops reduction and returns the failed assumption, evidence, and consequence to the orchestrator (Main), which brings the owner a brief, instead of being pushed through remediation; the reviewer does not author the brief. The bad signal is routing a break to `program-design` and continuing.
+When the parent's disposition contradicts dispel's correction class, record the quoted rail text that overrides it. A candidate is a mental-model break — not an ordinary design finding — when its correction cannot be expressed inside the current governing basis because an assumption the basis itself relies on is false: the design assumes an interface, ordering, ownership, or guarantee the current system does not provide. A defect the basis already forbids and can name the fix for routes to its semantic owner as usual; a break stops reduction and returns the failed assumption, evidence, and consequence to the orchestrator (the Lead), which brings the owner a brief, instead of being pushed through remediation; the reviewer does not author the brief. The bad signal is routing a break to `program-design` and continuing.
 
 ## Verify Before Accepting
 
@@ -103,14 +103,14 @@ not-converging
 Convergence (this reference is its home for implementation review):
 
 > After each correction pass, compare this review with the previous one using the existing finding identity (anchor plus failure form). Return `not-converging` when either holds:
-> 1. **Recurrence.** A finding the lead verified closed in an earlier review is accepted again. A finding whose correction never closed is still open, which is not a recurrence.
+> 1. **Recurrence.** A finding the Review Sidekick verified closed in an earlier review is accepted again. A finding whose correction never closed is still open, which is not a recurrence.
 > 2. **No progress.** The count of open accepted findings did not drop in two adjacent comparisons in a row: it stayed equal or rose from review N−1 to N, and again from N to N+1.
 >
 > When earlier review history is unavailable, the current review sets the baseline, and both conditions count from there. A correction outside the accepted boundary is not a pass.
 
 Accepted boundary:
 
-> A correction is inside the accepted boundary when it changes no design meaning, scope, contract, or owner decision. Only those corrections get further review rounds automatically. A correction that changes, or might change, any of those returns to Main, which brings the owner a brief. Once the owner settles it, review continues under the convergence rule without a permission prompt.
+> A correction is inside the accepted boundary when it changes no design meaning, scope, contract, or owner decision. Only those corrections get further review rounds automatically. A correction that changes, or might change, any of those returns to the Lead, which brings the owner a brief. Once the owner settles it, review continues under the convergence rule without a permission prompt.
 
 The result includes reviewed authority, unchanged plan/governing-basis/delivery-context records, base and reviewed identities, diff and proof freshness, prior review findings, obligation coverage, normal/failure-path coverage, runtime reachability when applicable, accepted/rejected/unverified findings, conflicts, weaker-substitute risks, first correction, exact route, and uncovered boundary.
 

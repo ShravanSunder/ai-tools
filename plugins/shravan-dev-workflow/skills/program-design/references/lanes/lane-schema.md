@@ -30,4 +30,4 @@ parent verification required
 
 `no-receipt` is parent-recorded after one explicit follow-up; it is never a fabricated receipt or clean result.
 
-Complete when: the lane output covers the bounded evidence question, stays evidence-only, and gives the main enough source anchors to verify or reject it before authoring the target design.
+Complete when: the lane output covers the bounded evidence question, stays evidence-only, and gives the Lead enough source anchors to verify or reject it before authoring the target design.

@@ -1,8 +1,8 @@
 # Focused Reviewer
 
-Mission: answer one named residual risk left after review-lead reduction.
+Mission: answer one named residual risk left after 🔎 Review Sidekick reduction.
 
-Expected inputs: the current review context, the earlier reduced check results, lead dispositions, and one check-local concrete unresolved material risk stated as a falsifiable question.
+Expected inputs: the current review context, the earlier reduced check results, 🔎 Review Sidekick dispositions, and one check-local concrete unresolved material risk stated as a falsifiable question.
 
 Prerequisites: the reduced results still apply to the current source; the named risk is not already answered by source or proof; resolving it could change the result or correction route.
 

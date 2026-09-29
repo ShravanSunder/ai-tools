@@ -13,7 +13,7 @@ const readPluginFile = (relativePath: string): string =>
   readFileSync(path.join(pluginRoot, relativePath), "utf8");
 
 const convergenceRecurrenceText =
-  "A finding the lead verified closed in an earlier review is accepted again. A finding whose correction never closed is still open, which is not a recurrence.";
+  "A finding the Review Sidekick verified closed in an earlier review is accepted again. A finding whose correction never closed is still open, which is not a recurrence.";
 const convergenceNoProgressText =
   "The count of open accepted findings did not drop in two adjacent comparisons in a row";
 const convergenceBaselineText =
@@ -185,7 +185,7 @@ describe("goal delivery intent hard cutover", () => {
     expect(skillsCreation).toContain(convergenceBaselineText);
     expect(skillsCreation).toContain(acceptedBoundaryText);
     expect(skillsCreation).toContain(
-      "IF a review stage returns `not-converging` or a semantic change outside the accepted boundary, Main loads `../../shared-references/owner-decision-brief.md` and returns the brief",
+      "IF a review stage returns `not-converging` or a semantic change outside the accepted boundary, the Lead loads `../../shared-references/owner-decision-brief.md` and returns the brief",
     );
   });
 

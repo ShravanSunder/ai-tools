@@ -1,6 +1,6 @@
 # Skill Implementation Review
 
-Review one of two targets. For implemented behavior-changing delivery, review after fitting proof and the user-facing main's source-backed assessment and before ship status advances; review consumes demonstrated behavior and does not substitute for missing proof. For an `evaluate` run over existing files, perform the source-only review before any new implementation commission, mark behavior `unverified/deferred`, and authorize no shipping. Mechanical changes and an explicit implementation-review skip do not enter this reference merely to fabricate coverage.
+Review one of two targets. For implemented behavior-changing delivery, review after fitting proof and the Lead's source-backed assessment and before ship status advances; review consumes demonstrated behavior and does not substitute for missing proof. For an `evaluate` run over existing files, perform the source-only review before any new implementation commission, mark behavior `unverified/deferred`, and authorize no shipping. Mechanical changes and an explicit implementation-review skip do not enter this reference merely to fabricate coverage.
 
 Return a verdict, changed-file coverage, accepted/rejected/unverified findings, smallest edits, targeted retest, and ship decision.
 
@@ -20,7 +20,7 @@ The artifact is changed or existing skill files. The independent 🔎 Review Sid
 
 Each name resolves to `lanes/<name>.md`. Deduplicate the selected set. For a scoped wording change, load the check that owns the targeted failure form and `rule-agreement`; record all other checks `complete` with `not selected: <reason>`. For an on-disk `evaluate` run, use current files as the reviewed surface and read them whole. A `create` run reviews new files. Sensitive-surface ownership stays in `../security-gate.md`.
 
-The lead records `complete | partial | blocked` per check, verifies candidates against source, and returns the per-check status block before one reduced verdict. IF a changed surface adds an output or tool shape, load `../reference-lanes-design.md` for its consumers and owner. A check cannot dispatch another agent. Prescribed proof commands may go to a 🔧 Operator under the exact grant; the lead judges the observations.
+The 🔎 Review Sidekick records `complete | partial | blocked` per check, verifies candidates against source, and returns the per-check status block before one reduced verdict. IF a changed surface adds an output or tool shape, load `../reference-lanes-design.md` for its consumers and owner. A check cannot dispatch another agent. Prescribed proof commands may go to a 🔧 Operator under the exact grant; the Review Sidekick judges the observations.
 
 ## Verdicts
 
@@ -32,7 +32,7 @@ Covers what only a whole-change ship decision can judge:
 
 - Every edited, added, or deleted source file is covered. Each file is reviewed semantically, marked source/static-only with its behavior status, or explicitly excluded by the accepted behavior-review boundary; deletions are verified through both absence and pointer inventory.
 - The implemented diff matches the accepted spec and user constraints without crossing the accepted source, behavior, or ship boundary.
-- For implemented behavior-changing delivery, fitting proof ran against the reviewed current files before this review; the main inspected the actual diff and proof against the original need, accepted spec/plan, ownership, complexity, and integration and returned `accepted-for-independent-review`. An `evaluate` run instead preserves the source-only, unverified/deferred behavior boundary above.
+- For implemented behavior-changing delivery, fitting proof ran against the reviewed current files before this review; the Lead inspected the actual diff and proof against the original need, accepted spec/plan, ownership, complexity, and integration and returned `accepted-for-independent-review`. An `evaluate` run instead preserves the source-only, unverified/deferred behavior boundary above.
 - Every added or changed check has one teaching owner, a complete stop condition, and a caller that loads it at the right step.
 - Every added or changed output or tool schema satisfies the shared-shape and ownership contract returned by `../reference-lanes-design.md`; cite the returned contract rather than re-deriving its field or ownership rules.
 - For review checks, award `great` only when `lanes/lane-schema.md` defines statuses, verdicts, finding fields, and reduction consumed by the review workflow.
@@ -48,12 +48,12 @@ Cover each item with source-backed evidence. When a check result already covers 
 
 ## Reduction
 
-The executing review lead verifies candidate findings against source files, pressure output, and user constraints before accepting them. Reject findings that contradict the current scope, treat length alone as a blocker when the user scoped length out, or ask for broad `skill-audit` work during one-skill authoring. The orchestrator retains final disposition and author acceptance.
+The executing 🔎 Review Sidekick verifies candidate findings against source files, pressure output, and user constraints before accepting them. Reject findings that contradict the current scope, treat length alone as a blocker when the user scoped length out, or ask for broad `skill-audit` work during one-skill authoring. The orchestrator retains final disposition and author acceptance.
 
 Accepted findings route back to the owning phase using the routing in the skills-creation step `Review the implementation, prune, and ship`; that is the live owner.
 
-After accepted edits, rerun the narrowest fitting pressure and static proof that can catch the issue, then require fresh main assessment. Resume the same review lead to refresh affected check coverage while the loop converges under the `SKILL.md` Review section's rule. End early on `great`. On `not-converging`, the lead returns the stop to Main for an owner brief.
+After accepted edits, rerun the narrowest fitting pressure and static proof that can catch the issue, then require fresh Lead assessment. Resume the same 🔎 Review Sidekick to refresh affected check coverage while the loop converges under the `SKILL.md` Review section's rule. End early on `great`. On `not-converging`, the Review Sidekick returns the stop to the Lead for an owner brief.
 
-At ship, reuse the semantically current review result when its changed-file coverage and proof remain current. Resume the same lead only when affected coverage needs refresh.
+At ship, reuse the semantically current review result when its changed-file coverage and proof remain current. Resume the same 🔎 Review Sidekick only when affected coverage needs refresh.
 
 Complete when: the verdict carries one of the allowed labels, every changed file is accounted for as reviewed, static-only, or out-of-scope, and the ship decision is explicit.

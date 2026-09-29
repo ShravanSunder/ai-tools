@@ -70,6 +70,6 @@ retest:
 
 If no suitable executable scenario exists or the user defers evaluation, return the named proof gap. Do not fabricate a scenario merely to satisfy the protocol. Scenario-authoring and harness expansion are separate work from this reference's proof interpretation.
 
-Return the current proof and every remaining gap to the user-facing main for source-backed assessment before independent implementation review. A reviewer consumes this demonstrated behavior and may challenge it; review does not create the missing proof.
+Return the current proof and every remaining gap to the Lead for source-backed assessment before independent implementation review. A reviewer consumes this demonstrated behavior and may challenge it; review does not create the missing proof.
 
-Complete when: the strongest claim the evidence supports is named, any gap between that and the claim being made is stated, and the proof artifacts are sufficient for main assessment or the exact missing observation is returned to the implementer.
+Complete when: the strongest claim the evidence supports is named, any gap between that and the claim being made is stated, and the proof artifacts are sufficient for Lead assessment or the exact missing observation is returned to the implementer.

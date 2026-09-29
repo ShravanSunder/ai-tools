@@ -7,7 +7,7 @@ description: "Use when writing or revising a repository-grounded implementation 
 
 IF no work reference is in context and the task qualifies, open or resume the trace through `practices-show-me-your-work` before phase work.
 
-An implementation plan is a proof route through current authority and repository reality. The user-facing main loads this skill and authors the complete plan, including strategy, slices, dependencies, proof mapping, and PR boundaries; helpers may return bounded repository or proof evidence but never plan prose or structure. The caller owns materially different delivery grouping and PR choices. A ready delivery plan is executable input, not a request for generic post-plan approval.
+An implementation plan is a proof route through current authority and repository reality. The Lead loads this skill and authors the complete plan, including strategy, slices, dependencies, proof mapping, and PR boundaries; helpers may return bounded repository or proof evidence but never plan prose or structure. The caller owns materially different delivery grouping and PR choices. A ready delivery plan is executable input, not a request for generic post-plan approval.
 
 ## Admit Planning
 
@@ -24,7 +24,7 @@ Completion: the target, governing basis, requested terminal, tracking dispositio
 ## Plan the Change
 
 1. Read the governing authority completely and re-anchor against current branch/HEAD, instructions, owners, interfaces, tests, commands, and proof seams.
-   IF one bounded repository or proof question benefits from helper work, use `manage-agents` for an evidence-only assignment and verify its anchors before continuing. The main still authors every plan row and delivery boundary.
+   IF one bounded repository or proof question benefits from helper work, use `manage-agents` for an evidence-only assignment and verify its anchors before continuing. The Lead still authors every plan row and delivery boundary.
 2. MUST load `references/slice-and-proof-design.md` and return its vertical slice graph, obligation/proof map, independent oracle, project proof-layer source or "project silent", property-versus-example choice when one rule covers the cases, existing-test keep/repair/remove disposition, necessary dependency edges, integration gates, false-green risks, and stop conditions. A remove row without replacement, redundancy, or dead-contract proof is not a ready plan.
 3. Choose the smallest coherent vertical grouping. If only one exists, use it without alternatives. If materially different groupings or PR topologies exist, pick one and record the choice, the alternatives, and the reason in the plan.
 4. Ensure every slice names its external dependencies and the boundary where a stand-in is allowed if one is missing; every contract-only or prefactoring slice names its downstream vertical consumer; every obligation has fitting proof; and no step invents Why, What, structural How, or external authority.
@@ -35,11 +35,11 @@ Completion: the target, governing basis, requested terminal, tracking dispositio
 ## Route the Result
 
 - A direct caller stops with a `plan-only` ready plan.
-- A direct main or an orchestrating caller validates a `pr-ready-unmerged` ready record and invokes `implement-plan` without another generic approval question, only then commissioning or resuming implementation.
-- An implementation 🐒 Sidekick that encounters a missing governing plan returns the evidence and exact gap to the current main. It may choose local mechanics inside a ready plan but does not author or repair the plan.
+- A direct Lead or an orchestrating caller validates a `pr-ready-unmerged` ready record and invokes `implement-plan` without another generic approval question, only then commissioning or resuming implementation.
+- An implementation 🐒 Sidekick that encounters a missing governing plan returns the evidence and exact gap to the current Lead. It may choose local mechanics inside a ready plan but does not author or repair the plan.
 - `revision-requested` returns to the named semantic or planning owner; `blocked` returns to the named unblock owner.
 - Planning never edits product code, invokes tracking providers, reviews implementation, manages PR state, or infers merge authority.
 
-Completion: one main-authored ready immutable plan exists at the required path with complete current meaning, or one exact non-ready result exists. No approval record, document digest, lifecycle state, placeholder delivery choice, helper-authored section, or second plan authority exists.
+Completion: one Lead-authored ready immutable plan exists at the required path with complete current meaning, or one exact non-ready result exists. No approval record, document digest, lifecycle state, placeholder delivery choice, helper-authored section, or second plan authority exists.
 
 IF a trace is open, at phase completion record the outcome, evidence, and next owner or return token as a checkpoint through `practices-show-me-your-work`.

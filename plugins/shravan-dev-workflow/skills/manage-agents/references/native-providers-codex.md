@@ -19,7 +19,7 @@ Resolve the exact id with the exact-id rule in `SKILL.md` Launch. If the host re
 
 ## Conversation History
 
-- A 🔧 Operator running prescribed review proof receives the exact execution grant and command procedure. Use `fork_turns="none"` when its packet must exclude the review lead's history; a positive integer inherits parent history, as does `all`.
+- A 🔧 Operator running prescribed review proof receives the exact execution grant and command procedure. Use `fork_turns="none"` when its packet must exclude the 🔎 Review Sidekick's history; a positive integer inherits parent history, as does `all`.
 - No inherited parent history: set `fork_turns="none"`.
 - Full parent history (non-reviewers only): set `fork_turns="all"`.
 - Full-history inheritance uses the parent model and reasoning effort; omit `model` and `reasoning_effort`.

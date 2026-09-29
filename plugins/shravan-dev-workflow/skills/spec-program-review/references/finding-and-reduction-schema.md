@@ -1,6 +1,6 @@
 # Finding and Parent Reduction
 
-This reference owns parent verification, candidate disposition, duplicate/conflict reduction, coverage accounting, and the final review result. `parent` means the immediate review lead for the ordered checks; the orchestrator later owns final disposition and delivery routing.
+This reference owns parent verification, candidate disposition, duplicate/conflict reduction, coverage accounting, and the final review result. `parent` means the immediate 🔎 Review Sidekick for the ordered checks; the orchestrator later owns final disposition and delivery routing.
 
 ## Finding
 
@@ -34,7 +34,7 @@ Severity follows consequence, not tone:
 - minor: intended model lands with avoidable ambiguity/cost;
 - observation: no proven behavior effect.
 
-## Review-lead verification
+## Review Sidekick verification
 
 For each candidate:
 
@@ -121,14 +121,14 @@ When states mix, apply precedence `not-converging -> blocked -> needs-revision -
 Convergence (this reference is its home for design review):
 
 > After each correction pass, compare this review with the previous one using the existing finding identity (anchor plus failure form). Return `not-converging` when either holds:
-> 1. **Recurrence.** A finding the lead verified closed in an earlier review is accepted again. A finding whose correction never closed is still open, which is not a recurrence.
+> 1. **Recurrence.** A finding the Review Sidekick verified closed in an earlier review is accepted again. A finding whose correction never closed is still open, which is not a recurrence.
 > 2. **No progress.** The count of open accepted findings did not drop in two adjacent comparisons in a row: it stayed equal or rose from review N−1 to N, and again from N to N+1.
 >
 > When earlier review history is unavailable, the current review sets the baseline, and both conditions count from there. A correction outside the accepted boundary is not a pass.
 
 Accepted boundary:
 
-> A correction is inside the accepted boundary when it changes no design meaning, scope, contract, or owner decision. Only those corrections get further review rounds automatically. A correction that changes, or might change, any of those returns to Main, which brings the owner a brief. Once the owner settles it, review continues under the convergence rule without a permission prompt.
+> A correction is inside the accepted boundary when it changes no design meaning, scope, contract, or owner decision. Only those corrections get further review rounds automatically. A correction that changes, or might change, any of those returns to the Lead, which brings the owner a brief. Once the owner settles it, review continues under the convergence rule without a permission prompt.
 
 After each correction round, the 🔎 Review Sidekick records whether each accepted finding was corrected and cites the current anchors. Do not rerun affected coverage automatically. A concrete source-backed substantive residual inside the accepted boundary admits another round under the convergence rule above; pedantic, stylistic, already-satisfied, confidence-only, and generic-freshness concerns do not qualify.
 

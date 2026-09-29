@@ -29,7 +29,7 @@ Before picking, cut the plan toward Complete, Local, and Planned where you can: 
 | 🔎 Review Sidekick | independent findings | one review, through its corrections | its own session, no author history |
 | 🦉 Advisor | guidance, only when the owner asks | the owner's question | its own session |
 
-A Step job goes to a 🔧 Operator. A Planned job goes to a 🛠️ Worker, or to a 🐒 Sidekick when it needs context from related jobs. Judgment an Operator meets goes back to whoever assigned it. Only the Lead and a Sidekick assign other agents.
+A Step job goes to a 🔧 Operator. A Planned job goes to a 🛠️ Worker, or to a 🐒 Sidekick when it needs context from related jobs. Judgment an Operator meets goes back to whoever assigned it. Tests and proof for an agent's own change stay with that agent; an Operator takes only a procedure assigned on its own, such as a suite run or a CI watch. Only the Lead and a Sidekick assign other agents.
 
 Delegate only independent work that costs less to hand off than to do. Work that splits into independent units (an audit, a migration, a review across files) fans out: one Worker per unit, one table at the end.
 

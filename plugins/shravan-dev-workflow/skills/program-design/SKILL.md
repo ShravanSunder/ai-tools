@@ -9,7 +9,7 @@ IF no work reference is in context and the task qualifies, open or resume the tr
 
 A program design is the structural realization of a fixed observable contract.
 
-The user-facing main loads this skill and authors the complete structural How: alternatives, selections, components, ownership, interfaces, state/failure policy, target views and diagrams, final prose and visual briefs. Bounded helpers may return current-system or external evidence. An explicitly owner-requested 🦉 Advisor may challenge and advise through `manage-agents`; advice is neither authorship nor acceptance. A rendering tool may realize pixels, typography, spacing and style from an unchanged main-authored brief, while semantic grouping, order, boundaries, labels, edges, invariants and candidate acceptance remain with the main.
+The Lead loads this skill and authors the complete structural How: alternatives, selections, components, ownership, interfaces, state/failure policy, target views and diagrams, final prose and visual briefs. Bounded helpers may return current-system or external evidence. A 🦉 Advisor may challenge and advise through `manage-agents`; advice is neither authorship nor acceptance. A rendering tool may realize pixels, typography, spacing and style from an unchanged Lead-authored brief, while semantic grouping, order, boundaries, labels, edges, invariants and candidate acceptance remain with the Lead.
 
 It explains how authoritative obligations become owned runtime behavior:
 
@@ -227,7 +227,7 @@ Completion: every Specification obligation has one trace row with no blank cell;
 
 Apply the Required Views predicates. For each selected view, state the reader question it answers: where each entity lives, who owns what, how a request reaches its effect and returns a result, what shape crosses each boundary, how state changes, how failure is contained or recovered, or how requirements map to owners and proof. IF one or more predicates fire, or the substantial per-document visual obligation applies even when no precise-view predicate fires, load `../../shared-references/diagram-rendering-and-fallbacks.md` before the local artifact reference. Supply the selected precise views plus the per-document explanatory-visual obligation when applicable, and return the selected medium, fallback decision, semantic-preservation result, visual-check result, and exact capability or preview gap.
 
-A newly authored or substantively revised substantial Program Design renders each fired structural view through the shared renderer. Ownership, calls, sequence, state, flow, failure, and trust are Mermaid in the file when the destination renders Mermaid. A screen the user will see is also an Image Gen picture grounded in the current app, beside that Mermaid, not instead of it. An exact user format takes precedence, except a text fence for a picture-type view when Mermaid can render. No decorative filler satisfies the requirement. Route the main-authored composition through the shared rendering owner. An attractive generated image with an invented owner, edge, state, boundary, or UI control fails. A generated image never excuses a missing required field or becomes the authoritative design. Reuse only after freshness inspection, and do not regenerate for typo-only edits. A text fence is not a pass for those views when Mermaid can render.
+A newly authored or substantively revised substantial Program Design renders each fired structural view through the shared renderer. Ownership, calls, sequence, state, flow, failure, and trust are Mermaid in the file when the destination renders Mermaid. A screen the user will see is also an Image Gen picture grounded in the current app, beside that Mermaid, not instead of it. An exact user format takes precedence, except a text fence for a picture-type view when Mermaid can render. No decorative filler satisfies the requirement. Route the Lead-authored composition through the shared rendering owner. An attractive generated image with an invented owner, edge, state, boundary, or UI control fails. A generated image never excuses a missing required field or becomes the authoritative design. Reuse only after freshness inspection, and do not regenerate for typo-only edits. A text fence is not a pass for those views when Mermaid can render.
 
 Keep distinct reader questions in separate views when combining them would hide an owner, call edge, state transition, failure path, or proof seam. A request for one diagram or valid Mermaid syntax does not override the fired view predicates or semantic fields: reject the overloaded request and render the separate inspectable views now rather than also producing the lossy all-in-one view.
 
@@ -241,7 +241,7 @@ For substantial or uncertain work, stage source notes, current/target comparison
 
 Author top-down. Begin with the rendered fired views. Use concise prose as the overview only when no picture-type view fired. The overview lets a human explain how the specified behavior works, then reveal entity homes, components, interfaces, call paths, state, flows, failure/recovery, concurrency, cutover, trust, and proof. Link through the immediate specification scenario or observable contract rather than jumping from raw customer needs directly to components.
 
-The main expresses every selected requirement realization, entity binding, component, ownership rule, interface, state/failure policy, view, and claim. Unmapped needs return as gaps rather than becoming delegated design work.
+The Lead expresses every selected requirement realization, entity binding, component, ownership rule, interface, state/failure policy, view, and claim. Unmapped needs return as gaps rather than becoming delegated design work.
 
 After deletion or simplification, compare coverage with the accepted requirements set. Many mechanisms may become fewer; the complete accepted requirements set from `spec-design` — affected classes, stable identities and requirements, priorities and assigners, named variants, defaults, observable contracts, constraints, and proof obligations — may not lose any item without owner authority. Stop on a conflict with mutually narrowed current files.
 
@@ -326,13 +326,13 @@ one bounded external question could change feasibility/structure/proof
   -> references/lanes/external-prior-art-platform.md
 ```
 
-Before any optional dispatch, MUST use `manage-agents` to resolve the agent pattern, model and reasoning when constrained by the caller, runtime, history, workspace access, permissions, packet, and receipt mechanics.
+Before any optional dispatch, MUST use `manage-agents` to pick the role and launch and hand off the lane.
 
 IF a predicate holds and delegation is useful, MUST load `references/lanes/lane-schema.md` and return its shared evidence packet and receipt contract. Dispatch the selected lane with the exact assignment, governing source pointers, observed predicate and prerequisites, bounded evidence question and source scope, and any instance constraint that narrows the selected lane reference. The lane reference owns the invariant mission, maximum authority, return, and stop boundary.
 
 The subagent loads `references/lanes/lane-schema.md` and the exact selected lane path named above.
 
-Parallel-safe only after the lane prerequisites exist and its result is not an input to another selected lane; scheduling may serialize. Instance authority is equal to or narrower than the lane maximum and never includes alternatives, target models or views, design selection, structural realization, prose, normative integration, three-artifact design review, or acceptance. Return a `complete | partial | blocked` evidence receipt; after one explicit follow-up, silence is `no-receipt`. The main opens load-bearing sources, verifies the evidence, resolves conflicts, and alone designs and writes.
+Parallel-safe only after the lane prerequisites exist and its result is not an input to another selected lane; scheduling may serialize. Instance authority is equal to or narrower than the lane maximum and never includes alternatives, target models or views, design selection, structural realization, prose, normative integration, three-artifact design review, or acceptance. Return a `complete | partial | blocked` evidence receipt; after one explicit follow-up, silence is `no-receipt`. The Lead opens load-bearing sources, verifies the evidence, resolves conflicts, and alone designs and writes.
 
 ## Planning Boundary
 
@@ -355,7 +355,7 @@ Do not return `locally-ready` while any of these hold:
 - an applicable Required View was selected but not rendered in an inspectable form, or a substantial design with contested ownership or cross-owner control remains prose-only;
 - a picture-type Required View is passed as fenced plain text while Mermaid can render, or a generated screen replaces the Mermaid for calls, state, failure, or trust;
 - a fired Required View lacks a passed rendering result or any required semantic field was lost in the selected medium;
-- a screen the user will see lacks a current-app-grounded Image Gen result, or that result is missing, broken, uninspected, unreadable, inconsistent with the Mermaid views, or not accepted by the main, without an exact `no current UI` gap, a user-format override that is not a text fence, or an explicit owner-authorized deferral;
+- a screen the user will see lacks a current-app-grounded Image Gen result, or that result is missing, broken, uninspected, unreadable, inconsistent with the Mermaid views, or not accepted by the Lead, without an exact `no current UI` gap, a user-format override that is not a text fence, or an explicit owner-authorized deferral;
 - state, flow, failure/recovery, concurrency, migration, trust, or proof semantics are applicable but undefined;
 - delegated evidence was treated as target design, or a helper originated alternatives, target models/views, structural realization, section prose, or any design meaning;
 - a mechanism survives even though removing it breaks no confirmed requirement, or simplification loses accepted requirements without owner authority;

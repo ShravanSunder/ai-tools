@@ -11,4 +11,4 @@ result: <shape required by the check reference>
 remaining boundary: <none | exact unfinished coverage or blocker>
 ```
 
-`complete` means the selected check finished, or an optional check was not selected with its reason. `partial` names unfinished coverage. `blocked` names the missing input or access. Missing, partial, or blocked required checks prevent `ready`. Findings carry source anchors; do not add reading digests or line-count attestations. A 🔧 Operator proof result is evidence for the lead's proof-challenge check, never a review verdict.
+`complete` means the selected check finished, or an optional check was not selected with its reason. `partial` names unfinished coverage. `blocked` names the missing input or access. Missing, partial, or blocked required checks prevent `ready`. Findings carry source anchors; do not add reading digests or line-count attestations. A 🔧 Operator proof result is evidence for the 🔎 Review Sidekick's proof-challenge check, never a review verdict.

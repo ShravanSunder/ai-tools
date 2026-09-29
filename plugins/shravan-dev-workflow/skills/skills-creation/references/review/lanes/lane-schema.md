@@ -63,9 +63,9 @@ route:            <owning check when the defect is outside this check's boundary
 
 Severity is graded by effect on behavior, not by how wrong the text reads. `route` names the owning check when the defect is outside the reporting check's boundary.
 
-## Lead Reduction
+## Review Sidekick Reduction
 
-Every field below is filled by the review lead. The 🔎 Review Sidekick fills this reduction. `changed-file coverage` is derived from complete current files and check evidence.
+Every field below is filled by the 🔎 Review Sidekick. `changed-file coverage` is derived from complete current files and check evidence.
 
 ```text
 review:

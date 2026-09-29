@@ -1,10 +1,10 @@
 # Background Monitoring Reference
 
-Use this reference when a debug investigation needs a long-running watcher, progress poller, shell monitor, or background job while the main model continues other work.
+Use this reference when a debug investigation needs a long-running watcher, progress poller, shell monitor, or background job while the Lead continues other work.
 
 ## Decision Boundary
 
-Machine watches; model adjudicates. Deterministic shell, Python, or service probes should collect small facts on a schedule. The model should inspect only state changes, anomalies, completion, and bounded summaries. Do not make the main model or a helper model the steady-state model polling loop.
+Machine watches; model adjudicates. Deterministic shell, Python, or service probes should collect small facts on a schedule. The model should inspect only state changes, anomalies, completion, and bounded summaries. Do not make the Lead or a helper agent the steady-state polling loop.
 
 This belongs to `debug-investigation` when the purpose is diagnosis, observability, failure detection, or root-cause proof. Do not route it to a new skill, `model-callers`, or an unfinished external caller helper just because the watcher launches another process. Helper agents are optional bounded lanes for interpreting snapshots or reviewing a monitor plan; they are not the monitor.
 

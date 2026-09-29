@@ -2,7 +2,7 @@
 
 This reference owns current-source orientation, planning and implementation admission, meaningful result verification, the missing-history baseline, and finish decisions for one implementation delivery goal. Phase skills retain their own input and return contracts.
 
-Expected inputs: the user's objective and requested terminal, repository instructions, current source and diff, governing artifacts, admitted-improvement evidence when applicable, the main-authored canonical plan and PR assignments, implementation proof, main-assessment evidence, review evidence, supplied authority, coordination and execution work references or unshared checkpoint path and whole-work responsibility, the orchestrator, persistent implementation 🐒 Sidekicks, persistent Review Sidekick when commissioned, executors when assigned, and known blockers.
+Expected inputs: the user's objective and requested terminal, repository instructions, current source and diff, governing artifacts, admitted-improvement evidence when applicable, the Lead-authored canonical plan and PR assignments, implementation proof, Lead-assessment evidence, review evidence, supplied authority, coordination and execution work references or unshared checkpoint path and whole-work responsibility, the orchestrator, persistent implementation 🐒 Sidekicks, persistent Review Sidekick when commissioned, executors when assigned, and known blockers.
 
 Return: a concise orientation containing the objective, scope, current basis, requested terminal, evidence freshness, next owner or exact stop, and the continuation checkpoint and whole-work completion decision.
 
@@ -39,9 +39,9 @@ The work trail is a navigation and continuity aid. Reopen its evidence before re
 
 ## Select the Current Owner
 
-The orchestrator routes the smallest owner that can resolve the current delivery decision, verifies decisive evidence, and continues the goal. The current goal context or applicable handoff and the next phase's existing input/result contract remain authoritative. The orchestrator authors design and planning and remains the default user conversation throughout delivery. After a ready plan, persistent implementation 🐒 Sidekicks execute implementation, associated proof, and corrections directly by default in their planned PR assignments. The user may explicitly choose direct contact with an assigned Sidekick inside its scope; a ready plan alone does not choose that branch. Material design/plan decisions, cross-assignment integration conflicts, permission boundaries, and concise completion receipts return to the orchestrator. Main does not relay every internal progress turn or poll merely to keep the conversation active, and returning to Main for conversation does not pause authorized implementation or transfer execution ownership.
+The orchestrator routes the smallest owner that can resolve the current delivery decision, verifies decisive evidence, and continues the goal. The current goal context or applicable handoff and the next phase's existing input/result contract remain authoritative. The orchestrator authors design and planning and remains the default user conversation throughout delivery. After a ready plan, persistent implementation 🐒 Sidekicks execute implementation, associated proof, and corrections directly by default in their planned PR assignments. The user may explicitly choose direct contact with an assigned Sidekick inside its scope; a ready plan alone does not choose that branch. Material design/plan decisions, cross-assignment integration conflicts, permission boundaries, and concise completion receipts return to the orchestrator. The Lead does not relay every internal progress turn or poll merely to keep the conversation active, and returning to the Lead for conversation does not pause authorized implementation or transfer execution ownership.
 
-Under `manage-agents`, a 🐒 Sidekick may select a bounded native Worker for independent work, needed expertise, or large disposable output whose expected benefit exceeds briefing, coordination, and verification cost, and may select a native Operator for a standalone prescribed procedure. Coupled implementation/proof stays with its executor and no relay-only supervisor is introduced. The orchestrator keeps the coordination and execution roots as `orchestrator`; each implementation Sidekick contributes as `implementer` only on its execution root and the Review Sidekick contributes where commissioned. Those seats describe thread participation, not authority.
+A 🐒 Sidekick delegates only through `manage-agents`. The orchestrator keeps the coordination and execution roots as `orchestrator`; each implementation Sidekick contributes as `implementer` only on its execution root and the Review Sidekick contributes where commissioned. Those seats describe thread participation, not authority.
 
 The source-phase workflow follows this order:
 
@@ -65,7 +65,7 @@ ready plan; terminal is plan-only
   -> finish at plan-only
 
 ready delivery plan; implementation or proof incomplete
-  -> commission/resume the planned PR implementation 🐒 Sidekick(s) while Main remains the default user conversation; use direct 🐒 Sidekick contact only when the user explicitly chooses it; then implement-plan per assignment after real prerequisites
+  -> commission/resume the planned PR implementation 🐒 Sidekick(s) while the Lead remains the default user conversation; use direct 🐒 Sidekick contact only when the user explicitly chooses it; then implement-plan per assignment after real prerequisites
 
 development and fitting proof complete
   -> orchestrator assessment against the original need, design, plan, current diff, actual proof, complexity, PR boundaries, and integration
@@ -81,13 +81,13 @@ accepted specification, design, or plan finding
   -> exact semantic owner, then resume the open implementation goal
 
 review ready; PR gates not current
-  -> assigned implementation 🐒 Sidekick or 🔧 Operator runs implementation-pr-wrapup and returns current PR gate evidence to Main
+  -> assigned implementation 🐒 Sidekick or 🔧 Operator runs implementation-pr-wrapup and returns current PR gate evidence to the Lead
 
 PR ready and unmerged
   -> default terminal; merge only under separately supplied authority
 ```
 
-The assessment result makes its source-backed inspection and outcome clear rather than compressing them into “looks done.” Inspect the original need and accepted design, main-authored plan and PR scope, current diff, actual proof and gaps, ownership and naming, unnecessary complexity, and cross-PR prerequisites/integration when applicable. Do not reject adequate evidence merely because a label or field is absent.
+The assessment result makes its source-backed inspection and outcome clear rather than compressing them into “looks done.” Inspect the original need and accepted design, Lead-authored plan and PR scope, current diff, actual proof and gaps, ownership and naming, unnecessary complexity, and cross-PR prerequisites/integration when applicable. Do not reject adequate evidence merely because a label or field is absent.
 
 A request for one direct phase bypasses this orchestrator. Optional `ops-*` tracking is a separate authorized side route; resume from canonical artifacts afterward because tickets prove no delivery result. A tracker 🔧 Operator logs meaningful decisions, results, and blockers through the existing trail contract, never each routine execution step.
 

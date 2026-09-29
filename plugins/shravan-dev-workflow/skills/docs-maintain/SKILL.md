@@ -35,7 +35,7 @@ docs request
 - Do not replace phase skills for active artifact work: `spec-design`, `program-design`, `spec-program-review`, `spec-handoff`, `plan-handoff`, `implementation-handoff`, `implementation-review` for general-domain implementation review, `skills-creation` for runtime skill-package review, `implementation-pr-wrapup`, and `debug-investigation` own their lanes. Retired skill trees are provenance, not runtime routes; active planning, execution, and implementation review use their current named owners rather than retired workflows.
 - Before purging or rewriting docs, propose the change and say what will be preserved.
 - When code and docs disagree, identify the driver and, IF it is not obvious, load `../../shared-references/owner-decision-brief.md` and return a brief of both versions.
-- Use subagents for bounded inventory or stale-doc research in large repos, but the parent owns final edits.
+- The parent owns final doc edits; bounded inventory or stale-doc research goes to a 🛠️ Worker through `manage-agents`.
 - Use `manage-agents` only for model-agent call/session mechanics; keep doc roles, staleness, and source-of-truth classification here.
 - Use progressive disclosure: load only the workflow reference that matches the docs job.
 
