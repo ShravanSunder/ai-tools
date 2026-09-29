@@ -11,7 +11,9 @@ The 🦁 Lead is the agent the owner talks to. It designs, plans, cuts the work,
 
 ## Classify
 
-Work nests like a project plan. At every level the agent works in a loop: do one piece, check it against that level's check, then do the next piece or hand back.
+### Work levels
+
+Work nests like a project plan. At every level the agent works in a loop: do one piece, check it against that level's check, then do the next piece or hand back. An agent can drive only as far as there is a check to verify against; if the Lead cannot name the check for a level, the job is cut smaller.
 
 | Level | Made of | Checked against |
 |---|---|---|
@@ -20,21 +22,39 @@ Work nests like a project plan. At every level the agent works in a loop: do one
 | Task, such as one slice | subtasks | its acceptance check |
 | Subtask, one step | edits or commands | its expected result |
 
-An agent can drive only as far as there is a check to verify against. If the Lead cannot name the check for a level, the job is cut smaller.
+### Horizon
 
-**Horizon**: the highest level of the work the agent closes before handing back: Subtask, Task, or Milestone. Name the check that ends each job.
+The highest work level the agent closes before handing back. Name the check that ends each job.
 
-**Direction**: how much of the job the brief decides.
+| Answer | The agent closes | Before handing back at |
+|---|---|---|
+| Subtask | one step | its expected result |
+| Task | one result made of subtasks | its acceptance check |
+| Milestone | one deliverable made of tasks | the plan's proof |
 
-- Exact: the brief is a procedure; nothing is left to judge. Test: could a script run it? Only an Exact job can go to a 🔧 Operator.
-- Complete: the brief names the approach; the agent decides only details nothing else depends on. Test: can you name the approach in one sentence?
-- Partial: the brief gives only the outcome, so the agent would choose the approach. Cut it: the Lead names the approach and writes the choice into the plan. A design choice never goes to a helper. Missing intent or a missing plan is missing input, not Partial.
+### Direction
 
-**Span**: what the agent must hold in its head to get the job right.
+How much of the job the brief decides.
 
-- Local: one owner's code and the contracts it uses. Test: is reading that owner and its contracts enough? Size and module count don't change it.
-- Cross-domain: two or more owners in one system whose shared contract must stay in step. Cut it: write the shared contract into the plan.
-- Cross-system: a contract another system consumes (an API, a wire format, stored data another system reads). Cut it: split at the system boundary if you can.
+| Answer | The brief | Test | Then |
+|---|---|---|---|
+| Exact | is a procedure; nothing is left to judge | could a script run it? | only an Exact job can go to a 🔧 Operator |
+| Complete | names the approach; the agent decides only details nothing else depends on | can you name the approach in one sentence? | ready to hand off |
+| Partial | gives only the outcome, so the agent would choose the approach | does the job hide a design choice? | the Lead names the approach and writes the choice into the plan; a design choice never goes to a helper |
+
+Missing intent or a missing plan is missing input, not Partial.
+
+### Span
+
+What the agent must hold in its head to get the job right. Size and module count don't change it.
+
+| Answer | The agent must hold | Test | Then |
+|---|---|---|---|
+| Local | one owner's code and the contracts it uses | is reading that owner and its contracts enough? | ready to hand off |
+| Cross-domain | two or more owners in one system whose shared contract must stay in step | would the change break another owner's code in this system? | write the shared contract into the plan |
+| Cross-system | a contract another system consumes: an API, a wire format, stored data another system reads | does another system read what changes? | split at the system boundary if you can |
+
+### How they fit
 
 Horizon caps the role, direction decides whether an Operator can take the job, and direction and span pick the Models row.
 
