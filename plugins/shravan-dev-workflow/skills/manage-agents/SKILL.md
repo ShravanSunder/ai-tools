@@ -1,6 +1,6 @@
 ---
 name: manage-agents
-description: "MUST use during project planning, design, and execution to choose who executes, and when spawning, assigning, steering, resuming, waiting for, or verifying Workers, Operators, Sidekicks, Review Sidekicks, Advisors, swarms, or agent-router and ACPX agents."
+description: "Always use when delegating to subagents, agent teams, or parallel agents: choosing which agent and model take a job, or spawning, assigning, steering, resuming, waiting for, or verifying a Worker, Operator, Sidekick, Review Sidekick, or Advisor, including a fan-out across many units."
 ---
 
 # Manage Agents
