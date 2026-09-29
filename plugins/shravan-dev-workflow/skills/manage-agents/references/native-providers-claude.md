@@ -14,10 +14,10 @@ Task / Agent may omit plan-mode or readonly flags. Do not hop to `claude -p --pe
 
 | Role | Model | Route |
 | --- | --- | --- |
-| 🛠️ Worker | Claude Opus, low | native Task / Agent |
-| 🔧 Operator | OpenAI Luna | agent-router (see Runtime in `SKILL.md`) |
+| 🛠️ Worker | Claude Opus, when the Models row picks it | native Task / Agent |
+| 🔧 Operator | OpenAI Luna | agent-router (see Launch in `SKILL.md`) |
 
-Resolve the exact id with the Runtime rule in `SKILL.md`.
+Resolve the exact id with the exact-id rule in `SKILL.md` Launch.
 
 ## Workspace Access
 

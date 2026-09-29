@@ -35,7 +35,7 @@ The assigned implementation 🐒 Sidekick may carry its delivery assignment thro
 4. IF this run created a PR, or the current body is missing `## Why the change` / `## Special things to note` / `## Change outline`, is a file-list changelog (`- path — note` bullets as the outline), stale against the current HEAD/diff, secret-unsafe, or the user asked to rewrite — including after a head/diff identity change and before a ready claim:
    ```text
    IF this run created a PR, or the current body is missing those headings, is a file-list changelog, stale against the current HEAD/diff, secret-unsafe, or the user asked to rewrite:
-     dispatch `pr-description` to a Workhorse 🛠️ Worker (Exact steps) using this packet:
+     dispatch `pr-description` to a Workhorse 🛠️ Worker (Complete direction) using this packet:
        pr number or create-intent; base; head SHA; diff identity; existing body;
        related URLs (only those already supplied); never-publish rules from step 2.
      Subagent loads `references/pr-description.md`.
@@ -45,7 +45,7 @@ The assigned implementation 🐒 Sidekick may carry its delivery assignment thro
      Instance authority is equal to or narrower than the lane maximum: draft the body file under tmp only; no push, merge, readiness claim, comment replies, or `gh pr edit`.
      Return complete | partial | blocked receipt against the receipt in `references/pr-description.md`.
    ```
-   Description is Collection+Synthesis under Exact steps: Workhorse 🛠️ Worker drafts Why, Special things to note, and views. Do not apply manage-agents Operator PR-ops to that draft. Workhorse Operator is the monitor. Operator publishes only the already-verified tmp file with `gh pr edit --body-file`.
+   Description drafting is Complete direction: a Workhorse 🛠️ Worker drafts Why, Special things to note, and views. Do not apply manage-agents Operator PR-ops to that draft. Workhorse Operator is the monitor. Operator publishes only the already-verified tmp file with `gh pr edit --body-file`.
    Parent mechanical-verifies only a `complete` receipt: the three headings are present as those exact strings; `included_views` is non-empty; the outline is not `- path — note` bullets; the receipt head SHA matches the current PR head; public-artifact-safety holds. Do not require catalog tokens to equal outline heading text. Parent does not re-pick views or rewrite Why / Special things to note. Then dispatch an Operator to `gh pr edit --body-file` the verified tmp file. Completion: GitHub body matches the verified file, or a named blocker.
 5. Monitor checks, comments, review threads, mergeability, head SHA, and the current PR body. MUST load `references/monitor-loop.md` and return current gate state. MUST load `manage-agents` before dispatching or resuming a Workhorse 🔧 Operator monitor. When head SHA or diff identity changes, re-evaluate step 4 before claiming ready.
 6. Handle existing PR feedback. MUST load `../../shared-references/code-review-feedback-handling.md` and return the next fix, reply, ask, or route action.

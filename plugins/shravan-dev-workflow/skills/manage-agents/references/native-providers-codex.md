@@ -8,10 +8,10 @@ This reference applies after `SKILL.md` selects a native 🛠️ Worker or Opera
 
 | Role | Model | Route |
 | --- | --- | --- |
-| 🛠️ Worker | OpenAI Luna or Sol, effort from the `model-catalog.md` role table | native `spawn_agent` |
-| 🔧 Operator | OpenAI Luna, effort from the `model-catalog.md` role table | native `spawn_agent` |
+| 🛠️ Worker | OpenAI Luna or Sol, effort from the `SKILL.md` Models table | native `spawn_agent` |
+| 🔧 Operator | OpenAI Luna, effort from the `SKILL.md` Models table | native `spawn_agent` |
 
-Resolve the exact id with the Runtime rule in `SKILL.md`. If the host requires a provider prefix, it takes the form `openai.<resolved id>` (example format only).
+Resolve the exact id with the exact-id rule in `SKILL.md` Launch. If the host requires a provider prefix, it takes the form `openai.<resolved id>` (example format only).
 
 ## Effort
 

@@ -4,7 +4,7 @@ Legacy route. agent-router carries persistent Claude relationships over ACP by d
 
 ## Models
 
-Examples: Claude Fable 5.x and Claude Opus 5.5 ACP selection ids. Resolve the exact id with the Runtime rule in `SKILL.md`. A custom Fable id may differ from bare `fable`, and user settings must expose that custom catalog. API model names are not guaranteed ACP selection IDs; the live catalog is authoritative. For Fable, define one relationship wrapper so every lifecycle call keeps the same model environment, cwd, and permission boundary:
+Examples: Claude Fable 5.x and Claude Opus 5.5 ACP selection ids. Resolve the exact id with the exact-id rule in `SKILL.md` Launch. A custom Fable id may differ from bare `fable`, and user settings must expose that custom catalog. API model names are not guaranteed ACP selection IDs; the live catalog is authoritative. For Fable, define one relationship wrapper so every lifecycle call keeps the same model environment, cwd, and permission boundary:
 
 ```bash
 REPO=/absolute/repo
