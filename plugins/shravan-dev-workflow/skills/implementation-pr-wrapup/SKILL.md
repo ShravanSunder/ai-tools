@@ -62,7 +62,7 @@ MUST load `manage-agents` before 🛠️ Worker description dispatch, Operator p
 - MUST load `references/github-pr-state.md` before inspecting PR state, checks, comments, review threads, or mergeability and return number, URL, head SHA, base, body, and mergeability.
 - IF step 4's predicate holds, dispatch `pr-description`; the 🛠️ Worker loads `references/pr-description.md`, which MUST load `references/pr-outline-views.md`, and returns a tmp body plus `complete | partial | blocked`.
 - MUST load `references/monitor-loop.md` before polling asynchronous PR state and return current gate state.
-- MUST load `manage-agents` before 🛠️ Worker description dispatch, Operator `gh pr edit`, or a subordinate PR monitor, and return the role, Models row, and packet.
+- MUST load `manage-agents` before 🛠️ Worker description dispatch, Operator `gh pr edit`, or a subordinate PR monitor, and return the role, catalog row, and packet.
 - MUST load `references/merge-gates.md` before saying ready, merge-clear, green, fixed, complete, or running a merge command, and return the gate-by-gate result including the body gate.
 - MUST load `../../shared-references/code-review-feedback-handling.md` before acting on existing PR comments or review threads and return the next action.
 

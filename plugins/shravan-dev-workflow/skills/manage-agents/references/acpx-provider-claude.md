@@ -18,7 +18,7 @@ fable_acpx() {
 }
 ```
 
-The adapter observed `default`, `low`, `medium`, `high`, `xhigh`, and `max`. Use the Models table thinking values for Frontier Fable and invoke every lifecycle command through the wrapper so the custom model environment remains part of the relationship.
+The adapter observed `default`, `low`, `medium`, `high`, `xhigh`, and `max`. Use the catalog table thinking values for Frontier Fable and invoke every lifecycle command through the wrapper so the custom model environment remains part of the relationship.
 
 ## Settings And Permissions
 
