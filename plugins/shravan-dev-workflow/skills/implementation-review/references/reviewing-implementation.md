@@ -73,6 +73,6 @@ Identify the single assumption whose failure would most change the review result
 
 ## Write Only Supported Findings
 
-A candidate finding needs an exact source and implementation anchor, governing obligation or invariant, concrete failure or consequence, smallest correction, candidate owner, fitting confirmation evidence, and remaining uncertainty. If no well-supported candidate survives, return `No findings`; do not pad.
+A candidate finding needs an exact source and implementation anchor, governing obligation or invariant, concrete failure or consequence, an appropriate correction within the task boundary, candidate owner, fitting confirmation evidence, and remaining uncertainty. If no well-supported candidate survives, return `No findings`; do not pad.
 
 The method is complete when every requested stage has returned its result: coverage or anchored-exclusion rows accounting for every assigned file whole, normal and applicable failure paths inspected, proof layers and source freshness checked, applicable runtime claims carrying reachability status, weaker substitutes and the riskiest assumption tested, candidate findings meeting the standard, and the uncovered boundary named. Each check reference owns which stages it requests and when the lane stops.

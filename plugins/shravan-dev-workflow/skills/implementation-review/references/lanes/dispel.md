@@ -16,7 +16,7 @@ For each candidate finding, answer one bounded question: is the proposed correct
 rails anchor the candidate serves: <anchor | none found>
 deletion test: removing the questioned mechanism — do the confirmed
   obligations still hold?
-mechanism necessity: smallest change that serves the quoted clause | one of
+mechanism necessity: required and proportionate to the quoted clause | one of
   several ways to serve it — if several, only the obligation gap can be a finding
 correction class: required by anchor | gold-plating | scope expansion |
   requirements-weakening | cannot tell without owner decision
@@ -27,7 +27,7 @@ The failure this check exists to catch: a reviewer proposes completing an unrequ
 
 ## Challenge the Implementation
 
-Independently sweep the whole diff for over-delivery, and make the sweep accountable: map each delivered subsystem, layer, dependency, and capability to the exact rail that asks for it or to `absent`. For each `absent`, return an over-delivery finding with the delivered thing, the absent anchor, the smallest removal or the owner decision needed, and the consequence of keeping it unowned. The sweep is complete only when every delivered item carries a mapping.
+Independently sweep the whole diff for over-delivery, and make the sweep accountable: map each delivered subsystem, layer, dependency, and capability to the exact rail that asks for it or to `absent`. For each `absent`, return an over-delivery finding with the delivered thing, the absent anchor, the appropriate removal or the owner decision needed, and the consequence of keeping it unowned. The sweep is complete only when every delivered item carries a mapping.
 
 Good: every candidate carries a rails classification with evidence; unrequested subsystems in the diff are named even when well-built.
 

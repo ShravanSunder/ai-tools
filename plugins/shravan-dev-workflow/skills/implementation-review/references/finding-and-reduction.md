@@ -18,7 +18,7 @@ quoted or faithful obligation text:
 plain-language meaning of that anchor:
 observable outcome that fails if unresolved:
 deletion test: without the questioned mechanism, do the confirmed obligations still hold?
-mechanism necessity: is the proposed mechanism the smallest change that satisfies
+mechanism necessity: is the proposed mechanism required and proportionate to
   the quoted clause, or one of several ways to serve it?
 scope effect: inside confirmed boundary | requires owner expansion decision
 ```
@@ -60,7 +60,7 @@ governing obligation or invariant:
 rails anchor and deletion-test result:
 scope effect:
 concrete consequence:
-smallest correction:
+appropriate correction within the task boundary:
 owner:
 confirmation evidence:
 coverage invalidated:
