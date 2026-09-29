@@ -75,15 +75,13 @@ Pick a different lineage (OpenAI, Claude, xAI) from the author's.
 
 ### 🦉 Advisor
 
-The owner picks the row; an Advisor request is that choice.
+The owner picks.
 
-| Tier | Model | Effort |
-|---|---|---|
-| Frontier | OpenAI Astra | high |
-| Frontier | OpenAI Astra | xhigh |
-| Daily driver | Claude Opus | high |
-| Frontier | Claude Opus | xhigh |
-| Frontier | Claude Fable | high |
+| Model | Effort |
+|---|---|
+| OpenAI Astra | high or xhigh |
+| Claude Opus | high or xhigh |
+| Claude Fable | high |
 
 ## Work with an agent
 
