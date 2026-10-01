@@ -24,6 +24,8 @@ What done looks like, in one or two sentences the agent can check itself against
 
 Exact paths, or inlined text, that a fresh agent can use without the Lead's history.
 
+Name each input the job needs and the evidence it is usable. Work that needs an input that is not usable yet waits, unless an agreed contract or stand-in lets it proceed (the stand-in rule in the owner's prompt).
+
 ## Limits
 
 - Read-only: no repo edits except scratch under project `tmp/` or `/tmp`. The assigner checks the worktree is unchanged.
@@ -34,7 +36,7 @@ The provider page says how the host enforces these. A missing sandbox flag is no
 
 ## Stop
 
-Where the job ends. An 🔧 Operator that meets a judgment call or a missing permission returns what it observed, the decision needed, and a safe waiting state, then waits.
+Where the job ends, including whether it pushes, opens a PR, and runs the full suite. An 🔧 Operator that meets a judgment call or a missing permission returns what it observed, the decision needed, and a safe waiting state, then waits.
 
 ## Return
 

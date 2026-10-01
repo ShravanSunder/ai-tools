@@ -16,6 +16,7 @@ shared model-readable output                             -> references/<name>-ou
 machine-validated structure                              -> schemas/<name>.schema.json
                                                             or references/<name>-tool-schema.md
 deterministic executable mechanic                        -> scripts/
+rule another skill owns                                  -> a pointer to that skill, never a copy
 term meaning only                                        -> glossary.md
 no behavior change                                       -> prune
 ```

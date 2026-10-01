@@ -14,7 +14,7 @@ Where to look, when the artifact is **changed files**:
 
 IF a term is added, changed, or used in the reviewed surface, load `../../glossary.md` to compare its definition with every use and return its authoritative meaning and any disagreement.
 
-How to inspect: Build the claim inventory before judging. For each rule, term, predicate, label set, or required field, list every file and line that states it. Then compare wording, not intent. Separate three failures:
+How to inspect: Build the claim inventory before judging. For each rule, term, predicate, label set, or required field, list every file and line that states it. For a renamed term, search the plugin for the new word's existing meanings and flag a collision. Then compare wording, not intent. Separate three failures:
 
 ```text
 divergent home    one rule stated in 2+ places with different wording

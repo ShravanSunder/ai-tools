@@ -107,7 +107,7 @@ Steering is the wording that changes what the agent does. Three moves carry most
 
 **Rule strength.** Match the rule to how the agent fails. A rule it already follows needs no wording at all. A rule it skips under pressure needs a bright line — one unambiguous condition, no judgment call left at the moment of temptation — with the rationalization named beside it in the words the agent actually used. `I already know this` and `I'll verify later` belong in the skill, not in the postmortem.
 
-**The deletion test.** Would the agent act differently if this sentence disappeared? Apply it sentence by sentence inside its surrounding context, never to whole sections at once. Rationale that changes no behavior is padding however true it is.
+**The deletion test.** Would the agent act differently if this sentence disappeared? Apply it sentence by sentence inside its surrounding context, never to whole sections at once. Rationale that changes no behavior is padding however true it is. Before deleting a line that repeats another skill's rule, find that rule stated in its owner; if it is not there, move it there first.
 
 Lead with the positive shape: tell the agent what action to take, what result to produce, and what good judgment looks like. Add a prohibition only when a known failure still needs a bright-line boundary, and pair it with the positive target.
 
@@ -175,7 +175,7 @@ An update run follows one all-run spine: the Lead names the promise and success,
 
 ### 1. Name the promise and success
 
-Classify the run; search the owning plugin for an existing skill or reference that already owns the named behavior and return the matching paths or `none`; name the reusable behavior in one sentence: "This skill helps agents reliably do X when Y happens." Before behavior-changing authoring, state a concise, human-readable success definition that names the observable behavior and situation that matter. Ask the user when missing meaning would materially change the intended behavior; do not derive the need from current skill wording alone. IF evaluating a draft that exists only in conversation, load `references/review/spec-review.md` to judge the proposal and return its verdict, blocker overrides, and first required revision. IF evaluating a skill already on disk, load `references/review/implementation-review.md` to judge the existing files and return its verdict, changed-file coverage, and first fix. Completion: classification, owner, reusable behavior, baseline or review target, success definition, and the surface allocation — which of the four surfaces carries each part of the change — are named; an `evaluate` run completes with classification, owner, reusable behavior, and review target.
+Classify the run; search the owning plugin for an existing skill or reference that already owns the named behavior and return the matching paths or `none`; name the reusable behavior in one sentence: "This skill helps agents reliably do X when Y happens." Before behavior-changing authoring, state a concise, human-readable success definition that names the observable behavior and situation that matter. Ask the user when missing meaning would materially change the intended behavior; do not derive the need from current skill wording alone. IF evaluating a draft that exists only in conversation, load `references/review/spec-review.md` to judge the proposal and return its verdict, blocker overrides, and first required revision. IF evaluating a skill already on disk, load `references/review/implementation-review.md` to judge the existing files and return its verdict, changed-file coverage, and first fix. Completion: classification, owner, reusable behavior, baseline or review target, success definition, and the surface allocation — which of the four surfaces carries each part of the change — are named; an `evaluate` run completes with classification, owner, reusable behavior, and review target. A source such as 'use real sessions' is not a success definition.
 
 ### 2. Choose the authoring basis and proof posture
 
@@ -235,6 +235,8 @@ Match the guidance form to the observed failure, representative hypothesis, or u
 | shallow legwork                   | stronger completion criterion               |
 | wrong invocation                  | sharper description or user-invocable route |
 | reference retrieval gap           | stronger context pointer or inline material |
+
+When a skill defines categories agents apply, write worked examples against the definitions before review. When an example and a definition disagree, check both against the intended behavior and correct whichever is wrong. Draw examples from patterns in real work, not its details.
 
 Strengthen predicates, returns, and completion criteria when the agent would guess or stop early.
 
