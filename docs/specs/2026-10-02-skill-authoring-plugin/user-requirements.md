@@ -1,6 +1,6 @@
 # Skill authoring plugin: Requirements
 
-Owner: Shravan. Requirements author: the skills-evals Lead session. Status: **draft for owner confirmation**. The Specification and Program Design live beside this file once written; this file holds who the plugin is for, what they need, and the boundary of the work. It holds no obligations (`MUST` statements); those belong to the Specification.
+Owner: Shravan. Requirements author: the skills-evals Lead session. Status: **confirmed by the owner 2026-10-04** (question tool, after the restart). The Specification and Program Design live beside this file once written; this file holds who the plugin is for, what they need, and the boundary of the work. It holds no obligations (`MUST` statements); those belong to the Specification.
 
 Decision trail: Router board "Jev for Developer Workflow", topic "ai-tools skill evals with Jev", thread root `01a0fc9e-99fd-7462-a8d5-50a52049155d` (owner decisions 2026-10-02 and 2026-10-04). Evidence report: `2026-10-02-skill-authoring-needs-evidence.md` in that thread's Router scratch scope; the Lead re-verified its decisive anchors.
 
@@ -57,12 +57,12 @@ Authority: `authorized` means an explicit owner decision recorded on the thread 
 | U8 | C4 | When Jev is certain, its answer stands; when it is not, the evidence goes to an agent judge in the eval. | authorized 10-04 | must |
 | U9 | C1, C2 | Two done bars. A new skill from owner intent is done when its checks pass and Luna runs on realistic prompts show the behaviour. A fix for a recorded failure first makes that failure show up in a test, then passes several fresh runs. | authorized 10-04 | must |
 | U10 | C2 | The plugin itself supplies three practices: read the current files before claiming anything; keep a record of what was decided and of proposed versus shipped; get an independent second-agent check. Every other general practice is "ask the user" or optional. | authorized 10-04 | must |
-| U11 | C1 | The pressure-test runner stays the repository's general system; the pressure-testing method belongs to skill-authoring. | authorized 10-02 | must |
+| U11 | C1, C5 | The pressure-testing method belongs to skill-authoring, and the runner is portable: any repo can pressure-test its own skills, with scenarios living beside those skills. | authorized 10-02, portability 10-04 | must |
 | U12 | C1, S1 | Old names stop working at once; no compatibility shims (owner's standing hard-cutover rule). | authorized (standing rule) | must |
 
 ## Needs found in the evidence
 
-The owner directed that the design rest on "what we truly need", found from recorded evidence. These rows are `observational` until the owner confirms this document, which makes them `authorized`. Strength follows the evidence report: **strong** means repeated failures, verified closures, or measured comparisons.
+The owner directed that the design rest on "what we truly need", found from recorded evidence. The owner confirmed this document on 2026-10-04, so these rows are `authorized`. Strength follows the evidence report: **strong** means repeated failures, verified closures, or measured comparisons.
 
 | ID | Area | Need | What went wrong without it | Strength |
 |---|---|---|---|---|
@@ -93,19 +93,19 @@ Recorded as having **no evidence** of benefit (not proven useless, and not carri
 ## Goal boundary
 
 - **Goal:** a standalone `skill-authoring` plugin that helps an authoring agent in any repo create, review, test, and audit skills, with evals that are cheap enough to run often and reliable enough to trust.
-- **Foundation to reuse:** the skill craft in `skills-creation` that the evidence supports (U16–U19); its review properties (U21); the repository's pressure-test runner as the general system (U11); existing scenarios as input material, not as trusted tests.
+- **Foundation to reuse:** the skill craft in `skills-creation` that the evidence supports (U16–U19); its review properties (U21); the repository's pressure-test runner as the starting point, made portable (U11); existing scenarios as input material, not as trusted tests.
 - **Actually missing:** the standalone plugin; the orchestration skill; the multi-agent skill-review skill with Jev lint; the eval framework with per-check graders and the Jev cascade; the two done bars.
-- **May change (ai-tools):** a new `plugins/skill-authoring/`; removal of skills-creation and skill-audit from `shravan-dev-workflow`, whose 20 handoff mentions become routing results; the runner's grading and the scenario format; repository docs, manifests, marketplace entries, changelog.
+- **May change (ai-tools):** a new `plugins/skill-authoring/`; removal of skills-creation and skill-audit from `shravan-dev-workflow`, whose 20 handoff mentions become routing results; the runner's grading, its portability to other repos, and the scenario format; repository docs, manifests, marketplace entries, changelog.
 - **Protected:** the behaviour of every other `shravan-dev-workflow` skill beyond that handoff change; four of those files belong to the skill-review and work-breakdown Lead (`637baf68`), and the Specification decides how they change with that Lead; the owner's own settings and skill index; Router and board; agent-studio.
 - **Non-goals:** regression tracking (later); building the Jev tool (another agent; skill-authoring consumes its interface); the orchestration engine and Inspector (`637baf68`); retired skills.
-- **Acceptable complexity (proposed, needs confirmation):** five skills, the eval framework, and its grader cascade. A run database, dashboards, cross-run governance, unattended automation, or automatic skill edits need renewed approval.
-- **Acceptable evidence (proposed, needs confirmation):**
+- **Acceptable complexity (confirmed 10-04):** five skills, the eval framework, and its grader cascade. A run database, dashboards, cross-run governance, unattended automation, or automatic skill edits need renewed approval.
+- **Acceptable evidence (confirmed 10-04):**
   - the five skills load with `shravan-dev-workflow` **not** installed, in Claude and Codex;
   - a code check finds no remaining old names;
   - the plugin's own skills meet the U9 done bars;
   - on a labelled set, per-check grading agrees with adjudicated truth, with the escalation rate and cost per scenario reported.
 
-## Open questions for the owner
+## Resolved owner questions
 
-1. **Any repo versus a repo-local runner (U3 against U11).** If the runner stays in ai-tools, another repo cannot run its own pressure tests without it. Either the eval framework makes the runner usable from other repos, or "any repo" covers authoring and review but not evals.
-2. **The acceptable-complexity and acceptable-evidence lines above** are the Lead's proposal, not owner decisions.ee
+1. **Any repo versus a repo-local runner (U3, U11):** resolved 2026-10-04: the runner is portable, so other repos run pressure tests on their own skills.
+2. **Acceptable complexity and acceptable evidence:** confirmed as written on 2026-10-04.
