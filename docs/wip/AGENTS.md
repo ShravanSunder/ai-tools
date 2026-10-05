@@ -19,7 +19,9 @@
 
 Raw signals, investigations, lessons, authoring evidence, and the backlog live under `~/dev/memory-logs/skills/`. See root `AGENTS.md`.
 
-This folder may hold only skill-change proposals:
+A next ticket is a dated file at `docs/wip/<yyyy-mm-dd-name>.md`, listed under README **Next tickets**. It is not a skill-change proposal.
+
+`skills-authoring/` may hold a proposal only once a named skill is the target:
 
 `docs/wip/skills-authoring/<yyyy-mm-dd-name>/proposal.md`
 
