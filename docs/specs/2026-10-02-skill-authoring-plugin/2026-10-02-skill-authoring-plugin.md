@@ -127,7 +127,7 @@ Each requirement names the entities it is written over and the user rows it serv
 | ID | Requirement | Entities | Basis |
 |---|---|---|---|
 | R27 | Each Run MUST execute the subject once and record one Observation that every Check of that Run reads; a Check never triggers another subject execution. | E6, E7 | U30 |
-| R28 | Subjects MUST be Luna agents at medium effort by default; the agent judge MUST be a Luna agent. | E6, E8 | U7, owner 10-04 |
+| R28 | Subjects and every other agent the runner starts MUST be `gpt-6-luna` at medium effort, except the agent judge, which MUST be `gpt-6-luna` at high effort. | E6, E8 | U7, owner 10-04, 10-06 |
 | R29 | The runner MUST start subjects and judges through ACPX used as a library, not by launching the ACPX command line. | E6 | owner 10-04 |
 | R30 | A subject MUST NOT be able to write to the repository under test unless its Scenario explicitly allows writes; a denied write is recorded in the Observation. | E6, E7 | U28 |
 | R31 | When a `jev` Check's answer is certain, it MUST stand as the Check result; when it is not certain, the Check MUST be decided by the agent judge. | E5, E8, E12 | U8 |
@@ -189,7 +189,7 @@ Each requirement names the entities it is written over and the user rows it serv
 - **Undefined:** result storage across batches (regression tracking is a non-goal).
 
 ### C4 · Agent-judge input (R33)
-- **Consumers:** the Luna agent judge.
+- **Consumers:** the agent judge (`gpt-6-luna`, high effort).
 - **Gets:** the Check's question and criterion, the retrieved evidence, and the Scenario's prompt.
 - **Never gets:** Jev's probability, its leaning, the escalation fact, the Skill package's author or revision label, or other Runs' results.
 
@@ -209,7 +209,7 @@ Each requirement names the entities it is written over and the user rows it serv
 
 - Regression tracking or result storage across batches.
 - Building the Jev tool or engine; the plugin consumes its interface. Its question shape is shared with the Inspector's.
-- Subjects or judges on any model other than Luna.
+- Subjects or judges on any model other than `gpt-6-luna` (subjects medium, judge high).
 - Running old-form scenarios, or a second runner.
 - Automatic skill edits, unattended runs, dashboards, cross-run governance.
 
