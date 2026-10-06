@@ -81,6 +81,8 @@ Each requirement names the entities it is written over and the user rows it serv
 | R4 | When a `shravan-dev-workflow` skill meets skill-package work, it MUST return its existing routing result for a runtime skill package instead of naming a skill. | E14 | U2 |
 | R5 | After the cutover, `skills-creation` and `skill-audit` MUST no longer exist in `shravan-dev-workflow`, and files in this repository MUST NOT refer to them by their old names. | E14 | U1, U12 |
 | R6 | The plugin MUST work on Skill packages in any repository, at any path the user names. | E1 | U3 |
+| R49 | The eval runner MUST be a package of its own, separate from the plugin's skills, and MUST be run with `pnpm dlx` (a local `file:` package spec until it is published, then its published name). | E14 | U34, U35 |
+| R50 | Skills in the plugin MUST NOT install an executable, a global tool, or a dependency into the repository under test; anything a skill runs goes through `pnpm dlx`. | E1, E14 | U35 |
 
 ### Authoring practices the plugin carries
 
@@ -181,6 +183,7 @@ Each requirement names the entities it is written over and the user rows it serv
 
 ### C3 · Runner (R27–R40)
 - **Consumers:** authoring agents, the owner, any repository.
+- **Invocation:** `pnpm dlx file:<runner package path> …` today; `pnpm dlx <published name> …` once published. Nothing is installed; a run leaves no executable behind.
 - **Inputs:** a repository and Skill package (or Scenario ids), the change kind when judging a done bar, and the number of parallel Runs.
 - **Outputs, per Run:** the Observation reference; each Check result with its grader, evidence, and pass, fail, or inconclusive; the Run verdict; whether the judge was called; the cost of the Run.
 - **Outputs, per batch:** the counts of each verdict, the escalation rate (share of `jev` Checks sent to the judge), the cost per Scenario, and the Done-bar result when requested.
@@ -228,6 +231,7 @@ Each requirement names the entities it is written over and the user rows it serv
 | V9 | R29, R30, R35 | runtime evidence: a subject's write attempt denied and recorded; parallel Runs with no shared history |
 | V10 | R39 | one fix case: `fail` before, 3 fresh `pass` after |
 | V11 | R46, R47, R48 | inventory of converted and not-running Scenarios; the five skills' done bars met |
+| V12 | R49, R50 | runtime transcript: the runner runs via `pnpm dlx` from a clean shell and no new executable remains on PATH afterwards; automated search of the plugin's skills for install commands |
 
 ## Coverage
 
@@ -245,6 +249,8 @@ Each requirement names the entities it is written over and the user rows it serv
 | U10 | R7, R8, R9, R10 | V4 |
 | U11 | R21, R46 | V11 |
 | U12 | R5, R45 | V2 |
+| U34 | R49 | V12 |
+| U35 | R49, R50 | V12 |
 | U13 | R8 | V4 |
 | U14 | R7 | V4 |
 | U15 | R11 | V4 |
