@@ -153,3 +153,79 @@ Deno.test("a commit revision with a skill set outside the repository is invalid 
     assertStringIncludes(prepared.reason, "skill-set-outside-repo");
   }
 });
+Deno.test("a skill set already in the repository's .agents/skills is used in place", async () => {
+  const repo = await Deno.makeTempDir();
+  await Deno.mkdir(`${repo}/.agents/skills/local-skill/scenarios`, {
+    recursive: true,
+  });
+  await Deno.mkdir(`${repo}/.agents/skills/sibling-skill`, { recursive: true });
+  await Deno.writeTextFile(
+    `${repo}/.agents/skills/local-skill/SKILL.md`,
+    "local skill",
+  );
+  await Deno.writeTextFile(
+    `${repo}/.agents/skills/local-skill/scenarios/case.scenario.md`,
+    "hidden checklist",
+  );
+  await Deno.writeTextFile(
+    `${repo}/.agents/skills/sibling-skill/SKILL.md`,
+    "sibling skill",
+  );
+  await git(repo, "init", "-q");
+  const prepared = await prepareWithFixtureLogin(() =>
+    prepareEnvironment(
+      { repoRoot: repo, skillPath: ".agents/skills/local-skill" },
+      { kind: "working-tree" },
+      [],
+      undefined,
+      "codex-for-fixture",
+    )
+  );
+  if (prepared.kind === "failed") assertEquals(prepared.reason, "");
+  assertEquals(prepared.kind, "ready");
+  if (prepared.kind !== "ready") return;
+  try {
+    const exposed = `${prepared.environment.snapshotDir}/.agents/skills`;
+    assertEquals(
+      await Deno.readTextFile(`${exposed}/local-skill/SKILL.md`),
+      "local skill",
+    );
+    assertEquals(
+      await Deno.readTextFile(`${exposed}/sibling-skill/SKILL.md`),
+      "sibling skill",
+    );
+    const scenariosRemain = await Deno.stat(`${exposed}/local-skill/scenarios`)
+      .then(() => true, () => false);
+    assertEquals(scenariosRemain, false);
+  } finally {
+    await prepared.environment.dispose();
+  }
+});
+Deno.test("a different skill set that collides with .agents/skills is still a conflict", async () => {
+  const repo = await Deno.makeTempDir();
+  await Deno.mkdir(`${repo}/.agents/skills/shared-name`, { recursive: true });
+  await Deno.mkdir(`${repo}/plugin/skills/shared-name`, { recursive: true });
+  await Deno.writeTextFile(
+    `${repo}/.agents/skills/shared-name/SKILL.md`,
+    "repo-local",
+  );
+  await Deno.writeTextFile(
+    `${repo}/plugin/skills/shared-name/SKILL.md`,
+    "plugin",
+  );
+  await git(repo, "init", "-q");
+  const prepared = await prepareWithFixtureLogin(() =>
+    prepareEnvironment(
+      { repoRoot: repo, skillPath: "plugin/skills/shared-name" },
+      { kind: "working-tree" },
+      [],
+      undefined,
+      "codex-for-fixture",
+    )
+  );
+  if (prepared.kind === "ready") await prepared.environment.dispose();
+  assertEquals(prepared, {
+    kind: "failed",
+    reason: "skill-name-conflict:shared-name",
+  });
+});

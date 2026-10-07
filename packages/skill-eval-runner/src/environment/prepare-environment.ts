@@ -210,12 +210,17 @@ export async function prepareEnvironment(
     } else await copyTracked(skill.repoRoot, snapshot);
     await removeScenarioDirectoriesFromSnapshot(snapshot);
     // The skill set comes from the snapshot, so it is the run's revision; fixtures land after, so they never join it.
-    await exposeSkills(
-      skillSetSource.kind === "snapshot"
-        ? join(snapshot, skillSetSource.relativeSkillSetDir)
-        : skillSetSource.skillSetDir,
-      snapshot,
-    );
+    // A skill set that already lives at the repository's .agents/skills is in place in the snapshot.
+    const skillSetInPlace = skillSetSource.kind === "snapshot" &&
+      skillSetSource.relativeSkillSetDir === join(".agents", "skills");
+    if (!skillSetInPlace) {
+      await exposeSkills(
+        skillSetSource.kind === "snapshot"
+          ? join(snapshot, skillSetSource.relativeSkillSetDir)
+          : skillSetSource.skillSetDir,
+        snapshot,
+      );
+    }
     await applyFixtures(scenarioPath, fixtures, snapshot);
     const initialized = await run(["git", "init", "-q"], snapshot);
     if (initialized.code !== 0) throw new Error(text(initialized.stderr));
