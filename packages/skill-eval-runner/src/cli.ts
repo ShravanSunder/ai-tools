@@ -14,6 +14,7 @@ import {
   writeBatch,
 } from "./report/write-batch.ts";
 import type { Revision, SkillRef } from "./contracts/common.ts";
+import { sandboxPreflightMessage } from "./runtime/sandbox-preflight.ts";
 const args = Deno.args;
 const command = args[0] ?? "help";
 const value = (name: string, required = true): string | undefined => {
@@ -148,6 +149,13 @@ async function main(): Promise<number> {
     return 0;
   }
   const scenarioIds = values("--scenario");
+  if (command === "run" || command === "done-bar") {
+    const preflightError = sandboxPreflightMessage(Deno.env.toObject());
+    if (preflightError) {
+      console.error(preflightError);
+      return 2;
+    }
+  }
   if (command === "lint") {
     const dir = value("--skill-set", false) ?? value("--skill", false) ??
       Deno.cwd();

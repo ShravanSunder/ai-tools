@@ -11,6 +11,12 @@ const stringifyContent = (value: unknown): string | undefined =>
     : typeof value === "string"
     ? value
     : JSON.stringify(value);
+const capOutput = (value: string | undefined): string | undefined =>
+  value === undefined
+    ? undefined
+    : value.length <= 4000
+    ? value
+    : `${value.slice(0, 4000)}\n[output truncated]`;
 export function normalizeRuntimeEvents(
   events: readonly RecordedRuntimeEvent[],
 ): Observation["toolCalls"] {
@@ -42,7 +48,9 @@ export function normalizeRuntimeEvents(
         ? "failed"
         : previous?.status ?? "pending",
       inputText: stringifyContent(event.rawInput) ?? previous?.inputText,
-      outputText: stringifyContent(event.rawOutput) ?? previous?.outputText,
+      outputText: capOutput(
+        stringifyContent(event.rawOutput) ?? previous?.outputText,
+      ),
     });
   }
   return [...states.values()];

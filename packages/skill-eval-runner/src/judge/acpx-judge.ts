@@ -1,5 +1,5 @@
 import { join } from "node:path";
-import { mkdir, mkdtemp, symlink } from "node:fs/promises";
+import { mkdtemp, symlink } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import {
   type AcpRuntimeEvent,
@@ -21,14 +21,15 @@ export class AcpxJudge implements JudgePort {
     input: JudgeInput,
   ): Promise<JudgeVerdict | { kind: "malformed" }> {
     const root = await mkdtemp(join(tmpdir(), "skill-eval-judge-"));
-    const homeDir = join(root, "home");
-    const codexHome = join(root, "codex-home");
-    await mkdir(homeDir, { recursive: true, mode: 0o700 });
-    await mkdir(codexHome, { recursive: true, mode: 0o700 });
+    const cwd = await mkdtemp(join(tmpdir(), "skill-eval-judge-cwd-"));
+    const homeDir = await mkdtemp(join(tmpdir(), "skill-eval-judge-home-"));
+    const codexHome = await mkdtemp(
+      join(tmpdir(), "skill-eval-judge-codex-home-"),
+    );
     await symlink(this.environment.authPath, join(codexHome, "auth.json"));
     const state = await mkdtemp(join(tmpdir(), "skill-eval-judge-state-"));
     const runtime = createAcpRuntime({
-      cwd: root,
+      cwd,
       agentProcessEnv: {
         ...this.environment.agentEnv,
         HOME: homeDir,
@@ -53,7 +54,7 @@ export class AcpxJudge implements JudgePort {
         sessionKey: crypto.randomUUID(),
         agent: "codex-judge",
         mode: "oneshot",
-        cwd: root,
+        cwd,
       });
       const turn = runtime.startTurn({
         handle,
@@ -84,6 +85,9 @@ export class AcpxJudge implements JudgePort {
     } finally {
       await runtime.shutdown().catch(() => undefined);
       await Deno.remove(root, { recursive: true }).catch(() => undefined);
+      await Deno.remove(cwd, { recursive: true }).catch(() => undefined);
+      await Deno.remove(homeDir, { recursive: true }).catch(() => undefined);
+      await Deno.remove(codexHome, { recursive: true }).catch(() => undefined);
       await Deno.remove(state, { recursive: true }).catch(() => undefined);
     }
   }

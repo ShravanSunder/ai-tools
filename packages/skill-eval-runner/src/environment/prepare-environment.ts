@@ -162,8 +162,9 @@ export async function prepareEnvironment(
   scenarioPath?: string,
   codexPathOverride?: string,
 ): Promise<EnvironmentResult> {
-  const root = await mkdtemp(join(tmpdir(), "skill-eval-env-")),
-    snapshot = join(root, "snapshot");
+  const root = await mkdtemp(join(tmpdir(), "skill-eval-env-"));
+  const homesRoot = await mkdtemp(join(tmpdir(), "skill-eval-agent-homes-"));
+  const snapshot = join(root, "snapshot");
   await mkdir(snapshot);
   try {
     if (revision.kind === "commit") {
@@ -185,6 +186,7 @@ export async function prepareEnvironment(
     const codexPath = codexPathOverride ?? await discoverCodex();
     if (!codexPath) {
       await Deno.remove(root, { recursive: true });
+      await Deno.remove(homesRoot, { recursive: true });
       return { kind: "failed", reason: "codex-not-found" };
     }
     const sourceCodexHome = Deno.env.get("CODEX_HOME") ??
@@ -194,9 +196,11 @@ export async function prepareEnvironment(
       await Deno.stat(authPath);
     } catch {
       await Deno.remove(root, { recursive: true });
+      await Deno.remove(homesRoot, { recursive: true });
       return { kind: "failed", reason: "no-agent-login" };
     }
-    const homeDir = join(root, "home"), codexHome = join(root, "codex-home");
+    const homeDir = join(homesRoot, "home"),
+      codexHome = join(homesRoot, "codex-home");
     await mkdir(homeDir, { recursive: true, mode: 0o700 });
     await mkdir(codexHome, { recursive: true, mode: 0o700 });
     await symlink(authPath, join(codexHome, "auth.json"));
@@ -233,11 +237,13 @@ export async function prepareEnvironment(
         revision,
         dispose: async () => {
           await Deno.remove(root, { recursive: true });
+          await Deno.remove(homesRoot, { recursive: true });
         },
       },
     };
   } catch (error) {
     await Deno.remove(root, { recursive: true });
+    await Deno.remove(homesRoot, { recursive: true });
     return {
       kind: "failed",
       reason: error instanceof Error ? error.message : String(error),
