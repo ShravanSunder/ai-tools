@@ -1,6 +1,6 @@
 # 2026-10-06 skill-eval-runner
 
-New package `packages/skill-eval-runner` (0.1.1, local; run with `pnpm --config.dlx-cache-max-age=0 dlx file:./packages/skill-eval-runner`).
+New package `packages/skill-eval-runner` (0.1.1, local; run with `pnpm --config.dlx-cache-max-age=0 dlx file:"$PWD/packages/skill-eval-runner"` from the repo root; pnpm dlx needs an absolute path).
 
 - Commands: `validate`, `run`, `lint`, `done-bar`. Deno from the package's own `deno` dependency; ACPX as a library; subjects `gpt-6-luna` medium, judge leaves `gpt-6-luna` high.
 - Each Run gets a snapshot of the repository (skills' `scenarios/` stripped, fixtures placed), the skill set under `.agents/skills/`, and an isolated Codex home; the runner refuses to start inside a Codex sandbox.

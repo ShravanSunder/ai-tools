@@ -63,3 +63,5 @@ Converted instead: the 16 `skills-creation` and `skill-audit` scenarios (now bes
 | `skills-creation-proof-main-assessment-review-order` | `skill-orchestrator-proof-assessment-review-order` |
 | `skill-audit-evidence-first` | `skill-audit-evidence-first` |
 | `no-global-runtime-lane-contract` | `skill-audit-no-global-runtime-contract` |
+
+`skill-audit-no-global-runtime-contract` is converted but `retired`: its premise went stale (the workflow plugin now has a shared agent packet, and the swarm skills it names are retired). It needs a rewrite against neutral fixture skills before it runs.
