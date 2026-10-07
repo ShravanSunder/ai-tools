@@ -46,7 +46,7 @@ checks:
       evidence:
       - finalMessage
 - id: no-remediation-request
-  criterion: The reviewers are not asked to fix the problem.
+  criterion: The reviewers are not asked to remediate the problem or apply a fix. Asking for the proposed correction that a candidate finding must carry is not a remediation request.
   root: ask
   nodes:
     ask:

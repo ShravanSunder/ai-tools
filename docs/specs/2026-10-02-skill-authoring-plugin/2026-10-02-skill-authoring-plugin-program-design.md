@@ -96,12 +96,13 @@ Every file in `skills-creation` and `skill-audit` was read in full on 2026-10-06
 - **Early runs are judge-heavy.** Until the Jev tool and Calibrations exist, every Jev node falls in the uncertain band. *Payer:* run cost. *Closed when:* Calibrations exist per card and engine.
 - **`new-from-intent` bars are not evaluable yet.** They need Jev lint (`R38`). *Payer:* the plugin cannot claim its own done bar (`R48`). *Closed when:* the Jev tool ships.
 - **Subjects run on Codex only.** *Payer:* skills aimed at other agents are proven only on Codex. *Closed when:* a second ACP adapter is pinned and probed.
+- **Subject token counts are the last request, not the Run (open).** `Observation.usage` and `subjectTokenTotal` record the last model request (see Verified runtime facts). Measured on two Runs: 35,558 and 38,747 recorded against 149,180 and 154,180 in Codex's session log, about 72% of it cached input. *Payer:* cost per scenario is not reported correctly, and no cheaper-than-before claim can be made. *Closed when:* the owner picks the usage source (Codex's session log in the isolated home, or an acpx fix that sums per-request usage) and a Run's recorded total matches Codex's own.
 
 ## Verified runtime facts (2026-10-06)
 
 Probed with a throwaway script: Deno 2.9.6 from npm, `acpx@0.19.4` `acpx/runtime`, `@agentclientprotocol/codex-acp@1.6.2`, installed Codex CLI 0.160.0, `gpt-6-luna` medium, five calls.
 
-- `createAcpRuntime` → `ensureSession({mode: "oneshot"})` → `startTurn` runs under Deno; turns complete in 8–12 s; usage comes per turn in `result._meta.quota` and `getStatus().usage`.
+- `createAcpRuntime` → `ensureSession({mode: "oneshot"})` → `startTurn` runs under Deno; turns complete in 8–12 s; usage comes per turn in `result._meta.quota` and `getStatus().usage`. Corrected 2026-10-07: `getStatus().usage.cumulative` is the turn's last model request, not its total. acpx overwrites the field on each update, and no per-request usage events reach the runner. Measured on a 4-request turn: 14,474 reported against 56,817 in Codex's own session log.
 - A repo-local skill at `<snapshot>/.agents/skills/<name>/SKILL.md` is discovered; asked a triggering question, the subject read that `SKILL.md` (an `execute` tool call naming its path) and followed it.
 - `CODEX_HOME` and `HOME` pointed at fresh temporary directories, plus `features.remote_plugin = false`, leave only the snapshot's skills and Codex's bundled skills (`imagegen`, `openai-docs`, `skill-creator`, `skill-installer`); input tokens drop from 31k to 3k. `features.skip_host_skill_discovery` changes nothing. A symlinked `auth.json` is enough to log in.
 - A write attempt in the read-only sandbox reaches the client's permission handler as an `execute` request; rejecting it fails the tool call and leaves the snapshot unchanged.

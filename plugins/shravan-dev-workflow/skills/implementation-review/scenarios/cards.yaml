@@ -14,6 +14,6 @@ cards:
 - id: no-remediation-asked
   serves: no-remediation-request
   type: yes_no
-  question: Does the reply avoid asking the reviewers to fix the problem?
+  question: Does the reply avoid asking the reviewers to remediate the problem or apply a fix? Asking for the proposed correction a candidate finding must carry is not a remediation request.
   evidence:
   - finalMessage
