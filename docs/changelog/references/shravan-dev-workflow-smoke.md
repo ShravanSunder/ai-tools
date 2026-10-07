@@ -20,13 +20,13 @@ evidence already obtained.
 5. Ask for specification-only, program-only, and pair review. Confirm each invocation reads the complete current targets, dispatches one fresh mode-complete reviewer first, reduces it before selecting at most one concrete focused risk by default, and returns a non-accepting coverage-bound verdict.
 6. Ask generic `Grill me on requirements I have not decided.` Confirm it routes to `discuss-pathfinding`. Ask `Our previously agreed model drifted after this constraint changed; reconverge it.` Confirm only the explicit drift case routes to `discuss-clarify-mental-models`.
 7. Ask: `Threat-model this service as a standalone security exercise.` Confirm it routes to `ops-security-review`, while security obligations inside broader specification/program-design work remain with the owning design/review skill.
-8. Ask to create or evaluate each new skill as a runtime skill package. Confirm all three named-package requests route through `skills-creation`.
+8. Ask to create or evaluate each of those three skills as a runtime skill package. Confirm no skill routes the request as skill-package work: `shravan-dev-workflow` treats a skill like any other target.
 9. Confirm generic and explicitly named retired workflow requests never discover a runtime skill; the active design/spec workflows remain the only routes for design work.
 10. Ask `spec-handoff` to package a design whose How is missing, then one with complete but stale pair review, then one with a current pair-mode `ready` result covering both current artifacts. Confirm the first two route to `program-design` and `spec-program-review`, while the pair-ready case reports a blocked planning handoff because no planning route is shipped.
 11. Ask for plan creation, plan review, goal orchestration, implementation execution, and fresh implementation review. Confirm each reports an unavailable retired runtime route rather than inventing a replacement or silently using another skill.
 12. Ask for a plan handoff with no existing plan. Confirm it preserves the design handoff boundary and reports planning unavailable.
 13. Ask for a bounded implementation review using the preserved review packet contract, then use `implementation-pr-wrapup` for PR state. Confirm review evidence is parent-verified and PR lifecycle remains separate.
-14. Exercise `docs-maintain`, `debug-investigation`, `skill-audit`, `implementation-pr-wrapup`, and both handoff skills with their normal true prompts.
+14. Exercise `docs-maintain`, `debug-investigation`, `implementation-pr-wrapup`, and both handoff skills with their normal true prompts.
 17. Confirm final reports include coverage, terminal receipts or explicit gaps, artifact links where expected, and only parent-verified findings.
 18. Give `implementation-pr-wrapup` one existing pull-request review comment. Confirm it loads `shared-references/code-review-feedback-handling.md`, verifies the feedback before accepting it, and preserves PR-lifecycle ownership without claiming fresh implementation review.
 
@@ -49,8 +49,8 @@ evidence already obtained.
 - `spec-design` owns authoritative Why/What; `program-design` owns structural
   How; `spec-program-review` owns reviewer-free classification and fresh
   independent review. None is a fourth orchestration skill.
-- Direct named-package creation/update/evaluation for any of those three routes
-  through `skills-creation`.
+- Direct named-package creation/update/evaluation for any of those three gets no
+  skill-package route; this plugin treats a skill like any other target.
 - Retired spec-swarm source remains preserved for provenance but is absent from
   runtime discovery and active routing.
 - Standalone threat-model prompts route to `ops-security-review`; ordinary
@@ -77,4 +77,3 @@ evidence already obtained.
 - ops-security-review routes explicit scans to official Codex Security workflows and does not claim audit coverage from a normal review lane.
 - Debug investigation does not implement fixes until the diagnosis is proven or uncertainty is explicitly accepted.
 - Debug investigation writes a debug artifact for real debugging unless chat-only/no-files was requested.
-- Skill audit recommends updates before new skills and cites evidence or upstream inspiration for every recommendation.
