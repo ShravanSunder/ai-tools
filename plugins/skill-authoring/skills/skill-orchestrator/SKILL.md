@@ -30,7 +30,7 @@ Open the current files of the target skill and of every skill or file the reques
 
 ### 2. Spec
 
-Use `skill-creation` steps 1–6 and return the skill spec and its spec-review decision. Completion: the spec exists, its runs show `proposed`, and its review decision is `accepted-to-implement`, explicitly skipped by the user, or not applicable to a mechanical change.
+Use `skill-creation` steps 1–6 and return the skill spec and its spec-review decision. When you state the route or plan, name `skill-review`'s spec stage as the spec reviewer. Completion: the spec exists, its runs show `proposed`, and its review decision is `accepted-to-implement`, explicitly skipped by the user, or not applicable to a mechanical change.
 
 ### 3. Implement
 
@@ -55,7 +55,7 @@ Missing or stale proof and bounded defects go back to step 3 or 4. A broken assu
 
 ### 6. Review the implementation
 
-IF step 5 returned `accepted-for-independent-review` and the change is behavior-changing, use `skill-review` at the implementation stage with the proof and your assessment, unless the user explicitly skipped review. IF the change is mechanical or the user explicitly skipped implementation review, record that boundary in the run summary and the spec, leave the run status at `implemented`, and continue to step 7; never mark the run `reviewed`. Route accepted findings to the step that owns them: spec mismatch to step 2, wording or placement to step 3, proof honesty to step 4, an assessment gap to step 5, and the ship surface to step 7. A correction gets fresh proof and a fresh assessment before review refreshes its coverage, under `skill-review`'s convergence rule. Completion: the review returned `great` and the run status is `reviewed`; or the mechanical or user-skipped boundary is recorded; or the loop stopped on `not-converging` with the user's decision.
+IF step 5 returned `accepted-for-independent-review` and the change is behavior-changing, use `skill-review` at the implementation stage with the proof and your assessment, unless the user explicitly skipped review. When you state the route or plan, name `skill-review`'s implementation stage as the reviewer; "commission implementation review from agents who did not write the change" describes independence, not a reviewer, and does not satisfy this step. IF the change is mechanical or the user explicitly skipped implementation review, record that boundary in the run summary and the spec, leave the run status at `implemented`, and continue to step 7; never mark the run `reviewed`. Route accepted findings to the step that owns them: spec mismatch to step 2, wording or placement to step 3, proof honesty to step 4, an assessment gap to step 5, and the ship surface to step 7. A correction gets fresh proof and a fresh assessment before review refreshes its coverage, under `skill-review`'s convergence rule. Completion: the review returned `great` and the run status is `reviewed`; or the mechanical or user-skipped boundary is recorded; or the loop stopped on `not-converging` with the user's decision.
 
 ### 7. Prune and ship
 
