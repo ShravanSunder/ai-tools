@@ -237,7 +237,7 @@ sequenceDiagram
 | subject input | intentionally unchanged | `subject-execution/render-subject-prompt.ts`: subject sees the prompt only | same rule, enforced again by the loader's banned-word check (`R22`) |
 | deterministic gate | removed | `evaluators/deterministic/legacy-pressure-assertions.ts` regexes and self-report fields | none; code steps read recorded actions only |
 | semantic judge | removed | `evaluators/semantic/semantic-criteria-evaluator.ts`: one judge call over all criteria | per-Check judge leaf, only where the tree reaches one |
-| verdict | changed | per-row vitest pass/fail | `RunVerdict` aggregation (`R37`): an earlier fail is never hidden |
+| verdict | changed | per-row vitest pass/fail; the semantic overall puts inconclusive before fail (`evaluators/semantic/semantic-criteria-evaluator.ts:411-419`) | `RunVerdict` aggregation (`R37`): any fail makes the Run `fail`, then any inconclusive makes it `inconclusive`; an earlier fail is never hidden |
 | results | changed | `tmp/skill-pressure-evals/` in the ai-tools repo | the batch dir outside the repository |
 
 ## How a Check is decided
@@ -313,8 +313,13 @@ stateDiagram-v2
 1. Create `plugins/skill-authoring/` with three manifests and marketplace entries.
 2. Move `skills-creation` and `skill-audit` into it, rewriting their links to `shravan-dev-workflow` as plain needs (`R7`–`R10`). Their two shared files (`humanizer.md`, `owner-decision-brief.md`) are not copied: the evidence shows no benefit for skill work, so the needs become "ask the user" (`R10`).
 3. Add `skill-orchestrator`, `skill-review` and `skill-pressure-testing`.
-4. In `shravan-dev-workflow`, replace each of the 20 named mentions with the existing runtime-skill-package routing result.
-   - **Four of those files belong to the maintainer of work breakdown and skill review.** That maintainer reviews the diff before merge.
+4. In `shravan-dev-workflow`, change every active file that names the old skills (30 files):
+   - **20 skill files:** composition gates in spec-design, program-design, plan-implementation, spec-program-review and implementation-review; the `ready-for-review` classification mapping in orchestrator-implementation-goal; examples and pointers elsewhere.
+   - **5 files inside the two moving trees,** which move with them.
+   - **3 plugin manifests' keywords,** the plugin README, and the humanizer file's consumer declaration.
+   - **4 retired files keep their history.**
+   - **Four of the 20 belong to the maintainer of work breakdown and skill review,** who reviews that diff before merge.
+   - The marketplace entries name neither skill. The Cursor marketplace uses `pluginRoot` plus a relative source, unlike the other two, so the new entry follows each file's own shape.
 
 **Scenario cutover (`R45`–`R47`):**
 - Delete `tests/skills/` (runner and scenarios) in the same change that adds the runner package.
