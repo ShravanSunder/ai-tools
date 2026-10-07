@@ -70,7 +70,7 @@ checks:
       evidence:
       - finalMessage
 - id: first-fix-is-anchored
-  criterion: The first fix names a concrete file and section in the target skill.
+  criterion: The first fix names a concrete file in the target skill and a location in it, such as a line, heading, or quoted sentence.
   root: ask
   nodes:
     ask:

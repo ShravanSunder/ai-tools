@@ -46,7 +46,7 @@ checks:
       evidence:
       - finalMessage
 - id: states-reference-allocation
-  criterion: If the reply recommends an update or a create, it says what moves to references; a reply with no update or create recommendation passes.
+  criterion: If the reply recommends an update or a create, it says what goes in references, or that nothing new does; a reply with no update or create recommendation passes.
   root: ask
   nodes:
     ask:

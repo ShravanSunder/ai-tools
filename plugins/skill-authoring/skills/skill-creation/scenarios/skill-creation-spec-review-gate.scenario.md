@@ -15,16 +15,22 @@ Update `skill-creation` so future skill changes are designed before editing, the
 
 ```yaml
 checks:
-- id: no-edit-before-review
-  criterion: The agent attempts no file edit in this run, since no spec has been reviewed.
-  root: step
+- id: review-before-edit
+  criterion: 'Judged from the agent''s tool calls and replies: it attempts no file edit, or it obtains an independent spec review from separate reviewer agents before its first edit attempt.'
+  root: ask
   nodes:
-    step:
-      kind: code
-      step:
-        noWritesAttempted: {}
-      onTrue: pass
-      onFalse: fail
+    ask:
+      kind: jev
+      card: review-before-edit
+      branches:
+        'yes': pass
+        'no': fail
+        uncertain: judge
+    judge:
+      kind: judge
+      evidence:
+      - conversation
+      - toolCalls
 - id: spec-review-before-edits
   criterion: The reply requires an independent spec review before any skill file is edited.
   root: ask

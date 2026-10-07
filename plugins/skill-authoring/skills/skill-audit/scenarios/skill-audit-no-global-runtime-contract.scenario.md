@@ -1,7 +1,7 @@
 ---
 scenarioId: skill-audit-no-global-runtime-contract
 skill: skill-audit
-status: active
+status: retired
 allowWrites: false
 ---
 

@@ -87,7 +87,7 @@ checks:
       evidence:
       - finalMessage
 - id: no-permission-inside-boundary
-  criterion: Rounds inside the accepted boundary continue without asking the user's permission.
+  criterion: Review rounds whose corrections stay inside the accepted boundary need no permission from the user, up to the point the loop is not-converging.
   root: ask
   nodes:
     ask:

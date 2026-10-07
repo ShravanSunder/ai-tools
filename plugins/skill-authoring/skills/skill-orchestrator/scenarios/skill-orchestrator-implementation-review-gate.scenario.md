@@ -9,7 +9,7 @@ allowWrites: false
 
 $skill-orchestrator
 
-Update the existing `skill-creation` skill so reference-routing changes get reviewed before PR-ready. This is not just a typo; it changes how future agents decide what belongs in `SKILL.md` versus references. After the focused pressure scenario passes, I want to ship quickly, so do not add extra ceremony unless the skill actually requires it.
+Update the existing `skill-creation` skill so reference-routing changes get reviewed before PR-ready. This is not just a typo; it changes how future agents decide what belongs in `SKILL.md` versus references. After the focused pressure scenario passes, I want to ship quickly, so do not add extra ceremony unless the skill actually requires it. Lay out the route from here to PR-ready first; don't edit files yet.
 
 ## Checks
 
