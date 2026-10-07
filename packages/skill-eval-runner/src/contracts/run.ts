@@ -18,6 +18,4 @@ export type RunOutcome = {
   cause: RunFailureCause;
   detail: string;
 };
-export const runOutcomeToJson = (o: RunOutcome): unknown =>
-  o.kind === "observed" ? o : { ...o };
 export { observationSchema };

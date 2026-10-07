@@ -1,5 +1,5 @@
 import { assertEquals } from "jsr:@std/assert@1";
-import { normalizeRuntimeEvents } from "./normalize-runtime-events.ts";
+import { normalizeRuntimeEvents } from "./normalize-acp-events.ts";
 Deno.test("merges repeated ACPX tool updates by id", () => {
   const events = normalizeRuntimeEvents([
     {

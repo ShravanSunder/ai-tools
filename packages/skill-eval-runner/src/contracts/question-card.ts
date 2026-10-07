@@ -23,4 +23,3 @@ export const questionCardSchema = z.strictObject({
   }
 });
 export type QuestionCard = z.infer<typeof questionCardSchema>;
-export const questionCardsSchema = z.array(questionCardSchema);
