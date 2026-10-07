@@ -54,7 +54,7 @@ Do not change
 - <path/scope boundary>
 
 Recommended next action
-<implementation-review for general-domain work | skills-creation for a runtime skill package | continue through an explicitly authorized executor | resolve governing blocker | rerun validation>
+<implementation-review | continue through an explicitly authorized executor | resolve governing blocker | rerun validation>
 ```
 
 ## Stage Additions

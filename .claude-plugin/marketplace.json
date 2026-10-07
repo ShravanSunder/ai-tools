@@ -22,8 +22,14 @@
     {
       "name": "shravan-dev-workflow",
       "source": "./plugins/shravan-dev-workflow",
-      "description": "Development workflow skills for long-horizon delivery routing, canonical planning, plan execution, independent implementation review, bounded design orchestration, research, handoffs, PR lifecycle, debugging, operations, skill authoring, agent management, and surface-matched presentation (TUI and rendered web/chat)",
-      "version": "2.70.0"
+      "description": "Development workflow skills for long-horizon delivery routing, canonical planning, plan execution, independent implementation review, bounded design orchestration, research, handoffs, PR lifecycle, debugging, operations, agent management, and surface-matched presentation (TUI and rendered web/chat)",
+      "version": "2.71.0"
+    },
+    {
+      "name": "skill-authoring",
+      "source": "./plugins/skill-authoring",
+      "description": "Skill authoring for any repository: design and write skills, review them with independent agents, prove their behavior with fresh agent runs, and audit which skills to create, update, merge, or skip",
+      "version": "0.1.0"
     },
     {
       "name": "agent-router",

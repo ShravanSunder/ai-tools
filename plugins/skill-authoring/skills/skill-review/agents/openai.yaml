@@ -1,0 +1,4 @@
+interface:
+  display_name: "Skills: Review"
+  short_description: "Independent multi-agent review of a skill"
+  default_prompt: "Use $skill-review to independently review this skill spec or these skill files."

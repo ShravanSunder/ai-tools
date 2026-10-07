@@ -43,6 +43,18 @@
       "category": "Coding"
     },
     {
+      "name": "skill-authoring",
+      "source": {
+        "source": "local",
+        "path": "./plugins/skill-authoring"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_USE"
+      },
+      "category": "Coding"
+    },
+    {
       "name": "agent-router",
       "source": {
         "source": "local",

@@ -20,8 +20,8 @@ AI tools distributed through the local marketplaces in this repository.
 Client install IDs:
 
 ```text
-Codex       scaffold-project@ai-tools   dev-workflow-tools@ai-tools   shravan-dev-workflow@ai-tools   agent-router@ai-tools
-Claude Code scaffold-project@ai-tools   dev-workflow-tools@ai-tools   shravan-dev-workflow@ai-tools   agent-router@ai-tools
+Codex       scaffold-project@ai-tools   dev-workflow-tools@ai-tools   shravan-dev-workflow@ai-tools   skill-authoring@ai-tools   agent-router@ai-tools
+Claude Code scaffold-project@ai-tools   dev-workflow-tools@ai-tools   shravan-dev-workflow@ai-tools   skill-authoring@ai-tools   agent-router@ai-tools
 Cursor      local plugins via `.cursor-plugin/` manifests, including agent-router
 ```
 
@@ -73,12 +73,20 @@ Shravan's Codex-first development workflow plugin. Provides:
 - **ops-observability-stack** skill -- guides shared local OpenTelemetry/Victoria stack use, producer boundaries, AgentStudio and Agent VM loops, resource naming, and Victoria proof queries
 - **implementation-pr-wrapup** skill -- finishes the GitHub PR lifecycle with fresh checks, comments, review-thread, and mergeability gates without merging without authorization
 - **debug-investigation** skill -- investigates bugs, failing tests, flaky behavior, crashes, regressions, and unexpected behavior before fixes
-- **skills-creation** skill -- creates, updates, or evaluates one named skill or accepted draft with YAML trigger design, `SKILL.md` mental model and main path, reference depth, steering language, pressure proof, platform validation, and source-adaptation boundaries
-- **skill-audit** skill -- audits current skills, session evidence, and upstream inspirations before recommending create/update/merge/skip decisions
 - **presentation-tui** skill -- presents design, architecture, comparison, flow, and multi-section output on monospace terminal surfaces with a hybrid Unicode TUI + markdown style: box-drawing skeleton, inline code and fences for every technical atom, GFM tables as the default comparison medium
 - **presentation-webui** skill -- presents the same content on rendered proportional-font chat surfaces with a markdown-first style: headings and GFM tables as the skeleton, smallest-view media selection, and Mermaid only where the relationship earns it
 - **ops-linear-tracking** skill -- organizes Linear projects, milestones, issues, and dependencies using docs as the source of truth and tickets as tracking artifacts
 - Evidence-first reducer workflow -- treats all subagent and external outputs as candidate findings until verified against the repo
 - Oracle exclusion -- this workflow never invokes or suggests Oracle
+
+### [skill-authoring](skill-authoring/)
+
+Skill authoring for any repository, standalone from the workflow plugin. Provides:
+
+- **skill-orchestrator** skill -- carries one skill change from spec through review, implementation, proof, assessment, and release
+- **skill-creation** skill -- the skill craft and the skill spec: designs and writes one named skill
+- **skill-review** skill -- independent review of a skill spec or skill files by several reviewer agents plus lint
+- **skill-pressure-testing** skill -- proves skill behavior with fresh Luna runs through the `packages/skill-eval-runner` package, and owns the scenario method
+- **skill-audit** skill -- audits current skills, session evidence, and upstream inspirations before recommending create/update/merge/skip decisions
 
 - [agent-router plugin](agent-router/) — agent collaboration, shared message boards, wake-ups and schedules; canonical skill maintained in codex-router.

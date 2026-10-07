@@ -1,0 +1,4 @@
+interface:
+  display_name: "Skills: Pressure Testing"
+  short_description: "Prove skill behavior with fresh agent runs"
+  default_prompt: "Use $skill-pressure-testing to prove this skill change against its done bar."

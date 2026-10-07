@@ -22,7 +22,7 @@ decompose:
 
   first_principles:
     current SKILL.md requires distinct provenance slots;
-    skills-creation says branch-only depth belongs in references;
+    the authoring guide says branch-only depth belongs in references;
     pressure scenarios test non-collapsed provenance.
 
   assumptions:

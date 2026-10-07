@@ -57,15 +57,7 @@ Review coverage follows meaning, not changed bytes. After each permitted correct
 
 Closure is established by the latest permitted review result plus parent-verified correction evidence for the current artifacts. Keep this call-scoped record out of durable design artifacts and do not add persistent review bookkeeping.
 
-## 1. Guard the Skill-Authoring Boundary
-
-Record `target classification: general-domain | runtime-skill-package`.
-
-If the target is one named runtime skill package, require the explicit `skills-creation` parent packet/result identity authorizing this review composition. Without it, return the `skills-creation` route and stop before classification or reviewer dispatch.
-
-Completion: target classification and, when applicable, the `skills-creation` parent identity are recorded.
-
-## 2. Classify Review Requirement
+## 1. Classify Review Requirement
 
 IF operation is `classify-review-requirement`, load `references/classifying-review-requirement.md` and return its `review-required | non-substantial` result or blocked missing-input result.
 
@@ -73,12 +65,11 @@ Dispatch no reviewer, select no checks, and return no review verdict. `review-re
 
 Completion: classification returns immediately with zero reviewer dispatches.
 
-## 3. Prepare the Review
+## 2. Prepare the Review
 
 For operation `review`, require:
 
 ```text
-target classification and skills-creation parent identity when applicable
 mode and complete target identities: file paths or separately labeled in-chat records
 governing sources, authority states, and coverage basis
 confirmed goal boundary and accepted requirements set, or the exact authority gap
@@ -105,7 +96,7 @@ Completion: the complete target set, governing sources, accepted requirements, b
 
 If a review-and-correction round already ran, admit another only under the convergence rule and accepted boundary in `references/finding-and-reduction-schema.md`. Switching modes, checks, target labels, or caller skills does not reset the convergence comparison.
 
-## 4. Select the Mode
+## 3. Select the Mode
 
 The selected mode reference owns its review judgment:
 
@@ -119,13 +110,13 @@ Specification review judges the governing Requirements authority and the Specifi
 
 Completion: exactly one mode and its complete required artifact set are selected.
 
-## 5. Resolve Reviewer Runtime and Authority
+## 4. Resolve Reviewer Runtime and Authority
 
 The caller completes classification and admission. For an admitted substantive review, MUST use `manage-agents` to commission or resume one persistent 🔎 Review Sidekick with read-only workspace access. Resume that exact Review Sidekick through corrections. Candidate findings never become final disposition without its verification.
 
 A later semantic change outside an accepted correction invalidates affected check coverage. Further rounds follow the convergence rule in `references/finding-and-reduction-schema.md`.
 
-## 6. Walk the Mode and Chunk Checks
+## 5. Walk the Mode and Chunk Checks
 
 The 🔎 Review Sidekick reads the complete target set and governing sources first, every artifact whole. MUST load `references/coordination-and-chunking.md` and return a sequential chunk-pass plan with complete seam text and overlap, or one mode-complete pass when the whole target fits.
 
@@ -136,7 +127,7 @@ MUST load `references/lanes/lane-schema.md` and record `complete | partial | blo
 
 Completion: the mode-complete check and every selected chunk pass have statuses, each pass lists its seam sections, and every required dimension has current coverage.
 
-## 7. Proof-Challenge, Dispel, and Focused Checks
+## 6. Proof-Challenge, Dispel, and Focused Checks
 
 IF the design cites executable proof claims, load `references/lanes/proof-challenge.md` and challenge each claim. Assign prescribed proof commands to a 🔧 Operator under an exact execution grant. The 🔧 Operator performs the reference's write-set preflight, executes only granted commands with scratchpad output, compares `git status --porcelain` before and after, and returns commands, observations, and exit codes. The 🔎 Review Sidekick judges claimed against observed. Without a grant, inspect only and record the proof gap.
 
@@ -172,13 +163,13 @@ After correction, verify affected finding anchors. A concrete substantive residu
 
 Completion: dispel is complete, executable proof claims have challenge results or named gaps, and each focused check has a status and selection reason. Record every unselected optional check with `complete` and `not selected: <reason>`.
 
-## 8. Verify Check Coverage
+## 7. Verify Check Coverage
 
 Compare each check's covered target text with the current target. Confirm the 🔧 Operator ran only granted commands, wrote no tracked file, and returned an unchanged `git status --porcelain` result. A permitted correction is verified by the same 🔎 Review Sidekick against accepted findings without automatically starting another review round.
 
 Completion: each check supplies current coverage for its selected target, and proof execution stayed inside the recorded grant.
 
-## 9. Verify and Reduce Findings
+## 8. Verify and Reduce Findings
 
 MUST load `references/finding-and-reduction-schema.md` and return its dispositions, merged duplicates/conflicts, coverage gaps, goal-relevance record, deletion-first decision, scope effect, and final coverage-bound result. In that reference, `parent` means the 🔎 Review Sidekick, never the author or orchestrator.
 
@@ -210,7 +201,7 @@ Reject prose taste without reader or design effect. Missing evidence is `unverif
 
 Completion: every candidate has a source-backed disposition; every finding uses the complete loaded Finding shape and contains each caller-facing field above regardless of disposition or final verdict; and no accepted finding silently changes the confirmed goal or accepted requirements.
 
-## 10. Return the Coverage-Bound Result
+## 9. Return the Coverage-Bound Result
 
 Return every field in the `Coverage-Bound Result` owned by `references/finding-and-reduction-schema.md` for the current mode and targets.
 
@@ -224,7 +215,6 @@ Completion: the result names the first required revision, coverage gaps, any own
 
 Do not return `ready` while any of these hold:
 
-- target classification or required runtime-skill-package parent identity is missing;
 - the current target identity or semantic scope is missing or ambiguous;
 - Requirements and Specification are not separately identifiable in any review mode, or a combined `Requirements/spec` is being used as both;
 - the complete target or governing-source set was not read;
