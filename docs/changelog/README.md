@@ -1,5 +1,6 @@
 # Changelog
 
+- [2026-10-07 skill-authoring recorded misses](2026-10-07-skill-authoring-recorded-misses.md)
 - [2026-10-06 skill-eval-runner](2026-10-06-skill-eval-runner.md)
 - [2026-10-06 skill-authoring plugin](2026-10-06-skill-authoring-plugin.md)
 - [2026-09-29 manage-agents Sol and Opus Daily driver](2026-09-29-manage-agents-sol-opus-daily.md)

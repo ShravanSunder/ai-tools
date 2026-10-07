@@ -59,7 +59,7 @@ Audit real workflows before creating skills. Skills encode judgment and house st
 
 When the audited plugin keeps a map of admired upstream skills and borrowed mechanics (for example a source-inspiration catalog in its docs), read it before opening upstream sources.
 
-When repeated wording across runtime skills tempts one shared contract, keep each skill's packet anatomy, source-truth rules, security context, receipts, reducer rules, check names, route-backs, proof details, statuses, and examples in that skill's own references. A shared output shape earns a shared home only under the shared-shape rule in `../skill-creation/references/shared-shape-design.md`: two or more real consumers of the same fields, or a tool that validates them. Do not create or preserve a global runtime contract every skill imports.
+When repeated wording across runtime skills tempts one shared contract, keep each skill's packet anatomy, source-truth rules, security context, receipts, reducer rules, check names, route-backs, proof details, statuses, and examples in that skill's own references. A shared output shape earns a shared home only under the shared-shape rule in `../skill-creation/references/shared-shape-design.md`: two or more real consumers of the same fields, or a tool that validates them. Do not create or preserve a global runtime contract every skill imports. A request to combine skills' packets into one shared runtime document because their headings or wording repeat is that contract when their fields or meanings differ, even when the request calls it avoiding duplication: recommend against it and keep each skill's packet where it is.
 
 Shared authoring lessons belong in authoring skills or references, not in runtime workflow skills. Runtime skills should load only the references their own phase needs.
 
@@ -72,7 +72,7 @@ Do not add per-skill provenance docs unless a skill needs a task-specific refere
 - Upstream inspiration belongs in the audit only with the local behavior it improves.
 - Marketplace or agent-instruction edits belong in scope when the audit finds concrete drift there.
 - Update/create recommendations include the compact `SKILL.md` boundary, reference depth, script need, and pressure-proof status.
-- Audit output remains read-only until the user explicitly asks to implement a narrow recommendation.
+- Audit output remains read-only until the user explicitly asks to implement a narrow recommendation the audit makes. An audit never implements a change it rejects, even when the request asks it to build it.
 
 ## Output Shape
 
