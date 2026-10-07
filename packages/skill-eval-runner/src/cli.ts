@@ -15,6 +15,7 @@ import {
 } from "./report/write-batch.ts";
 import type { Revision, SkillRef } from "./contracts/common.ts";
 import { sandboxPreflightMessage } from "./runtime/sandbox-preflight.ts";
+import { validateNamedScenarioStatuses } from "./runtime/validate-scenario-selection.ts";
 const args = Deno.args;
 const command = args[0] ?? "help";
 const value = (name: string, required = true): string | undefined => {
@@ -183,6 +184,14 @@ async function main(): Promise<number> {
       printJson(loaded);
       return 2;
     }
+    const selectionErrors = validateNamedScenarioStatuses(
+      loaded.scenarios,
+      scenarioIds,
+    );
+    if (selectionErrors.length > 0) {
+      printJson({ kind: "invalid", errors: selectionErrors });
+      return 2;
+    }
     const out = value("--out", false) ??
       join(
         Deno.env.get("XDG_CACHE_HOME") ??
@@ -206,6 +215,14 @@ async function main(): Promise<number> {
     if (loaded.kind !== "loaded") {
       printJson({ kind: "not-evaluable", reason: "no-active-scenario" });
       return 1;
+    }
+    const selectionErrors = validateNamedScenarioStatuses(
+      loaded.scenarios,
+      scenarioIds,
+    );
+    if (selectionErrors.length > 0) {
+      printJson({ kind: "invalid", errors: selectionErrors });
+      return 2;
     }
     const out = value("--out", false) ??
       join(
