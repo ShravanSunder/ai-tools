@@ -1,0 +1,11 @@
+{
+  "nodeModulesDir": "manual",
+  "lint": {
+    "rules": {
+      "exclude": [
+        "no-import-prefix",
+        "no-unversioned-import"
+      ]
+    }
+  }
+}

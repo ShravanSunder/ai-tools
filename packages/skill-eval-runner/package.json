@@ -1,0 +1,19 @@
+{
+  "name": "skill-eval-runner",
+  "version": "0.1.1",
+  "private": true,
+  "type": "module",
+  "bin": {
+    "skill-eval-runner": "bin/skill-eval-runner.cjs"
+  },
+  "dependencies": {
+    "@agentclientprotocol/codex-acp": "1.6.2",
+    "acpx": "0.19.4",
+    "deno": "^2.9.0",
+    "yaml": "^2.8.1",
+    "zod": "^4.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.4"
+  }
+}

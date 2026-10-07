@@ -1,0 +1,5 @@
+- id: answer-is-useful
+  serves: answer quality
+  type: yes_no
+  question: Does the answer address the user's request clearly?
+  evidence: [finalMessage]
