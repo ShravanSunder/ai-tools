@@ -5,13 +5,17 @@ export type JudgeInput = {
   evidence: readonly string[];
 };
 export interface JudgePort {
-  judge(input: JudgeInput): Promise<JudgeVerdict | { kind: "malformed" }>;
+  judge(
+    input: JudgeInput,
+  ): Promise<JudgeVerdict | { kind: "malformed"; raw: string }>;
 }
 export class FakeJudge implements JudgePort {
-  constructor(private readonly verdict: JudgeVerdict | { kind: "malformed" }) {}
+  constructor(
+    private readonly verdict: JudgeVerdict | { kind: "malformed"; raw: string },
+  ) {}
   judge(
     _input: JudgeInput,
-  ): Promise<JudgeVerdict | { kind: "malformed" }> {
+  ): Promise<JudgeVerdict | { kind: "malformed"; raw: string }> {
     return Promise.resolve(this.verdict);
   }
 }

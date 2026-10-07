@@ -84,6 +84,11 @@ Deno.test("code step and uncertain Jev reach judge leaf", async () => {
   assertEquals(result.verdict, "pass");
   assertEquals(result.checks[0].decidedBy, "code");
   assertEquals(result.checks[1].decidedBy, "judge");
+  assertEquals(result.checks[1].path.at(-1)?.judge, {
+    result: "pass",
+    evidenceQuote: "Useful answer",
+    rationale: "clear",
+  });
 });
 Deno.test("fail outranks later pass", async () => {
   const bad: Scenario = structuredClone(scenario);
@@ -97,7 +102,10 @@ Deno.test("fail outranks later pass", async () => {
     kind: "observed",
     runId: "r",
     observation,
-  }, { jev: new NoEngineJev(), judge: new FakeJudge({ kind: "malformed" }) });
+  }, {
+    jev: new NoEngineJev(),
+    judge: new FakeJudge({ kind: "malformed", raw: "bad judge reply" }),
+  });
   assertEquals(result.verdict, "fail");
 });
 Deno.test("startedSubagents code step uses recorded ACPX start calls", async () => {
@@ -193,7 +201,10 @@ Deno.test("missing code evidence is inconclusive", async () => {
     kind: "observed",
     runId: "r",
     observation: { ...observation, toolCalls: undefined as never },
-  }, { jev: new NoEngineJev(), judge: new FakeJudge({ kind: "malformed" }) });
+  }, {
+    jev: new NoEngineJev(),
+    judge: new FakeJudge({ kind: "malformed", raw: "bad judge reply" }),
+  });
   assertEquals(result.checks[0].result, "inconclusive");
 });
 Deno.test("malformed judge replies are inconclusive", async () => {
@@ -201,8 +212,14 @@ Deno.test("malformed judge replies are inconclusive", async () => {
     kind: "observed",
     runId: "r",
     observation,
-  }, { jev: new NoEngineJev(), judge: new FakeJudge({ kind: "malformed" }) });
+  }, {
+    jev: new NoEngineJev(),
+    judge: new FakeJudge({ kind: "malformed", raw: "bad judge reply" }),
+  });
   assertEquals(result.checks[1].result, "inconclusive");
+  assertEquals(result.checks[1].path.at(-1)?.judge, {
+    malformed: "bad judge reply",
+  });
 });
 Deno.test("scripted Jev covers yes, no, uncertain, and choice branches", async () => {
   const cards: Scenario["cards"] = [{
@@ -297,7 +314,7 @@ Deno.test("scripted Jev covers yes, no, uncertain, and choice branches", async (
       { unavailable: true },
       { value: "red", score: 0 },
     ]),
-    judge: new FakeJudge({ kind: "malformed" }),
+    judge: new FakeJudge({ kind: "malformed", raw: "bad judge reply" }),
   });
   assertEquals(result.checks.length, 4);
   assertEquals(result.checks[0].result, "pass");
@@ -345,6 +362,45 @@ Deno.test("listing and naming commands are not content reads", async () => {
     evaluateCodeStep(
       { readFile: "skill:references/rule.md" },
       make("rg pattern sample-skill/references/rule.md"),
+      "sample-skill",
+    ).kind,
+    "true",
+  );
+});
+Deno.test("readFile unwraps quoted multi-command titles and shell wrappers", async () => {
+  const { evaluateCodeStep } = await import("./code-steps.ts");
+  const make = (title: string) => ({
+    ...observation,
+    toolCalls: [{
+      id: "1",
+      turnIndex: 0,
+      kind: "execute",
+      title,
+      status: "completed" as const,
+    }],
+  });
+  const exact =
+    '"cat plugins/skill-authoring/skills/skill-creation/references/security-gate.md && cat plugins/skill-authoring/skills/skill-creation/references/platform-mechanics.md"';
+  assertEquals(
+    evaluateCodeStep(
+      {
+        readFile:
+          "repo:plugins/skill-authoring/skills/skill-creation/references/security-gate.md",
+      },
+      make(exact),
+      "sample-skill",
+    ).kind,
+    "true",
+  );
+  assertEquals(
+    evaluateCodeStep(
+      {
+        readFile:
+          "repo:plugins/skill-authoring/skills/skill-creation/references/security-gate.md",
+      },
+      make(
+        "bash -lc 'cat plugins/skill-authoring/skills/skill-creation/references/security-gate.md'",
+      ),
       "sample-skill",
     ).kind,
     "true",

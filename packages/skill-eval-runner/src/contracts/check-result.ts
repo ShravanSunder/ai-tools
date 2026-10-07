@@ -8,5 +8,10 @@ export type CheckResult = {
     kind: TreeNode["kind"] | "terminal";
     outcome: string;
     evidence: readonly string[];
+    judge?: JudgeAudit;
   }[];
 };
+export type JudgeAudit =
+  | { result: "pass" | "fail"; evidenceQuote: string; rationale: string }
+  | { undecidable: "evidence-insufficient" | "criterion-ambiguous" }
+  | { malformed: string };

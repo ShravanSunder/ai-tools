@@ -19,7 +19,7 @@ export class AcpxJudge implements JudgePort {
   constructor(private readonly environment: PreparedEnvironment) {}
   async judge(
     input: JudgeInput,
-  ): Promise<JudgeVerdict | { kind: "malformed" }> {
+  ): Promise<JudgeVerdict | { kind: "malformed"; raw: string }> {
     const root = await mkdtemp(join(tmpdir(), "skill-eval-judge-"));
     const cwd = await mkdtemp(join(tmpdir(), "skill-eval-judge-cwd-"));
     const homeDir = await mkdtemp(join(tmpdir(), "skill-eval-judge-home-"));
@@ -72,15 +72,20 @@ export class AcpxJudge implements JudgePort {
         }
       }
       const result = await turn.result;
-      if (result.status !== "completed") return { kind: "malformed" };
+      const rawReply = normalizeAssistantMessage(events);
+      if (result.status !== "completed") {
+        return { kind: "malformed", raw: rawReply.slice(0, 300) };
+      }
       try {
         const parsed: unknown = JSON.parse(
-          normalizeAssistantMessage(events).trim(),
+          rawReply.trim(),
         );
         const verdict = judgeVerdictSchema.safeParse(parsed);
-        return verdict.success ? verdict.data : { kind: "malformed" };
+        return verdict.success
+          ? verdict.data
+          : { kind: "malformed", raw: rawReply.slice(0, 300) };
       } catch {
-        return { kind: "malformed" };
+        return { kind: "malformed", raw: rawReply.slice(0, 300) };
       }
     } finally {
       await runtime.shutdown().catch(() => undefined);

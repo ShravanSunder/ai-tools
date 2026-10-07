@@ -48,9 +48,25 @@ const mentionsReference = (text: string, reference: string): boolean => {
   );
   return pattern.test(text) || text.includes(`/${normalized}`);
 };
+const stripMatchingQuotes = (command: string): string => {
+  let result = command.trim();
+  while (
+    result.length >= 2 &&
+    ((result.startsWith('"') && result.endsWith('"')) ||
+      (result.startsWith("'") && result.endsWith("'")))
+  ) {
+    result = result.slice(1, -1).trim();
+  }
+  return result;
+};
 const innerCommand = (command: string): string => {
-  const wrapper = command.match(/\b(?:bash|sh)\s+-lc\s+["']([\s\S]*)["']\s*$/);
-  return wrapper?.[1] ?? command;
+  let result = stripMatchingQuotes(command);
+  for (let depth = 0; depth < 2; depth++) {
+    const wrapper = result.match(/^(?:bash|sh|zsh)\s+(?:-lc|-c)\s+([\s\S]+)$/i);
+    if (!wrapper) break;
+    result = stripMatchingQuotes(wrapper[1]);
+  }
+  return result;
 };
 const commandReadsReference = (
   command: string,
@@ -92,13 +108,19 @@ const callReadMatches = (
     return references.some((reference) => mentionsReference(text, reference));
   }
   if (call.kind === "execute") {
-    let command = call.inputText ?? "";
+    const titleLooksLikeCommand =
+      /^(?:["']|(?:cat|sed|head|tail|less|more|nl|bat|rg|grep|awk|bash|sh|zsh)\b)/i
+        .test(call.title.trim());
+    let command = titleLooksLikeCommand ? call.title : call.inputText ?? "";
     try {
       const parsed: unknown = JSON.parse(command);
       if (typeof parsed === "object" && parsed !== null) {
         const record = parsed as Record<string, unknown>;
-        if (typeof record.command === "string") command = record.command;
-        else if (typeof record.cmd === "string") command = record.cmd;
+        if (typeof record.command === "string" && !titleLooksLikeCommand) {
+          command = record.command;
+        } else if (
+          typeof record.cmd === "string" && !titleLooksLikeCommand
+        ) command = record.cmd;
       }
     } catch { /* plain command */ }
     return references.some((reference) =>

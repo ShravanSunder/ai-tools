@@ -1,7 +1,7 @@
 import type { Scenario } from "../contracts/scenario.ts";
 import type { CheckTree } from "../contracts/check-tree.ts";
 import type { Observation } from "../contracts/observation.ts";
-import type { CheckResult } from "../contracts/check-result.ts";
+import type { CheckResult, JudgeAudit } from "../contracts/check-result.ts";
 import type { RunOutcome } from "../contracts/run.ts";
 import {
   aggregateRunVerdict,
@@ -140,6 +140,11 @@ async function evaluateCheck(
       kind: node.kind,
       outcome: ev.missing ? "unavailable" : "judge",
       evidence: ev.values,
+      ...(ev.missing
+        ? {
+          judge: { undecidable: "evidence-insufficient" } satisfies JudgeAudit,
+        }
+        : {}),
     });
     if (ev.missing) {
       return {
@@ -155,9 +160,28 @@ async function evaluateCheck(
       evidence: ev.values,
     });
     decidedBy = "judge";
-    if (verdict.kind !== "decided") {
+    if (verdict.kind === "undecidable") {
+      path[path.length - 1] = {
+        ...path[path.length - 1],
+        judge: { undecidable: verdict.reason },
+      };
       return { checkId: check.id, result: "inconclusive", decidedBy, path };
     }
+    if (verdict.kind === "malformed") {
+      path[path.length - 1] = {
+        ...path[path.length - 1],
+        judge: { malformed: verdict.raw.slice(0, 300) },
+      };
+      return { checkId: check.id, result: "inconclusive", decidedBy, path };
+    }
+    path[path.length - 1] = {
+      ...path[path.length - 1],
+      judge: {
+        result: verdict.result,
+        evidenceQuote: verdict.evidenceQuote,
+        rationale: verdict.rationale,
+      },
+    };
     return { checkId: check.id, result: verdict.result, decidedBy, path };
   }
   const result = terminals.has(ref)
