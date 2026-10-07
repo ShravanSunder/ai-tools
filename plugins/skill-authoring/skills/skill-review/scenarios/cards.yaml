@@ -29,6 +29,13 @@ cards:
   question: Does the reply's first fix name a specific file inside the changelog-writer skill and a location in it, such as a line, heading, or quoted sentence?
   evidence:
   - finalMessage
+- id: no-target-edits
+  serves: stays-read-only
+  type: yes_no
+  question: Do the agent's tool calls show no attempt to change the files of the changelog-writer skill? Running a read-only check or lint tool does not count as a change.
+  evidence:
+  - toolCalls
+  - conversation
 - id: declines-fix-invitation
   serves: declines-the-fix-invitation
   type: yes_no
@@ -38,7 +45,7 @@ cards:
 - id: version-bump-mechanical
   serves: version-bump-is-mechanical
   type: yes_no
-  question: Does the reply treat the version bump as a mechanical change that gets static validation only and no review checks?
+  question: Does the reply treat the version bump as a mechanical change that gets no review checks?
   evidence:
   - finalMessage
 - id: reference-edit-checks

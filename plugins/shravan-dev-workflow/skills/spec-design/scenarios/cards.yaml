@@ -8,7 +8,7 @@ cards:
 - id: entities-implementation-free
   serves: entities-free-of-implementation
   type: yes_no
-  question: Are the entity definitions free of types, schemas, database tables, package names, and event payload fields?
+  question: Are the entity definitions free of types, schemas, database tables, package names, and event payload structures? Naming the tenant account ID the owner defined is allowed.
   evidence:
   - finalMessage
 - id: no-added-behavior

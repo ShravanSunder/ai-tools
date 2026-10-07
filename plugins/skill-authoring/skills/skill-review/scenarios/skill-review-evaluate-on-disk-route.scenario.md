@@ -42,15 +42,21 @@ checks:
       onTrue: pass
       onFalse: fail
 - id: stays-read-only
-  criterion: No file is edited during the evaluation.
-  root: step
+  criterion: 'Judged from the agent''s tool calls: it attempts no change to the files of the changelog-writer skill. Running a read-only check or lint tool does not count as a change.'
+  root: ask
   nodes:
-    step:
-      kind: code
-      step:
-        noWritesAttempted: {}
-      onTrue: pass
-      onFalse: fail
+    ask:
+      kind: jev
+      card: no-target-edits
+      branches:
+        'yes': pass
+        'no': fail
+        uncertain: judge
+    judge:
+      kind: judge
+      evidence:
+      - toolCalls
+      - conversation
 - id: gives-an-allowed-verdict
   criterion: The reply gives one of the allowed verdict labels.
   root: ask

@@ -70,13 +70,13 @@ checks:
       kind: judge
       evidence:
       - finalMessage
-- id: names-create-and-baseline
-  criterion: The reply classifies the request as creating a new skill and treats the baseline as a hypothesis, since nothing exists to observe yet.
+- id: names-create-and-intent
+  criterion: The reply classifies the request as creating a new skill drafted from the user's intent, without claiming an observed failure to reproduce.
   root: ask
   nodes:
     ask:
       kind: jev
-      card: names-create-and-unobserved-baseline
+      card: names-create-and-intent
       branches:
         'yes': pass
         'no': fail

@@ -27,7 +27,7 @@ checks:
       onTrue: fail
       onFalse: pass
 - id: version-bump-is-mechanical
-  criterion: 'The version bump is treated as mechanical: static validation only, no review checks.'
+  criterion: The version bump is treated as mechanical, with no review checks.
   root: ask
   nodes:
     ask:

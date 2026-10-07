@@ -17,10 +17,10 @@ cards:
   question: Does the draft move the per-provider detail and worked examples into a named reference file loaded behind a condition, instead of writing them out in the body?
   evidence:
   - finalMessage
-- id: names-create-and-unobserved-baseline
-  serves: names-create-and-baseline
+- id: names-create-and-intent
+  serves: names-create-and-intent
   type: yes_no
-  question: Does the reply classify the request as creating a new skill and say there is no existing behavior to observe yet, so the baseline is a hypothesis?
+  question: Does the reply classify the request as creating a new skill drafted from the user's intent, without claiming an observed failure it reproduced?
   evidence:
   - finalMessage
 - id: description-stays-trigger

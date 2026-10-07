@@ -21,8 +21,24 @@ Preserve exactly this behavior and do not add product behavior. The words are ob
 
 ```yaml
 checks:
-- id: defines-entities-first
-  criterion: The Specification defines Account, Ticket, and Reminder with stable identifiers, identity rules, relationships with cardinality, and Reminder states, and bounds a ticket change to status or due-date changes, before or alongside the obligations.
+- id: defines-the-entities
+  criterion: The Specification defines Account, Ticket, and Reminder as entities, each with an identifier such as E1, before or alongside the obligations.
+  root: judge
+  nodes:
+    judge:
+      kind: judge
+      evidence:
+      - finalMessage
+- id: reminder-has-identity-rule
+  criterion: The Specification says what makes two Reminders the same or different.
+  root: judge
+  nodes:
+    judge:
+      kind: judge
+      evidence:
+      - finalMessage
+- id: reminder-states-named
+  criterion: The Specification names the states a Reminder passes through, such as pending, moved, cancelled, and completed.
   root: judge
   nodes:
     judge:
@@ -30,7 +46,7 @@ checks:
       evidence:
       - finalMessage
 - id: rehold-is-a-new-reminder
-  criterion: A Reminder's identity is its Ticket plus the Hold-with-due-date occurrence that created it, so putting the ticket on Hold again creates a new Reminder.
+  criterion: Putting a ticket on Hold again after it came back creates a new Reminder, not the old one.
   root: judge
   nodes:
     judge:
@@ -53,7 +69,7 @@ checks:
       evidence:
       - finalMessage
 - id: entities-free-of-implementation
-  criterion: The entity definitions name no type, schema, table, package, or payload field.
+  criterion: The entity definitions name no type, schema, database table, package, or event payload structure. Naming the tenant's account ID, which the owner's statements define, is allowed.
   root: ask
   nodes:
     ask:
