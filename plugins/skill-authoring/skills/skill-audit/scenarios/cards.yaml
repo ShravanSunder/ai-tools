@@ -8,7 +8,7 @@ cards:
 - id: skill-md-boundary-stated
   serves: states-skill-md-boundary
   type: yes_no
-  question: Does the reply either make no update or create recommendation, or, for its update or create recommendation, say what stays in SKILL.md?
+  question: Does the reply either make no update or create recommendation, or, for its update or create recommendation, say what the change puts in the compact SKILL.md core?
   evidence:
   - finalMessage
 - id: reference-allocation-stated

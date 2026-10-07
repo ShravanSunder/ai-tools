@@ -31,7 +31,7 @@ checks:
       evidence:
       - finalMessage
 - id: states-skill-md-boundary
-  criterion: If the reply recommends an update or a create, it says what stays in SKILL.md; a reply with no update or create recommendation passes.
+  criterion: If the reply recommends an update or a create, it says what the change puts in the compact SKILL.md core; a reply with no update or create recommendation passes.
   root: ask
   nodes:
     ask:

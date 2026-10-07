@@ -8,7 +8,7 @@ cards:
 - id: drafted-description-is-trigger
   serves: description-is-a-trigger
   type: yes_no
-  question: Does the drafted description start with 'Use when' and name the situations that should load the skill, without narrating the workflow's steps?
+  question: Does the drafted description start with 'Use when' and name the situations that should load the skill, without listing the workflow's steps? A short 'so the agent ...' payoff clause is not a step list.
   evidence:
   - finalMessage
 - id: provider-detail-in-reference
@@ -44,7 +44,7 @@ cards:
 - id: static-validation-is-structural
   serves: static-validation-is-structural
   type: yes_no
-  question: Does the reply say that plugin or skill validation proves structure only, and that behavior needs a pressure scenario or a named proof gap?
+  question: Does the reply say that static or platform validation does not prove behavior, and that behavior needs a pressure scenario or a named proof gap?
   evidence:
   - finalMessage
 - id: no-cache-refresh-as-proof

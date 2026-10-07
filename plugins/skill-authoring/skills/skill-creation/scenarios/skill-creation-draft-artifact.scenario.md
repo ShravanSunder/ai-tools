@@ -41,7 +41,7 @@ checks:
       evidence:
       - finalMessage
 - id: description-is-a-trigger
-  criterion: The drafted description starts with 'Use when' and names triggering situations without narrating the workflow.
+  criterion: The drafted description starts with 'Use when' and names the situations that should load the skill. A short 'so the agent ...' payoff clause is allowed; a description that lists the workflow's steps fails.
   root: ask
   nodes:
     ask:

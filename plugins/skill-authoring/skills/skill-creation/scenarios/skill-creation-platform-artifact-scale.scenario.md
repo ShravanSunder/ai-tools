@@ -54,7 +54,7 @@ checks:
       evidence:
       - finalMessage
 - id: static-validation-is-structural
-  criterion: The reply says platform validation proves structure only, and behavior needs a pressure scenario or a named proof gap.
+  criterion: The reply says that static or platform validation does not prove behavior, and that behavior needs a pressure scenario or a named proof gap.
   root: ask
   nodes:
     ask:
