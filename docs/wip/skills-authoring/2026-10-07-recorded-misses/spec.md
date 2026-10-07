@@ -6,7 +6,7 @@ Revision 2 (review F1, F2 applied). Owner plugin: `plugins/skill-authoring/`. Ow
 
 | Run | Target | Misses fixed | State |
 | --- | --- | --- | --- |
-| A | `skill-creation` | provider depth kept inline when drafting in chat; spec review skipped under "move fast" | proposed |
+| A | `skill-creation` | provider depth kept inline when drafting in chat; spec review skipped under "move fast" | implemented |
 | B | `skill-orchestrator` | implementation review described generically instead of routed to `skill-review` | proposed |
 | C | `skill-review` | full check set on a scoped edit; 3→2→2→3 not called not-converging | proposed |
 | D | `skill-audit` | built a shared runtime document on request | proposed |
@@ -60,7 +60,7 @@ No change to `shravan-dev-workflow`. No runner changes. No token-usage work. No 
 
 ## Run status
 
-A proposed · B proposed · C proposed · D proposed
+A implemented · B proposed · C proposed · D proposed
 
 ## Review record
 
