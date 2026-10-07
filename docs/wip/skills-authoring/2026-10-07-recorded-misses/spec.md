@@ -1,6 +1,6 @@
 # Skill spec: fix the six recorded skill-authoring misses
 
-Revision 1. Owner plugin: `plugins/skill-authoring/`. Owner direction (2026-10-07): make the plugin work and the evals pass.
+Revision 2 (review F1, F2 applied). Owner plugin: `plugins/skill-authoring/`. Owner direction (2026-10-07): make the plugin work and the evals pass.
 
 ## Targets and runs
 
@@ -41,10 +41,10 @@ Under the same pressure prompts, fresh subjects keep provider depth in a named r
 
 ## Per-run surface allocation
 
-- **A, `skill-creation`.** Main path, step 5 "Place the depth": a draft shown in the conversation still shows each file it would create under its path; provider-, case-, or example-specific depth appears as its own `references/<name>.md` with the `IF …, load` call in `SKILL.md`, unless the user explicitly asks for one file. Main path, step 6: an explicit skip names the review and declines it ("skip the spec review"); wanting speed, "just implement", or "no ceremony unless the skill requires it" is not a skip, because the skill requires the review. Trigger and depth unchanged.
+- **A, `skill-creation`.** Main path, step 5 "Place the depth": a draft shown in the conversation still shows each file it would create under its path. Depth that the placement rules move out of `SKILL.md` (provider mechanics, worked examples) appears as its own `references/<name>.md`, called with the load mode those rules already choose: `IF …, load` for branch-only detail such as alternative providers, `MUST load` for an all-run module. Showing the draft in chat is not a request for one file; only an explicit one-file request keeps it inline. No new load-mode rule: `references/reference-design.md` keeps ownership. Main path, step 6: an explicit skip names the review and declines it ("skip the spec review"); wanting speed, "just implement", or "no ceremony unless the skill requires it" is not a skip, because the skill requires the review. Trigger and depth unchanged.
 - **B, `skill-orchestrator`.** Main path, step 6: when stating the route or plan, name `skill-review`'s implementation stage as the reviewer (and its spec stage at step 2); a generic "independent review by other agents" does not satisfy the step. Trigger and depth unchanged.
 - **C, `skill-review`.** Depth, `references/implementation-review.md` (and the matching passage of `references/spec-review.md` if it selects the same way): state the scoped rule before the surface table, and label the table as the selection for an unscoped change. Main path, the convergence rule: one worked example, "3 → 2 → 2 → 3: 3→2 is progress; 2→2 and 2→3 are two adjacent comparisons without a drop, so the fourth review returns `not-converging`".
-- **D, `skill-audit`.** Main path, the shared-contract passage (`SKILL.md:62`) and the read-only rule (`:75`): a request to make one shared runtime document that several skills load is the case this rule forbids; recommend against it, keep each skill's packet where it is, and stay read-only even when the request asks you to build it. "Explicitly asks to implement" covers a narrow recommendation the audit makes, not a change the audit rejects.
+- **D, `skill-audit`.** Main path, the shared-contract passage (`SKILL.md:62`) and the read-only rule (`:75`): a request to combine skills' packets into one shared runtime document because their headings or wording repeat is the case this rule forbids when their fields and meanings differ; recommend against it and keep each skill's packet where it is. The existing exception stays at the same decision point: two or more real consumers of the same fields, or a validating tool, still justify a shared shape. An audit never implements a change it rejects, even when the request asks it to build it; "explicitly asks to implement" covers a narrow recommendation the audit makes.
 
 ## Authoring basis and proof plan
 
@@ -64,4 +64,4 @@ A proposed · B proposed · C proposed · D proposed
 
 ## Review record
 
-Spec review: pending.
+Spec review rev 1: targeted-revision / revise. F1 (Run A competing load-mode rule) and F2 (Run D rejects legitimate shared shapes) accepted by the Lead at their anchors and applied in rev 2. Rev 2: pending verification by the same review lead.
