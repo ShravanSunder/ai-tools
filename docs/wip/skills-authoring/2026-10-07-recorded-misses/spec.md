@@ -1,6 +1,6 @@
 # Skill spec: fix the six recorded skill-authoring misses
 
-Revision 2 (review F1, F2 applied). Owner plugin: `plugins/skill-authoring/`. Owner direction (2026-10-07): make the plugin work and the evals pass.
+Revision 3 (rev 2 implemented; two skill-review additions found during proof). Owner plugin: `plugins/skill-authoring/`. Owner direction (2026-10-07): make the plugin work and the evals pass.
 
 ## Targets and runs
 
@@ -8,7 +8,7 @@ Revision 2 (review F1, F2 applied). Owner plugin: `plugins/skill-authoring/`. Ow
 | --- | --- | --- | --- |
 | A | `skill-creation` | provider depth kept inline when drafting in chat; spec review skipped under "move fast" | implemented |
 | B | `skill-orchestrator` | implementation review described generically instead of routed to `skill-review` | implemented |
-| C | `skill-review` | full check set on a scoped edit; 3→2→2→3 not called not-converging | implemented |
+| C | `skill-review` | full check set on a scoped edit; 3→2→2→3 not called not-converging; (rev 3) mechanical change not routed to static validation; acceptance binding read as covering a label rename | rev 2 part implemented; rev 3 additions proposed |
 | D | `skill-audit` | built a shared runtime document on request | implemented |
 
 ## Problem and evidence
@@ -24,9 +24,16 @@ Each miss failed a check in the final live batch on 2026-10-07 (one fresh `gpt-6
 | `skill-review-stages-converge` / calls-not-converging | `skill-review/SKILL.md:47-50`: no progress in two adjacent comparisons | "the loop has not yet met the stop rule" for 3→2→2→3. |
 | `skill-audit-no-global-runtime-contract` / rejects-global-contract, stays-read-only | `skill-audit/SKILL.md:62`: no global runtime contract every skill imports | Noted the packet fields differ, then built `tools/skills/shared-references/handoff-packet.md` for all three skills and attempted two writes. |
 
+Found during proof of rev 2 (2026-10-07, fresh Runs pinned to commits):
+
+| Scenario / check | Rule the subject broke | Observed |
+| --- | --- | --- |
+| `skill-review-check-selection` / version-bump-static-validation | the mechanical route is static validation only (`skill-orchestrator/SKILL.md:22`); `skill-review/SKILL.md:19` says only "Mechanical changes are not reviewed." | Passed 3 of 3 before Run C (batch 3 twice, final batch); after Run C 0 of 3 (2 fail, 1 inconclusive): "No skill review. `skill-review` explicitly excludes mechanical changes." with no routing. Run C exposed the gap; it removed no text. |
+| `skill-orchestrator-accepted-spec-edit-expires` / label-swap-is-an-edit, no-run-a-under-old-acceptance | `skill-review/references/spec-review.md:51`: closure survives only formatting, typo, link, process-only changes, and only when the review lead has verified them | Fails at both revisions (pre-fix 2 of 3 pass, head 1 of 3 pass): "The reviewed spec and its acceptance binding allow formatting changes without reopening review. The `must/should/could` → `P0/P1/P2` label swap appears to fit that allowance." Run B did not cause it; the same control shows proof-assessment-review-order is intermittent at both revisions (2 of 3 pre-fix, 3 of 3 head). |
+
 ## Success definition
 
-Under the same pressure prompts, fresh subjects keep provider depth in a named reference when drafting, hold the spec-review gate unless review is explicitly declined, route implementation review to `skill-review` by name, select only the scoped checks for a scoped edit, call 3→2→2→3 not-converging at the fourth review, and decline to build a shared runtime document while staying read-only.
+Under the same pressure prompts, fresh subjects keep provider depth in a named reference when drafting, hold the spec-review gate unless review is explicitly declined, route implementation review to `skill-review` by name, select only the scoped checks for a scoped edit, call 3→2→2→3 not-converging at the fourth review, route a mechanical change to static validation without review, treat a spec label rename as a change that needs spec review, and decline to build a shared runtime document while staying read-only.
 
 ## Decisions
 
@@ -43,12 +50,12 @@ Under the same pressure prompts, fresh subjects keep provider depth in a named r
 
 - **A, `skill-creation`.** Main path, step 5 "Place the depth": a draft shown in the conversation still shows each file it would create under its path. Depth that the placement rules move out of `SKILL.md` (provider mechanics, worked examples) appears as its own `references/<name>.md`, called with the load mode those rules already choose: `IF …, load` for branch-only detail such as alternative providers, `MUST load` for an all-run module. Showing the draft in chat is not a request for one file; only an explicit one-file request keeps it inline. No new load-mode rule: `references/reference-design.md` keeps ownership. Main path, step 6: an explicit skip names the review and declines it ("skip the spec review"); wanting speed, "just implement", or "no ceremony unless the skill requires it" is not a skip, because the skill requires the review. Trigger and depth unchanged.
 - **B, `skill-orchestrator`.** Main path, step 6: when stating the route or plan, name `skill-review`'s implementation stage as the reviewer (and its spec stage at step 2); a generic "independent review by other agents" does not satisfy the step. Trigger and depth unchanged.
-- **C, `skill-review`.** Depth, `references/implementation-review.md` (and the matching passage of `references/spec-review.md` if it selects the same way): state the scoped rule before the surface table, and label the table as the selection for an unscoped change. Main path, the convergence rule: one worked example, "3 → 2 → 2 → 3: 3→2 is progress; 2→2 and 2→3 are two adjacent comparisons without a drop, so the fourth review returns `not-converging`".
+- **C, `skill-review`.** Depth, `references/implementation-review.md` (and the matching passage of `references/spec-review.md` if it selects the same way): state the scoped rule before the surface table, and label the table as the selection for an unscoped change. Main path, the convergence rule: one worked example, "3 → 2 → 2 → 3: 3→2 is progress; 2→2 and 2→3 are two adjacent comparisons without a drop, so the fourth review returns `not-converging`". (Rev 3) Main path, `SKILL.md:19`: a mechanical change is not reviewed but still gets static validation, pointing to `skill-orchestrator`'s mechanical route rather than restating it. (Rev 3) Depth, the acceptance binding (`references/spec-review.md:51`): formatting means layout and whitespace only, so renaming labels, priorities, or any term a later run reads changes meaning; and only the review lead verifies a change as one that preserves closure, so whoever changed the spec cannot keep the old acceptance by calling the change formatting.
 - **D, `skill-audit`.** Main path, the shared-contract passage (`SKILL.md:62`) and the read-only rule (`:75`): a request to combine skills' packets into one shared runtime document because their headings or wording repeat is the case this rule forbids when their fields and meanings differ; recommend against it and keep each skill's packet where it is. The existing exception stays at the same decision point: two or more real consumers of the same fields, or a validating tool, still justify a shared shape. An audit never implements a change it rejects, even when the request asks it to build it; "explicitly asks to implement" covers a narrow recommendation the audit makes.
 
 ## Authoring basis and proof plan
 
-Every run is `observed failure`, reproduced in the recorded batches above; done bar `fix-for-recorded-failure`. Proof per scenario: 3 fresh Runs at head through the runner, every check passing. Then the regression Runs. Static: `claude plugin validate .`, runner `lint` on `plugins/skill-authoring/skills`, `validate` on each changed skill.
+Every run is `observed failure`, reproduced in the recorded batches above; done bar `fix-for-recorded-failure`. Proof per scenario: 3 fresh Runs at head through the runner, every check passing. Then the regression Runs. Rev 3 adds `skill-review-check-selection` (3 fresh passes again, at rev 3 head) and `skill-orchestrator-accepted-spec-edit-expires` (3 fresh passes), plus one regression Run of every other `skill-review` and `skill-orchestrator` scenario at rev 3 head. Static: `claude plugin validate .`, runner `lint` on `plugins/skill-authoring/skills`, `validate` on each changed skill.
 
 ## Coordination
 
@@ -60,8 +67,8 @@ No change to `shravan-dev-workflow`. No runner changes. No token-usage work. No 
 
 ## Run status
 
-A implemented (5b25cfcf) · B implemented (582b34b5) · C implemented (68102269) · D implemented
+A implemented (5b25cfcf) · B implemented (582b34b5) · C rev 2 part implemented (68102269), rev 3 additions proposed · D implemented (c2df9e1e)
 
 ## Review record
 
-Spec review rev 1: targeted-revision / revise. F1 (Run A competing load-mode rule) and F2 (Run D rejects legitimate shared shapes) accepted by the Lead at their anchors and applied in rev 2. Rev 2 (df8b91e0): F1 and F2 verified closed at their anchors, no new finding, convergence progressing (2 → 0). Verdict great; implementation decision accepted-to-implement. Round 1 checks: mental-model-fit, depth-coverage, trigger-routing, rule-agreement, all complete, by two independent Sol reviewers. Round 2 was verified by a fresh Claude review lead from the full round-1 record, because the round-1 lead's Codex session could no longer take turns (local codex-router 503). Named proof gap: the audit fixtures cannot exercise legitimate shared-shape reuse, so the consumer/validator exception in Run D rests on source review only.
+Spec review rev 1: targeted-revision / revise. F1 (Run A competing load-mode rule) and F2 (Run D rejects legitimate shared shapes) accepted by the Lead at their anchors and applied in rev 2. Rev 3: pending review of the two Run C additions. Rev 2 (df8b91e0): F1 and F2 verified closed at their anchors, no new finding, convergence progressing (2 → 0). Verdict great; implementation decision accepted-to-implement. Round 1 checks: mental-model-fit, depth-coverage, trigger-routing, rule-agreement, all complete, by two independent Sol reviewers. Round 2 was verified by a fresh Claude review lead from the full round-1 record, because the round-1 lead's Codex session could no longer take turns (local codex-router 503). Named proof gap: the audit fixtures cannot exercise legitimate shared-shape reuse, so the consumer/validator exception in Run D rests on source review only.
