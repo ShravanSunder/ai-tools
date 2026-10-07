@@ -67,3 +67,64 @@ Deno.test("run at a commit with a skill set outside the repository exits 2 befor
   assertEquals(result.code, 2);
   assertStringIncludes(result.output, "skill-set-outside-repo");
 });
+const gitInit = async (repo: string): Promise<void> => {
+  const output = await new Deno.Command("git", {
+    args: ["init", "-q"],
+    cwd: repo,
+    stdout: "null",
+    stderr: "piped",
+  }).output();
+  if (output.code !== 0) {
+    throw new Error(new TextDecoder().decode(output.stderr));
+  }
+};
+Deno.test("done-bar with invalid scenarios exits 2 and prints the loader errors", async () => {
+  const repo = await Deno.makeTempDir();
+  const skillDir = `${repo}/skills/sample-skill`;
+  await writeSkillWithScenario(skillDir, "active", "Run a test of this.");
+  const result = await runCli([
+    "done-bar",
+    "--kind",
+    "new-from-intent",
+    "--repo",
+    repo,
+    "--skill",
+    skillDir,
+  ]);
+  assertEquals(result.code, 2);
+  assertStringIncludes(result.output, "banned word in prompt");
+});
+Deno.test("run exits 2 before any Run when Codex is missing or has no login", async () => {
+  const repo = await Deno.makeTempDir();
+  const skillDir = `${repo}/skills/sample-skill`;
+  await writeSkillWithScenario(skillDir, "active");
+  await gitInit(repo);
+  const missingCodex = await runCli([
+    "run",
+    "--repo",
+    repo,
+    "--skill",
+    skillDir,
+  ]);
+  assertEquals(missingCodex.code, 2);
+  assertStringIncludes(missingCodex.output, "codex-not-found");
+  const noLogin = await runCli([
+    "run",
+    "--repo",
+    repo,
+    "--skill",
+    skillDir,
+    "--codex-path",
+    "codex-for-fixture",
+  ]);
+  assertEquals(noLogin.code, 2);
+  assertStringIncludes(noLogin.output, "no-agent-login");
+});
+Deno.test("run with no active scenario selected exits 2 with a message", async () => {
+  const repo = await Deno.makeTempDir();
+  const skillDir = `${repo}/skills/sample-skill`;
+  await writeSkillWithScenario(skillDir, "draft");
+  const result = await runCli(["run", "--repo", repo, "--skill", skillDir]);
+  assertEquals(result.code, 2);
+  assertStringIncludes(result.output, "no active scenario");
+});

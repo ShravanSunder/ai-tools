@@ -2,6 +2,7 @@ import { join } from "node:path";
 import { mkdir } from "node:fs/promises";
 import { loadScenarios } from "./scenarios/parse-scenario.ts";
 import {
+  checkAgentPrerequisites,
   prepareEnvironment,
   resolveSkillSetSource,
 } from "./environment/prepare-environment.ts";
@@ -61,6 +62,20 @@ const invalidSkillSetReason = async (
     if (source.kind === "invalid") return source.reason;
   }
   return undefined;
+};
+const agentPrerequisiteMessages = {
+  "codex-not-found":
+    "codex-not-found: no codex on PATH; install Codex or pass --codex-path",
+  "no-agent-login":
+    "no-agent-login: no file-based Codex login (auth.json) in CODEX_HOME or ~/.codex",
+} as const;
+const missingAgentPrerequisite = async (
+  codexPath: string | undefined,
+): Promise<string | undefined> => {
+  const prerequisites = await checkAgentPrerequisites(codexPath);
+  return prerequisites.kind === "failed"
+    ? agentPrerequisiteMessages[prerequisites.reason]
+    : undefined;
 };
 const runOne = async (
   scenario: import("./contracts/scenario.ts").Scenario,
@@ -205,10 +220,27 @@ async function main(): Promise<number> {
       printJson({ kind: "invalid", errors: selectionErrors });
       return 2;
     }
+    if (
+      !loaded.scenarios.some((scenario) =>
+        scenario.frontmatter.status === "active"
+      )
+    ) {
+      console.error(
+        "no active scenario selected: only scenarios with status active run",
+      );
+      return 2;
+    }
     const runRevision = revision();
     const skillSetError = await invalidSkillSetReason(skill, [runRevision]);
     if (skillSetError) {
       console.error(skillSetError);
+      return 2;
+    }
+    const environmentError = await missingAgentPrerequisite(
+      value("--codex-path", false),
+    );
+    if (environmentError) {
+      console.error(environmentError);
       return 2;
     }
     const out = value("--out", false) ??
@@ -232,8 +264,8 @@ async function main(): Promise<number> {
   }
   if (command === "done-bar") {
     if (loaded.kind !== "loaded") {
-      printJson({ kind: "not-evaluable", reason: "no-active-scenario" });
-      return 1;
+      printJson(loaded);
+      return 2;
     }
     const selectionErrors = validateNamedScenarioStatuses(
       loaded.scenarios,
@@ -303,6 +335,13 @@ async function main(): Promise<number> {
     ]);
     if (skillSetError) {
       console.error(skillSetError);
+      return 2;
+    }
+    const environmentError = await missingAgentPrerequisite(
+      value("--codex-path", false),
+    );
+    if (environmentError) {
+      console.error(environmentError);
       return 2;
     }
     const baseRun = await runOne(

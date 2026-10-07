@@ -169,6 +169,28 @@ const discoverCodex = async (): Promise<string> => {
   const found = await run(["sh", "-c", "command -v codex"], Deno.cwd());
   return found.code === 0 ? text(found.stdout).trim() : "";
 };
+export type AgentPrerequisites = {
+  kind: "ready";
+  codexPath: string;
+  authPath: string;
+} | { kind: "failed"; reason: "codex-not-found" | "no-agent-login" };
+// Codex and its file-based login are environment, not Run, outcomes: the CLI checks them once
+// before any Run, and prepareEnvironment checks them again for its own callers.
+export async function checkAgentPrerequisites(
+  codexPathOverride?: string,
+): Promise<AgentPrerequisites> {
+  const codexPath = codexPathOverride ?? await discoverCodex();
+  if (!codexPath) return { kind: "failed", reason: "codex-not-found" };
+  const sourceCodexHome = Deno.env.get("CODEX_HOME") ??
+      join(Deno.env.get("HOME") ?? "", ".codex"),
+    authPath = join(sourceCodexHome, "auth.json");
+  try {
+    await Deno.stat(authPath);
+  } catch {
+    return { kind: "failed", reason: "no-agent-login" };
+  }
+  return { kind: "ready", codexPath, authPath };
+}
 const extractArchive = async (
   archive: Uint8Array,
   destination: string,
@@ -196,6 +218,9 @@ export async function prepareEnvironment(
   if (skillSetSource.kind === "invalid") {
     return { kind: "failed", reason: skillSetSource.reason };
   }
+  const prerequisites = await checkAgentPrerequisites(codexPathOverride);
+  if (prerequisites.kind === "failed") return prerequisites;
+  const { codexPath, authPath } = prerequisites;
   const root = await mkdtemp(join(tmpdir(), "skill-eval-env-"));
   const homesRoot = await mkdtemp(join(tmpdir(), "skill-eval-agent-homes-"));
   const snapshot = join(root, "snapshot");
@@ -226,22 +251,6 @@ export async function prepareEnvironment(
     await applyFixtures(scenarioPath, fixtures, snapshot);
     const initialized = await run(["git", "init", "-q"], snapshot);
     if (initialized.code !== 0) throw new Error(text(initialized.stderr));
-    const codexPath = codexPathOverride ?? await discoverCodex();
-    if (!codexPath) {
-      await Deno.remove(root, { recursive: true });
-      await Deno.remove(homesRoot, { recursive: true });
-      return { kind: "failed", reason: "codex-not-found" };
-    }
-    const sourceCodexHome = Deno.env.get("CODEX_HOME") ??
-        join(Deno.env.get("HOME") ?? "", ".codex"),
-      authPath = join(sourceCodexHome, "auth.json");
-    try {
-      await Deno.stat(authPath);
-    } catch {
-      await Deno.remove(root, { recursive: true });
-      await Deno.remove(homesRoot, { recursive: true });
-      return { kind: "failed", reason: "no-agent-login" };
-    }
     const homeDir = join(homesRoot, "home"),
       codexHome = join(homesRoot, "codex-home");
     await mkdir(homeDir, { recursive: true, mode: 0o700 });
