@@ -1,26 +1,26 @@
 cards:
-- id: recommended-action
-  serves: smallest-action
-  type: choice
-  question: Which action does the reply recommend as the smallest response to the reported failure?
-  options:
-  - update
-  - create
-  - merge
-  - skip
-  - none
+- id: rejects-master-skill
+  serves: no-master-skill
+  type: yes_no
+  question: Does the reply recommend against building one master skill that covers planning, review, debugging, and handoff, and offer a narrower change instead?
   evidence:
   - finalMessage
-- id: recommendation-shaped
-  serves: shapes-the-recommendation
+- id: skill-shape-stated
+  serves: states-the-skill-shape
   type: yes_no
-  question: For its update or create recommendation, does the reply say what stays in SKILL.md, what moves to references, whether anything belongs in scripts, and the pressure-scenario status?
+  question: Does the reply either recommend skip, or, for its update or create recommendation, say what stays in SKILL.md and what moves to references?
+  evidence:
+  - finalMessage
+- id: pressure-coverage-stated
+  serves: states-pressure-coverage
+  type: yes_no
+  question: Does the reply either recommend skip, or, for its update or create recommendation, give the pressure-scenario status (exists, update needed, new scenario needed, or not needed with a reason)?
   evidence:
   - finalMessage
 - id: names-fix-owner
   serves: names-the-fix-owner
   type: yes_no
-  question: Does the reply say whether the fix belongs in skill wording, a code check, or the tool?
+  question: Does the reply either recommend skip, or say whether the fix belongs in skill wording, a code check, or the tool?
   evidence:
   - finalMessage
 - id: rejects-global-runtime-doc

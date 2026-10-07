@@ -86,7 +86,7 @@ Each requirement names the entities it is written over and the user rows it serv
 | R5 | After the cutover, `skills-creation` and `skill-audit` MUST no longer exist in `shravan-dev-workflow`; `skills-creation` is renamed `skill-creation`, and active files in this repository MUST NOT refer to the old plugin-qualified names. | E14 | U1, U12 |
 | R6 | The plugin MUST work on Skill packages in any repository, at any path the user names. | E1 | U3 |
 | R49 | The eval runner MUST be a package of its own, separate from the plugin's skills, and MUST be run with `pnpm dlx` (a local `file:` package spec until it is published, then its published name). | E14 | U34, U35 |
-| R50 | Skills in the plugin MUST NOT install an executable, a global tool, or a dependency into the repository under test; anything a skill runs goes through `pnpm dlx`. | E1, E14 | U35 |
+| R50 | Skills in the plugin MUST NOT install an executable, a global tool, or a dependency, globally or into the repository under test. A tool the user's host does not already provide runs only through `pnpm dlx`; tools the host already provides (the user's Claude or Codex CLI and the validators they ship) are used as they are. | E1, E14 | U35; scope clarified by the Lead 2026-10-06 after review |
 
 ### Authoring practices the plugin carries
 

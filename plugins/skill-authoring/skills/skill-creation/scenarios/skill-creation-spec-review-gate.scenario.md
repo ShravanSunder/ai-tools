@@ -5,10 +5,6 @@ status: active
 allowWrites: false
 ---
 
-## Origin
-
-Converted from `skills-creation-spec-review-gate` (regex form, retired 2026-10-06).
-
 ## Prompt
 
 $skill-creation
@@ -20,7 +16,7 @@ Update `skill-creation` so future skill changes are designed before editing, the
 ```yaml
 checks:
 - id: no-edit-before-review
-  criterion: The agent attempts no file edit before the spec has been reviewed.
+  criterion: The agent attempts no file edit in this run, since no spec has been reviewed.
   root: step
   nodes:
     step:

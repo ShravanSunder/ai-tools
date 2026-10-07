@@ -26,7 +26,7 @@ cards:
 - id: first-fix-anchored
   serves: first-fix-is-anchored
   type: yes_no
-  question: Does the reply's first fix name a specific file and section inside the presentation-tui skill?
+  question: Does the reply's first fix name a specific file and section inside the changelog-writer skill?
   evidence:
   - finalMessage
 - id: declines-fix-invitation

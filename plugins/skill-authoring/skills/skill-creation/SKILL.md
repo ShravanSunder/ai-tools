@@ -131,7 +131,7 @@ Reference loads and dispatched procedures use the Call Grammar above; placement 
 
 Steps 1–6 produce the skill spec: the proposal a reviewer can judge before any skill file changes. Step 7 writes the files inside the accepted spec. Proof and independent implementation review come after this skill: `skill-pressure-testing` proves behavior and `skill-review` reviews the changed files.
 
-A run implementing one slice of an accepted multi-run skill spec reads that spec doc and takes its step 1–6 returns from it, quoting the slice's success definition, authoring basis, surface allocation, proof posture, and the decision rows it must honor, and checks the doc's coordination slot before editing. The doc is the commission for that slice, and each slice still names exactly one skill target.
+A run implementing one slice of an accepted multi-run skill spec reads that spec doc and takes its step 1–6 returns from it, quoting the slice's success definition, authoring basis, surface allocation, proof posture, and the decision rows it must honor, and checks the doc's coordination slot before editing. Before editing, it also confirms the spec's acceptance still covers the spec's current meaning, under the acceptance binding in `../skill-review/references/spec-review.md`: formatting, typo, link, process-only changes and verified remediations keep the acceptance; any other change since acceptance, or one of uncertain effect, goes back to spec review before any skill file is edited. The doc is the commission for that slice, and each slice still names exactly one skill target.
 
 ### 1. Name the promise and success
 

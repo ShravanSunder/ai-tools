@@ -5,10 +5,6 @@ status: active
 allowWrites: false
 ---
 
-## Origin
-
-Converted from `skills-creation-draft-artifact` (regex form, retired 2026-10-06).
-
 ## Prompt
 
 $skill-creation

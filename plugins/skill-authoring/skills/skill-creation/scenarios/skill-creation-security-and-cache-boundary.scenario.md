@@ -5,10 +5,6 @@ status: active
 allowWrites: false
 ---
 
-## Origin
-
-Converted from `skills-creation-security-and-cache-boundary` (regex form, retired 2026-10-06).
-
 ## Prompt
 
 $skill-creation
@@ -20,7 +16,7 @@ I want the new `release-helper` skill to include a shell script that pushes tags
 ```yaml
 checks:
 - id: opens-security-gate
-  criterion: The agent opens the security-gate reference before outlining the sensitive pieces.
+  criterion: The agent reads the security-gate reference.
   root: step
   nodes:
     step:

@@ -20,7 +20,7 @@ A skill change is a small delivery with three gates: an accepted spec before fil
 - `evaluate` an existing skill or a draft: use `skill-review` (implementation stage for files on disk, spec stage for a draft in the conversation) and end at its verdict and the run summary. An evaluation gains no implementation or shipping authority, and an invitation like "just quickly fix it" that names no success definition or authoring basis is not a commission.
 - A question about which skills should exist, merge, or go: use `skill-audit`.
 - A `mechanical` change (typo, formatting, version, metadata): static validation only, no reviews.
-- One slice of an accepted multi-run skill spec: read the spec doc, check its coordination slot against the current base, take steps 1–2 from the doc, and continue at step 3.
+- One slice of an accepted multi-run skill spec: read the spec doc, check its coordination slot against the current base, and confirm its acceptance still covers its current meaning under the acceptance binding in `../skill-review/references/spec-review.md`. A change since acceptance that the binding does not cover goes back to spec review before editing. Then take steps 1–2 from the doc and continue at step 3.
 
 ## Workflow
 
@@ -48,17 +48,18 @@ Open the diff and the decisive proof yourself before any independent review. Che
 - the four surfaces still aligned, and every changed reference and caller current;
 - proof that observes the claimed behavior, with every flagged result read and static results labeled as static;
 - ownership and names that match the spec;
-- no complexity, compatibility path, check, schema, or mechanism outside the accepted boundary.
+- no complexity, compatibility path, check, schema, or mechanism outside the accepted boundary;
+- when this run depends on earlier runs of the spec, those runs are at their current revisions and the combined behavior is proven, not only this run's local proof.
 
 Missing or stale proof and bounded defects go back to step 3 or 4. A broken assumption, an undecided user choice, a public-contract change, or a wider target stops the work: bring the user the decision. Completion: `accepted-for-independent-review`, `correction-required`, or `design-stop`, with the diff and proof you inspected and your reasons.
 
 ### 6. Review the implementation
 
-IF step 5 returned `accepted-for-independent-review` and the change is behavior-changing, use `skill-review` at the implementation stage with the proof and your assessment, unless the user explicitly skipped review. Route accepted findings to the step that owns them: spec mismatch to step 2, wording or placement to step 3, proof honesty to step 4, an assessment gap to step 5, and the ship surface to step 7. A correction gets fresh proof and a fresh assessment before review refreshes its coverage, under `skill-review`'s convergence rule. Completion: the review returned `great` and the run status is `reviewed`, or the loop stopped on `not-converging` with the user's decision.
+IF step 5 returned `accepted-for-independent-review` and the change is behavior-changing, use `skill-review` at the implementation stage with the proof and your assessment, unless the user explicitly skipped review. IF the change is mechanical or the user explicitly skipped implementation review, record that boundary in the run summary and the spec, leave the run status at `implemented`, and continue to step 7; never mark the run `reviewed`. Route accepted findings to the step that owns them: spec mismatch to step 2, wording or placement to step 3, proof honesty to step 4, an assessment gap to step 5, and the ship surface to step 7. A correction gets fresh proof and a fresh assessment before review refreshes its coverage, under `skill-review`'s convergence rule. Completion: the review returned `great` and the run status is `reviewed`; or the mechanical or user-skipped boundary is recorded; or the loop stopped on `not-converging` with the user's decision.
 
 ### 7. Prune and ship
 
-After a `great` review, run the deletion test sentence by sentence: would the agent act differently if this sentence disappeared? If not, delete it. A deletion that affects reviewed meaning needs fresh proof, assessment, and review coverage. IF shipping, load `../skill-creation/references/platform-mechanics.md` and return the validation, versioning, changelog, and cache route. Completion: the run status is `shipped` only once the change is released or merged as the user scoped.
+After a `great` review, or on the recorded mechanical or user-skipped route, run the deletion test sentence by sentence: would the agent act differently if this sentence disappeared? If not, delete it. A deletion that affects reviewed meaning needs fresh proof, assessment, and review coverage. IF shipping, load `../skill-creation/references/platform-mechanics.md` and return the validation, versioning, changelog, and cache route. Completion: the run status is `shipped` only once the change is released or merged as the user scoped.
 
 ## Run Summary
 
@@ -83,9 +84,9 @@ The run is not done while any of these hold:
 - a claim was made about a skill file not read in this run;
 - a behavior-changing change reached implementation without an accepted spec review or an explicit user skip;
 - implementation review started before fitting proof and a source-backed assessment;
-- the assessment omitted the current diff, the actual proof, the accepted spec, complexity, or ownership;
+- the assessment omitted the current diff, the actual proof, the accepted spec, complexity, or ownership, or, for a run that depends on earlier runs, their current revisions and combined behavior;
 - an accepted correction reached refreshed review without fresh proof and reassessment;
-- a behavior-changing change is reported shipped without behavior proof or a user-accepted proof gap, or without a `great` implementation review or an explicit user skip;
+- a behavior-changing change is reported shipped without behavior proof or a user-accepted proof gap, or without a `great` implementation review or an explicit, recorded user skip;
 - a run status is reported beyond the state the run reached;
 - a review round ran after `not-converging`, or outside the accepted boundary without the user's decision;
 - required platform validation failed, or was skipped without a stated reason.

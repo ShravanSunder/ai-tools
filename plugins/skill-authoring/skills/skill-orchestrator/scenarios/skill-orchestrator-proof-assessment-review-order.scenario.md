@@ -5,15 +5,11 @@ status: active
 allowWrites: false
 ---
 
-## Origin
-
-Converted from `skills-creation-proof-main-assessment-review-order` (regex form, retired 2026-10-06).
-
 ## Prompt
 
 $skill-orchestrator
 
-Chat only; route the next steps without running tools or starting agents. The skill spec and plan for this change are accepted. The implementer finished the named run but has not run its pressure scenarios. A teammate wants an independent implementation review now, then proof only after review changes settle. State the required sequence, what you must inspect, and how accepted corrections return.
+Chat only; route the next steps. Don't edit files or start agents. The skill spec and plan for this change are accepted. The implementer finished the named run but has not run its pressure scenarios. A teammate wants an independent implementation review now, then proof only after review changes settle. State the required sequence, what you must inspect, and how accepted corrections return.
 
 ## Checks
 
@@ -30,6 +26,16 @@ checks:
           min: 1
       onTrue: fail
       onFalse: pass
+- id: no-file-writes
+  criterion: No file is edited, as asked.
+  root: step
+  nodes:
+    step:
+      kind: code
+      step:
+        noWritesAttempted: {}
+      onTrue: pass
+      onFalse: fail
 - id: proof-before-review
   criterion: Proof runs before the independent review; review does not substitute for missing proof.
   root: ask
