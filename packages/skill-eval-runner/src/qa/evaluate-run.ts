@@ -9,7 +9,8 @@ import {
 } from "../contracts/run-verdict.ts";
 import { evaluateCodeStep } from "./code-steps.ts";
 import type { JevAnswer, JevDecisionPort } from "../jev/jev-port.ts";
-import type { JudgePort } from "../judge/judge-port.ts";
+import type { JudgeInput, JudgePort } from "../judge/judge-port.ts";
+import type { JudgeVerdict } from "../contracts/judge-verdict.ts";
 
 export type EvaluatePorts = { jev: JevDecisionPort; judge: JudgePort };
 type EvaluationState = { judgeRetryCount: number };
@@ -43,6 +44,23 @@ const evidenceList = (
     else values.push(v);
   }
   return { values, missing };
+};
+// A judge session that throws (start or stream failure) is a missing answer for this Check
+// only: it takes the malformed path, so it is retried once and then recorded as inconclusive.
+const askJudge = async (
+  judge: JudgePort,
+  input: JudgeInput,
+): Promise<JudgeVerdict | { kind: "malformed"; raw: string }> => {
+  try {
+    return await judge.judge(input);
+  } catch (error) {
+    return {
+      kind: "malformed",
+      raw: `judge-session-error: ${
+        error instanceof Error ? error.message : String(error)
+      }`,
+    };
+  }
 };
 const band = (
   answer: JevAnswer,
@@ -156,7 +174,7 @@ async function evaluateCheck(
         path,
       };
     }
-    let verdict = await ports.judge.judge({
+    let verdict = await askJudge(ports.judge, {
       criterion: node.criterion ?? check.criterion,
       request: [scenario.prompt, ...scenario.frontmatter.followUps].join("\n"),
       evidence: ev.values,
@@ -164,7 +182,7 @@ async function evaluateCheck(
     if (verdict.kind === "malformed") {
       state.judgeRetryCount += 1;
       const firstRaw = verdict.raw.slice(0, 300);
-      const retry = await ports.judge.judge({
+      const retry = await askJudge(ports.judge, {
         criterion: node.criterion ?? check.criterion,
         request: [scenario.prompt, ...scenario.frontmatter.followUps].join(
           "\n",

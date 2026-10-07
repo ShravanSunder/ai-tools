@@ -442,3 +442,28 @@ Deno.test("readFile unwraps quoted multi-command titles and shell wrappers", asy
     "true",
   );
 });
+Deno.test("a judge session that throws makes only its Check inconclusive, with the reason", async () => {
+  class ThrowingJudge {
+    public calls = 0;
+    judge(): Promise<never> {
+      this.calls += 1;
+      return Promise.reject(new Error("judge session failed to start"));
+    }
+  }
+  const judge = new ThrowingJudge();
+  const result = await evaluateRun(scenario, {
+    kind: "observed",
+    runId: "r",
+    observation,
+  }, { jev: new NoEngineJev(), judge });
+  assertEquals(result.checks[0].result, "pass");
+  assertEquals(result.checks[1].result, "inconclusive");
+  assertEquals(result.checks[1].path.at(-1)?.judge, {
+    malformed: [
+      "judge-session-error: judge session failed to start",
+      "judge-session-error: judge session failed to start",
+    ],
+  });
+  assertEquals(result.verdict, "inconclusive");
+  assertEquals(judge.calls, 2);
+});
