@@ -64,4 +64,4 @@ A proposed · B proposed · C proposed · D proposed
 
 ## Review record
 
-Spec review rev 1: targeted-revision / revise. F1 (Run A competing load-mode rule) and F2 (Run D rejects legitimate shared shapes) accepted by the Lead at their anchors and applied in rev 2. Rev 2: pending verification by the same review lead.
+Spec review rev 1: targeted-revision / revise. F1 (Run A competing load-mode rule) and F2 (Run D rejects legitimate shared shapes) accepted by the Lead at their anchors and applied in rev 2. Rev 2 (df8b91e0): F1 and F2 verified closed at their anchors, no new finding, convergence progressing (2 → 0). Verdict great; implementation decision accepted-to-implement. Round 1 checks: mental-model-fit, depth-coverage, trigger-routing, rule-agreement, all complete, by two independent Sol reviewers. Round 2 was verified by a fresh Claude review lead from the full round-1 record, because the round-1 lead's Codex session could no longer take turns (local codex-router 503). Named proof gap: the audit fixtures cannot exercise legitimate shared-shape reuse, so the consumer/validator exception in Run D rests on source review only.
