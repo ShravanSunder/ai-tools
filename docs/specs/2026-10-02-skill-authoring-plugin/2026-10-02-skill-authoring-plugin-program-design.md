@@ -399,7 +399,7 @@ stateDiagram-v2
 - With no Calibration file, or an `unavailable` answer, the band is `uncertain`.
 - The evaluator never passes a Jev answer onward (`R33`).
 
-**The judge prompt** (`runner/src/judge/judge-prompt.ts`) carries the user's request (Prompt and follow-ups), the criterion, and the retrieved evidence. It tells the judge to decide only what the request asked (`R25`) and to reply with exactly one `JudgeVerdict` JSON object. The judge session runs in an empty temporary directory with every permission request rejected.
+**The judge prompt** (`runner/src/judge/judge-prompt.ts`) carries the user's request (Prompt and follow-ups), the criterion, and the retrieved evidence. It tells the judge to read the criterion exactly as written and to treat the request as context for scope only: never fail work for lacking something the request did not ask for, and never fail it for departing from the request when the criterion is met (`R25`). The judge replies with exactly one `JudgeVerdict` JSON object, and the Check result records its quote and rationale so every judge decision can be audited. The judge session runs in an empty temporary directory, with its own Codex home, and every permission request rejected. Measured on 2026-10-07: an earlier prompt ("decide only against what the user's request asked") made the judge grade against the request instead of the criterion.
 
 ## Lint
 
@@ -430,7 +430,7 @@ Jev lint cards (duplicated rule, a rule losing its home, trigger overlap; `R19`)
 | the model never ran | turn `completed` with zero token usage | `execution-failed(model-unavailable)` with the reply text as detail | user (model or Codex version) | V6 |
 | subject tries to write | permission handler | request rejected and recorded; the Run continues | none needed (`R30`) | V9 |
 | Jev unavailable | port returns `unavailable` | uncertain band, so the tree's uncertain branch | none | V7 |
-| judge malformed or silent | strict JSON parse or timeout | that Check `inconclusive` | user reruns | V6 |
+| judge malformed or silent | strict JSON parse or timeout | retried once in a fresh judge session; still malformed → that Check `inconclusive`, both raw replies recorded | user reruns | V6 |
 | cancel a batch (Ctrl-C) | signal | finished Runs written; unstarted Runs reported not run | user | V6 |
 
 **Parallel Runs:** each has its own environment, ACPX runtime, session and process: no shared history or mutable state (`R35`). The reporter writes per-run files and aggregates once at the end. `--parallel` (default 3) is backpressure on local CPU and agent quota.
