@@ -283,4 +283,4 @@ Every entity E1–E15 is used by at least one requirement.
 - **Certain band (R32):** an uncalibrated `jev` Check always escalates. This follows from the owner's "if Jev is not certain" plus the measured fact that thresholds do not transfer across engines; it means early runs call the judge often until Calibrations exist.
 - **New-from-intent run count (R38):** one passing Run per active Scenario. The owner's bar says "Luna runs"; repeated runs are required only for fixes and improvement claims.
 - **Jev tool:** another agent builds it. Until it exists, every Jev node answers in the uncertain band (R32); this is a dependency, not a fallback design.
-- **Shared shape:** Question cards and decision trees use the same card and tree shape as the orchestration Inspector's guards (owned by the orchestration lane, Lead 637baf68), so the Jev tool has one schema for both consumers.
+- **Shared shape:** Question cards and decision trees use the same card and tree shape as the orchestration Inspector's guards (owned by the orchestration maintainers), so the Jev tool has one schema for both consumers.

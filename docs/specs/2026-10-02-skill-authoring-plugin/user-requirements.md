@@ -2,7 +2,7 @@
 
 Owner: Shravan. Requirements author: the skills-evals Lead session. Status: **confirmed by the owner 2026-10-04** (question tool, after the restart). The Specification and Program Design live beside this file once written; this file holds who the plugin is for, what they need, and the boundary of the work. It holds no obligations (`MUST` statements); those belong to the Specification.
 
-Decision trail: Router board "Jev for Developer Workflow", topic "ai-tools skill evals with Jev", thread root `01a0fc9e-99fd-7462-a8d5-50a52049155d` (owner decisions 2026-10-02 and 2026-10-04). Evidence report: `2026-10-02-skill-authoring-needs-evidence.md` in that thread's Router scratch scope; the Lead re-verified its decisive anchors.
+Decision trail: the owner's decisions (2026-10-02, 2026-10-04 and 2026-10-06) are recorded in the private coordination thread for this design. The evidence report behind rows U13–U33 is kept privately; its decisive anchors were re-verified.
 
 ## Why this exists
 
@@ -98,8 +98,8 @@ Recorded as having **no evidence** of benefit (not proven useless, and not carri
 - **Foundation to reuse:** the skill craft in `skills-creation` that the evidence supports (U16–U19); its review properties (U21); the repository's pressure-test runner as the starting point, made portable (U11); existing scenarios as input material, not as trusted tests.
 - **Actually missing:** the standalone plugin; the orchestration skill; the multi-agent skill-review skill with Jev lint; the eval framework with per-check graders and the Jev cascade; the two done bars.
 - **May change (ai-tools):** a new `plugins/skill-authoring/`; removal of skills-creation and skill-audit from `shravan-dev-workflow`, whose 20 handoff mentions become routing results; the runner's grading, its portability to other repos, and the scenario format; repository docs, manifests, marketplace entries, changelog.
-- **Protected:** the behaviour of every other `shravan-dev-workflow` skill beyond that handoff change; four of those files belong to the skill-review and work-breakdown Lead (`637baf68`), and the Specification decides how they change with that Lead; the owner's own settings and skill index; Router and board; agent-studio.
-- **Non-goals:** regression tracking (later); building the Jev tool (another agent; skill-authoring consumes its interface); the orchestration engine and Inspector (`637baf68`); retired skills.
+- **Protected:** the behaviour of every other `shravan-dev-workflow` skill beyond that handoff change; four of those files belong to the maintainer of work breakdown and skill review, and the Specification decides how they change with that maintainer; the owner's own settings and skill index; Router and board; agent-studio.
+- **Non-goals:** regression tracking (later); building the Jev tool (another agent; skill-authoring consumes its interface); the orchestration engine and Inspector; retired skills.
 - **Acceptable complexity (confirmed 10-04):** five skills, the eval framework, and its grader cascade. A run database, dashboards, cross-run governance, unattended automation, or automatic skill edits need renewed approval.
 - **Acceptable evidence (confirmed 10-04):**
   - the five skills load with `shravan-dev-workflow` **not** installed, in Claude and Codex;
