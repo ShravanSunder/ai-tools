@@ -24,6 +24,13 @@ export function assessDoneBar(input: DoneBarInput): DoneBarResult {
       ? { kind: "met", bar: input.kind, runs: input.runs.map((r) => r.id) }
       : { kind: "not-met", reason: "check-failed" };
   }
+  // A base Run that broke or could not be settled says nothing about reproduction.
+  if (input.baseVerdict === "execution-failed") {
+    return { kind: "not-evaluable", reason: "execution-failed-run" };
+  }
+  if (input.baseVerdict === "inconclusive") {
+    return { kind: "not-evaluable", reason: "inconclusive-run" };
+  }
   if (input.baseVerdict !== "fail") {
     return { kind: "not-met", reason: "failure-not-reproduced" };
   }

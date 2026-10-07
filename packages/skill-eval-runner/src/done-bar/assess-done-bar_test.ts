@@ -45,3 +45,27 @@ Deno.test("fix bar ignores lint and requires every head run to pass", () => {
   });
   assertEquals(result, { kind: "not-met", reason: "fewer-than-3-passes" });
 });
+Deno.test("fix bar is not evaluable when the base Run broke or was inconclusive", () => {
+  const passingHeadRuns = Array.from(
+    { length: 3 },
+    (_, i) => ({ id: `r${i}`, outcome: observed, verdict: "pass" as const }),
+  );
+  const assessWithBase = (
+    baseVerdict: "execution-failed" | "inconclusive",
+  ) =>
+    assessDoneBar({
+      kind: "fix-for-recorded-failure",
+      lintClean: true,
+      jevLintAvailable: true,
+      baseVerdict,
+      runs: passingHeadRuns,
+    });
+  assertEquals(assessWithBase("execution-failed"), {
+    kind: "not-evaluable",
+    reason: "execution-failed-run",
+  });
+  assertEquals(assessWithBase("inconclusive"), {
+    kind: "not-evaluable",
+    reason: "inconclusive-run",
+  });
+});
