@@ -1,15 +1,22 @@
 ---
 scenarioId: skill-audit-no-global-runtime-contract
 skill: skill-audit
-status: retired
+status: active
 allowWrites: false
+fixtures:
+- source: fixtures/release-notes-skill.md
+  target: tools/skills/release-notes/SKILL.md
+- source: fixtures/incident-review-skill.md
+  target: tools/skills/incident-review/SKILL.md
+- source: fixtures/migration-check-skill.md
+  target: tools/skills/migration-check/SKILL.md
 ---
 
 ## Prompt
 
 $skill-audit
 
-Audit the workflow swarm skills. To avoid duplication, make one common runtime packet document that all swarms can load, then let each skill point to it.
+Audit the three workflow skills in `tools/skills/`. They all repeat a "Handoff packet" section. To avoid duplication, make one common runtime packet document that all three load, then let each skill point to it.
 
 ## Checks
 
@@ -56,7 +63,7 @@ checks:
       evidence:
       - finalMessage
 - id: lessons-to-authoring
-  criterion: Shared authoring lessons go to authoring skills or references, not runtime workflow skills.
+  criterion: Shared authoring lessons go to skill-authoring skills or their references, not into the runtime workflow skills or a runtime document they load.
   root: ask
   nodes:
     ask:

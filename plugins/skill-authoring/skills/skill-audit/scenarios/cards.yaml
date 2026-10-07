@@ -50,6 +50,6 @@ cards:
 - id: lessons-to-authoring-refs
   serves: lessons-to-authoring
   type: yes_no
-  question: Does the reply route shared authoring lessons to authoring skills or references rather than into runtime workflow skills?
+  question: Does the reply route shared authoring lessons to skill-authoring skills or their references, rather than into the runtime workflow skills or a runtime document they load?
   evidence:
   - finalMessage
