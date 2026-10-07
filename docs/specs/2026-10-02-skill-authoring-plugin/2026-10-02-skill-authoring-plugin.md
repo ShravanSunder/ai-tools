@@ -37,15 +37,16 @@ The entity table is normative. Program Design binds these to files, schemas, and
 | E2 | **Skill change** | one owner-authorized change to one or more Skill packages; a later, separately authorized request is a new Skill change even when it touches the same packages | covers 1..n E1; has exactly 1 Change record (E3); has 0..n Review findings (E11); has 1 Done-bar result (E10) | its kind is fixed when authorized: `new-from-intent` or `fix-for-recorded-failure` | proposed → implemented → reviewed → shipped; or abandoned from any state before shipped | U9, U13, U15 |
 | E3 | **Change record** | one per Skill change; for a multi-run change it is that change's skill-change spec | belongs to exactly one E2 | each listed item carries exactly one of proposed, implemented, reviewed, shipped; a decision once recorded is superseded by a later entry, never rewritten | (follows its items) | U10, U13 |
 | E4 | **Scenario** | one pressure scenario for exactly one Skill package, identified by that package plus a scenario id stable across edits | belongs to 1 E1; has 1..n Checks (E5); has 0..n Runs (E6) | stored beside its Skill package; its checklist is never part of what the subject sees | draft → active → retired | U6, U11, U25 |
-| E5 | **Check** | one narrow question in one Scenario, identified by that scenario plus a check id | belongs to 1 E4; has 0..1 Calibration (E12) per engine | asks one judgement; names the evidence it needs; has exactly one grader class: `code`, `jev`, or `judge` | (none) | U6, U8, U26 |
+| E5 | **Check** | one checklist item in one Scenario, identified by that scenario plus a check id | belongs to 1 E4; is decided by exactly 1 decision tree whose Jev nodes use Question cards (E15) | its decision tree is made of code steps and Jev questions whose branches are named bands (yes / uncertain / no, or high / mid / low); every path ends in pass, fail, inconclusive, or a judge leaf; it names the evidence each node needs | (none) | U6, U8, U26 |
 | E6 | **Run** | one execution of one Scenario against one Skill package revision by one subject configuration; two Runs are fresh when neither shares conversation history with the other | belongs to 1 E4; produces 0..1 Observation (E7) | the subject is a Luna agent | started → observed, or started → execution-failed | U7, U29, U30 |
 | E7 | **Observation** | the recorded behaviour of exactly one Run | belongs to 1 E6; read by every Check result (E8) of that Run | immutable once recorded; holds what the subject did (tool calls, files read, artifacts written) apart from what it said | (none) | U23, U30 |
 | E8 | **Check result** | one Check applied to one Observation | belongs to 1 E5 and 1 E7 | carries the evidence it relied on and which grader decided it | pass, fail, or inconclusive; decided by `code`, by `jev` (certain), or by `judge` | U8, U23, U24 |
 | E9 | **Run verdict** | one per Run | summarizes the E8 results of 1 E6 | a fail or inconclusive result is never replaced by a later pass | execution-failed, inconclusive, fail, or pass | U27, U28 |
 | E10 | **Done-bar result** | one per Skill change, at the revision being judged | belongs to 1 E2; reads E9 verdicts of its packages' Scenarios | uses the bar for its change kind | met, not met, or not evaluable | U9 |
 | E11 | **Review finding** | one candidate defect at one anchor (file and line or section) in one Skill change, raised by a reviewer agent or a Jev lint check | belongs to 1 E2 | names the property it concerns: teaching, trigger, rule agreement, placement, or claim strength | candidate → verified-at-anchor → accepted or rejected | U20, U21, U22 |
-| E12 | **Calibration** | one Jev engine plus one Check, measured on one labelled set | belongs to 1 E5 | the labelled set was not used to write the Check's question; recorded with its engine, date, and set | (none) | U8, U22 |
+| E12 | **Calibration** | one Jev engine plus one Question card, measured on one labelled set | belongs to 1 E15 | the labelled set was not used to write the Check's question; recorded with its engine, date, and set | (none) | U8, U22 |
 | E13 | **Audit recommendation** | one recommendation for one signal about one or more Skill packages | cites 1..n recorded signals | names its action and the owner of the fix, with recurrence evidence | update, create, merge, or skip; fix owner: prose, a code check, or the tool | U31, U32, U33 |
+| E15 | **Question card** | one predefined Jev question, identified by a card id stable across edits | used by 1..n Checks (E5) and by the judge's prescribed tools; has 0..n Calibrations (E12), one per engine | asks one judgement over named evidence; its type is yes/no or choice; it never asks whether work is good overall | (none) | U8, U22, owner 10-06 |
 | E14 | **Plugin** | one installable unit, identified by its plugin name | contains 0..n E1 | `skill-authoring` and `shravan-dev-workflow` name none of each other's skills or files | (none) | U1, U2 |
 
 ```mermaid
@@ -119,7 +120,7 @@ Each requirement names the entities it is written over and the user rows it serv
 |---|---|---|---|
 | R21 | A Scenario MUST be stored beside its Skill package and selected by its scenario id. | E4 | U11 |
 | R22 | What the subject sees MUST read as an organic user request: it never contains the checklist, and never the words eval, test, judge, experiment, rubric, score, compare, benchmark, candidate, or arena, nor a question about which skills or files it used. | E4, E6 | U25 |
-| R23 | Every Check MUST ask one judgement and name its grader class (`code`, `jev`, `judge`) and the evidence it needs. | E5 | U6 |
+| R23 | Every Check MUST be decided by a decision tree of code steps and Jev questions (Question cards), whose every path ends in pass, fail, inconclusive, or a judge leaf, and whose every node names the evidence it needs. | E5, E15 | U6, owner 10-06 |
 | R24 | A Check MUST NOT pass or fail by matching a text pattern against what the subject wrote. A `code` Check inspects recorded actions (tool calls, files read, artifacts written). | E5, E7 | U6, U23 |
 | R25 | A Check MUST be judged only against what the Scenario's prompt asked and the accepted scope; it never requires an artifact or step the prompt did not ask for. | E5, E8 | U24 |
 | R26 | A Check's evidence MUST be retrieved from the whole Observation (and any named plan or record), never from a local window; when needed evidence is absent from all of them, the result is `inconclusive`, not `fail`. | E5, E7, E8 | U26 |
@@ -132,10 +133,10 @@ Each requirement names the entities it is written over and the user rows it serv
 | R28 | Subjects and every other agent the runner starts MUST be `gpt-6-luna` at medium effort, except the agent judge, which MUST be `gpt-6-luna` at high effort. | E6, E8 | U7, owner 10-04, 10-06 |
 | R29 | The runner MUST start subjects and judges through ACPX used as a library, not by launching the ACPX command line. | E6 | owner 10-04 |
 | R30 | A subject MUST NOT be able to write to the repository under test unless its Scenario explicitly allows writes; a denied write is recorded in the Observation. | E6, E7 | U28 |
-| R31 | When a `jev` Check's answer is certain, it MUST stand as the Check result; when it is not certain, the Check MUST be decided by the agent judge. | E5, E8, E12 | U8 |
-| R32 | A Jev answer MUST be called certain only inside the band set by that Check's Calibration for that engine; a Check with no Calibration for the engine in use has no certain band. | E8, E12 | U8, evidence E14 |
-| R33 | The agent judge MUST receive the evidence and the criterion only: never the Jev probability, its leaning, or the fact that the item was escalated. | E8 | U8, U20 |
-| R34 | A Run whose Checks are all decided by `code` or by certain Jev MUST make no agent-judge call. | E8, E9 | U5 |
+| R31 | At each Jev node the tree MUST follow the branch of the band the answer falls in; the `uncertain` band follows the tree's uncertain branch, which leads to a judge leaf, another node, or inconclusive, as that Check's tree defines. | E5, E8, E15 | U8, owner 10-06 |
+| R32 | A Jev answer MUST fall in the yes, no, high or low band only inside the band set by that Question card's Calibration for the engine in use; with no Calibration for that engine, every answer falls in the uncertain band. | E12, E15 | U8, evidence E14 |
+| R33 | A judge leaf's agent MUST receive the evidence and the Check's criterion, and never the Jev answer, probability, leaning, or route that led to it. It gets tools only when its Check requires code execution or composing several questions, and then only that Check's prescribed Question cards, never free-form Jev access. | E8, E15 | U8, U20, owner 10-06 |
+| R34 | A Run in which no Check's tree reaches a judge leaf MUST make no agent-judge call. | E8, E9 | U5 |
 | R35 | Several Runs MUST be able to execute in parallel without sharing conversation history, and each MUST be fresh. | E6 | U7, U29 |
 
 ### Verdicts and done bars
@@ -185,16 +186,16 @@ Each requirement names the entities it is written over and the user rows it serv
 - **Consumers:** authoring agents, the owner, any repository.
 - **Invocation:** `pnpm dlx file:<runner package path> …` today; `pnpm dlx <published name> …` once published. Nothing is installed; a run leaves no executable behind.
 - **Inputs:** a repository and Skill package (or Scenario ids), the change kind when judging a done bar, and the number of parallel Runs.
-- **Outputs, per Run:** the Observation reference; each Check result with its grader, evidence, and pass, fail, or inconclusive; the Run verdict; whether the judge was called; the cost of the Run.
-- **Outputs, per batch:** the counts of each verdict, the escalation rate (share of `jev` Checks sent to the judge), the cost per Scenario, and the Done-bar result when requested.
+- **Outputs, per Run:** the Observation reference; each Check result with the path its decision tree took (node, answer band, branch), the evidence each node used, and pass, fail, or inconclusive; the Run verdict; whether a judge leaf was reached; the cost of the Run.
+- **Outputs, per batch:** the counts of each verdict, the judge-leaf rate (share of Check results decided at a judge leaf), the cost per Scenario, and the Done-bar result when requested.
 - **Failure:** a Run that never observed is `execution-failed` with its cause (R36). A malformed or missing judge answer is `inconclusive` for that Check. Cancelling a batch leaves completed Runs' results intact and marks unstarted Runs as not run.
 - **Exit:** the command reports failure when any requested Done-bar result is not `met`, or any Run is not `pass`.
 - **Undefined:** result storage across batches (regression tracking is a non-goal).
 
 ### C4 · Agent-judge input (R33)
 - **Consumers:** the agent judge (`gpt-6-luna`, high effort).
-- **Gets:** the Check's question and criterion, the retrieved evidence, and the Scenario's prompt.
-- **Never gets:** Jev's probability, its leaning, the escalation fact, the Skill package's author or revision label, or other Runs' results.
+- **Gets:** the Check's criterion, the retrieved evidence, and the Scenario's prompt; plus that Check's prescribed Question-card tools only when its Check requires code execution or composition.
+- **Never gets:** any Jev answer, probability, or leaning from the tree; the route that reached the leaf; free-form Jev access; the Skill package's author or revision label; other Runs' results.
 
 ### C5 · Workflow routing result (R4)
 - **Consumer:** `shravan-dev-workflow` skills and the owner's skill index.
@@ -273,11 +274,12 @@ Each requirement names the entities it is written over and the user rows it serv
 | U32 | R43 | V4 |
 | U33 | R44 | V4 |
 
-Every entity E1–E14 is used by at least one requirement.
+Every entity E1–E15 is used by at least one requirement.
 
 ## Open decisions and known gaps
 
 - **Proving set (R46):** its size and which `shravan-dev-workflow` packages it covers are chosen in Program Design. The owner set only "small".
 - **Certain band (R32):** an uncalibrated `jev` Check always escalates. This follows from the owner's "if Jev is not certain" plus the measured fact that thresholds do not transfer across engines; it means early runs call the judge often until Calibrations exist.
 - **New-from-intent run count (R38):** one passing Run per active Scenario. The owner's bar says "Luna runs"; repeated runs are required only for fixes and improvement claims.
-- **Jev tool:** another agent builds it. Until it exists, `jev` Checks have no engine and escalate; this is a dependency, not a fallback design.
+- **Jev tool:** another agent builds it. Until it exists, every Jev node answers in the uncertain band (R32); this is a dependency, not a fallback design.
+- **Shared shape:** Question cards and decision trees use the same card and tree shape as the orchestration Inspector's guards (owned by the orchestration lane, Lead 637baf68), so the Jev tool has one schema for both consumers.
