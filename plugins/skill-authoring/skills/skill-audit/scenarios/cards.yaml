@@ -1,0 +1,43 @@
+cards:
+- id: recommended-action
+  serves: smallest-action
+  type: choice
+  question: Which action does the reply recommend as the smallest response to the reported failure?
+  options:
+  - update
+  - create
+  - merge
+  - skip
+  - none
+  evidence:
+  - finalMessage
+- id: recommendation-shaped
+  serves: shapes-the-recommendation
+  type: yes_no
+  question: For its update or create recommendation, does the reply say what stays in SKILL.md, what moves to references, whether anything belongs in scripts, and the pressure-scenario status?
+  evidence:
+  - finalMessage
+- id: names-fix-owner
+  serves: names-the-fix-owner
+  type: yes_no
+  question: Does the reply say whether the fix belongs in skill wording, a code check, or the tool?
+  evidence:
+  - finalMessage
+- id: rejects-global-runtime-doc
+  serves: rejects-global-contract
+  type: yes_no
+  question: Does the reply reject creating one common runtime packet document that every workflow skill loads?
+  evidence:
+  - finalMessage
+- id: shapes-stay-local
+  serves: keeps-shapes-skill-local
+  type: yes_no
+  question: Does the reply keep each skill's packet shape and rules in that skill's own references, allowing a shared home only for a shape with several real consumers or a validating tool?
+  evidence:
+  - finalMessage
+- id: lessons-to-authoring-refs
+  serves: lessons-to-authoring
+  type: yes_no
+  question: Does the reply route shared authoring lessons to authoring skills or references rather than into runtime workflow skills?
+  evidence:
+  - finalMessage
