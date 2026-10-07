@@ -9,6 +9,7 @@ export type BatchRun = {
   outcome: RunOutcome;
   checks: readonly CheckResult[];
   verdict: RunVerdict;
+  judgeRetryCount: number;
 };
 export type ScenarioBatchSummary = {
   scenarioId: string;
@@ -23,6 +24,7 @@ export type ScenarioBatchSummary = {
   judgeLeafRate: number;
   subjectTokenTotal: number;
   judgeCallCount: number;
+  judgeRetryCount: number;
 };
 export const summarizeBatch = (
   scenario: Scenario,
@@ -54,6 +56,10 @@ export const summarizeBatch = (
     ),
     judgeCallCount:
       checks.filter((check) => check.decidedBy === "judge").length,
+    judgeRetryCount: runs.reduce(
+      (total, run) => total + run.judgeRetryCount,
+      0,
+    ),
   };
 };
 export async function writeBatch(

@@ -14,4 +14,4 @@ export type CheckResult = {
 export type JudgeAudit =
   | { result: "pass" | "fail"; evidenceQuote: string; rationale: string }
   | { undecidable: "evidence-insufficient" | "criterion-ambiguous" }
-  | { malformed: string };
+  | { malformed: readonly string[] };

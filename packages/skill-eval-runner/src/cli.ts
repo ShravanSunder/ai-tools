@@ -73,6 +73,7 @@ const runOne = async (
       },
       checks: [],
       verdict: "execution-failed",
+      judgeRetryCount: 0,
     };
   }
   try {
@@ -82,12 +83,17 @@ const runOne = async (
         jev: new NoEngineJev(),
         judge: new AcpxJudge(env.environment),
       })
-      : { checks: [], verdict: "execution-failed" as const };
+      : {
+        checks: [],
+        verdict: "execution-failed" as const,
+        judgeRetryCount: 0,
+      };
     return {
       id: runId,
       outcome,
       checks: evaluated.checks,
       verdict: evaluated.verdict,
+      judgeRetryCount: evaluated.judgeRetryCount,
     };
   } finally {
     await env.environment.dispose();

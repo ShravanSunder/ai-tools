@@ -208,18 +208,54 @@ Deno.test("missing code evidence is inconclusive", async () => {
   assertEquals(result.checks[0].result, "inconclusive");
 });
 Deno.test("malformed judge replies are inconclusive", async () => {
+  const judge = new FakeJudge({ kind: "malformed", raw: "bad judge reply" });
   const result = await evaluateRun(scenario, {
     kind: "observed",
     runId: "r",
     observation,
   }, {
     jev: new NoEngineJev(),
-    judge: new FakeJudge({ kind: "malformed", raw: "bad judge reply" }),
+    judge,
   });
   assertEquals(result.checks[1].result, "inconclusive");
   assertEquals(result.checks[1].path.at(-1)?.judge, {
-    malformed: "bad judge reply",
+    malformed: ["bad judge reply", "bad judge reply"],
   });
+  assertEquals(judge.calls, 2);
+});
+Deno.test("malformed judge reply retries once and uses the second decision", async () => {
+  const judge = new FakeJudge([{ kind: "malformed", raw: "first malformed" }, {
+    kind: "decided",
+    result: "pass",
+    evidenceQuote: "Useful answer",
+    rationale: "second answer",
+  }]);
+  const result = await evaluateRun(scenario, {
+    kind: "observed",
+    runId: "r",
+    observation,
+  }, { jev: new NoEngineJev(), judge });
+  assertEquals(result.checks[1].result, "pass");
+  assertEquals(result.checks[1].path.at(-1)?.judge, {
+    result: "pass",
+    evidenceQuote: "Useful answer",
+    rationale: "second answer",
+  });
+  assertEquals(result.judgeRetryCount, 1);
+  assertEquals(judge.calls, 2);
+});
+Deno.test("a decided judge reply is never retried", async () => {
+  const judge = new FakeJudge({
+    kind: "decided",
+    result: "pass",
+    evidenceQuote: "Useful answer",
+    rationale: "first answer",
+  });
+  await evaluateRun(scenario, { kind: "observed", runId: "r", observation }, {
+    jev: new NoEngineJev(),
+    judge,
+  });
+  assertEquals(judge.calls, 1);
 });
 Deno.test("scripted Jev covers yes, no, uncertain, and choice branches", async () => {
   const cards: Scenario["cards"] = [{

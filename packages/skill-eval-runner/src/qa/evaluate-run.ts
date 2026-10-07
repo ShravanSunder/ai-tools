@@ -12,6 +12,7 @@ import type { JevAnswer, JevDecisionPort } from "../jev/jev-port.ts";
 import type { JudgePort } from "../judge/judge-port.ts";
 
 export type EvaluatePorts = { jev: JevDecisionPort; judge: JudgePort };
+type EvaluationState = { judgeRetryCount: number };
 const terminals = new Set(["pass", "fail", "inconclusive"]);
 const evidenceFor = (source: unknown, obs: Observation): string | undefined => {
   if (source === "finalMessage") return obs.finalMessage;
@@ -65,6 +66,7 @@ async function evaluateCheck(
   scenario: Scenario,
   obs: Observation,
   ports: EvaluatePorts,
+  state: EvaluationState,
 ): Promise<CheckResult> {
   let ref = check.root;
   const path: Array<CheckResult["path"][number]> = [];
@@ -154,23 +156,40 @@ async function evaluateCheck(
         path,
       };
     }
-    const verdict = await ports.judge.judge({
+    let verdict = await ports.judge.judge({
       criterion: node.criterion ?? check.criterion,
       request: [scenario.prompt, ...scenario.frontmatter.followUps].join("\n"),
       evidence: ev.values,
     });
+    if (verdict.kind === "malformed") {
+      state.judgeRetryCount += 1;
+      const firstRaw = verdict.raw.slice(0, 300);
+      const retry = await ports.judge.judge({
+        criterion: node.criterion ?? check.criterion,
+        request: [scenario.prompt, ...scenario.frontmatter.followUps].join(
+          "\n",
+        ),
+        evidence: ev.values,
+      });
+      if (retry.kind === "malformed") {
+        path[path.length - 1] = {
+          ...path[path.length - 1],
+          judge: { malformed: [firstRaw, retry.raw.slice(0, 300)] },
+        };
+        return {
+          checkId: check.id,
+          result: "inconclusive",
+          decidedBy: "judge",
+          path,
+        };
+      }
+      verdict = retry;
+    }
     decidedBy = "judge";
     if (verdict.kind === "undecidable") {
       path[path.length - 1] = {
         ...path[path.length - 1],
         judge: { undecidable: verdict.reason },
-      };
-      return { checkId: check.id, result: "inconclusive", decidedBy, path };
-    }
-    if (verdict.kind === "malformed") {
-      path[path.length - 1] = {
-        ...path[path.length - 1],
-        judge: { malformed: verdict.raw.slice(0, 300) },
       };
       return { checkId: check.id, result: "inconclusive", decidedBy, path };
     }
@@ -198,15 +217,26 @@ export async function evaluateRun(
   scenario: Scenario,
   outcome: RunOutcome,
   ports: EvaluatePorts,
-): Promise<{ checks: readonly CheckResult[]; verdict: RunVerdict }> {
-  if (outcome.kind !== "observed") {
-    return { checks: [], verdict: "execution-failed" };
+): Promise<
+  {
+    checks: readonly CheckResult[];
+    verdict: RunVerdict;
+    judgeRetryCount: number;
   }
+> {
+  if (outcome.kind !== "observed") {
+    return { checks: [], verdict: "execution-failed", judgeRetryCount: 0 };
+  }
+  const state: EvaluationState = { judgeRetryCount: 0 };
   const checks: CheckResult[] = [];
   for (const check of scenario.checks) {
     checks.push(
-      await evaluateCheck(check, scenario, outcome.observation, ports),
+      await evaluateCheck(check, scenario, outcome.observation, ports, state),
     );
   }
-  return { checks, verdict: aggregateRunVerdict(checks.map((c) => c.result)) };
+  return {
+    checks,
+    verdict: aggregateRunVerdict(checks.map((c) => c.result)),
+    judgeRetryCount: state.judgeRetryCount,
+  };
 }
