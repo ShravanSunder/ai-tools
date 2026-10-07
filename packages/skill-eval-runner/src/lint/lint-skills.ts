@@ -48,11 +48,39 @@ const collectMarkdown = async (
   await visit(skillRoot);
   return paths;
 };
+const lineAt = (text: string, index: number): string => {
+  const start = text.lastIndexOf("\n", index - 1) + 1;
+  const end = text.indexOf("\n", index);
+  return text.slice(start, end === -1 ? text.length : end);
+};
+const columnAt = (text: string, index: number): number =>
+  index - (text.lastIndexOf("\n", index - 1) + 1);
+const crossSkillOwner = (
+  line: string,
+  referenceStart: number,
+  skillNames: ReadonlySet<string>,
+): string | undefined => {
+  const prefix = line.slice(0, referenceStart).replace(/`\s*$/, "").trimEnd();
+  let owner: string | undefined;
+  for (const match of prefix.matchAll(/`([^`]+)`(?:'s|’s)/g)) {
+    if (skillNames.has(match[1])) owner = match[1];
+  }
+  return owner;
+};
 export async function lintSkills(
   skillSetDir: string,
   forbidden: readonly string[] = [],
 ): Promise<LintResult> {
   const findings: LintFinding[] = [];
+  const skillNames = new Set<string>();
+  for await (const entry of Deno.readDir(skillSetDir)) {
+    if (entry.isDirectory) {
+      try {
+        await Deno.stat(join(skillSetDir, entry.name, "SKILL.md"));
+        skillNames.add(entry.name);
+      } catch { /* not a skill */ }
+    }
+  }
   for await (const entry of Deno.readDir(skillSetDir)) {
     if (!entry.isDirectory) continue;
     const skillRoot = join(skillSetDir, entry.name);
@@ -128,8 +156,26 @@ export async function lintSkills(
           !relative.startsWith("references/")
         ) continue;
         if (relative.includes("*") || relative.includes("<")) continue;
+        let target = resolveReference(skillRoot, filePath, relative);
         try {
-          await Deno.stat(resolveReference(skillRoot, filePath, relative));
+          await Deno.stat(target);
+        } catch {
+          const line = lineAt(text, match.index ?? 0);
+          const owner = crossSkillOwner(
+            line,
+            columnAt(text, match.index ?? 0),
+            skillNames,
+          );
+          if (owner) {
+            target = resolveReference(
+              join(skillSetDir, owner),
+              filePath,
+              relative,
+            );
+          }
+        }
+        try {
+          await Deno.stat(target);
         } catch {
           findings.push({
             path: filePath,
