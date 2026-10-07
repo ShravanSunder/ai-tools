@@ -41,6 +41,21 @@ checks:
       kind: judge
       evidence:
       - finalMessage
+- id: version-bump-static-validation
+  criterion: The version bump is routed to static validation.
+  root: ask
+  nodes:
+    ask:
+      kind: jev
+      card: version-bump-static-validation
+      branches:
+        'yes': pass
+        'no': fail
+        uncertain: judge
+    judge:
+      kind: judge
+      evidence:
+      - finalMessage
 - id: selects-checks-by-surface
   criterion: The reference edit gets rule-agreement and no-op-pruning, not trigger-routing, claim-vs-evidence, or placement-and-calls.
   root: ask

@@ -48,6 +48,12 @@ cards:
   question: Does the reply treat the version bump as a mechanical change that gets no review checks?
   evidence:
   - finalMessage
+- id: version-bump-static-validation
+  serves: version-bump-static-validation
+  type: yes_no
+  question: Does the reply route the version bump to static validation (for example manifest or plugin validation) rather than leaving it with no check at all?
+  evidence:
+  - finalMessage
 - id: reference-edit-checks
   serves: selects-checks-by-surface
   type: yes_no
