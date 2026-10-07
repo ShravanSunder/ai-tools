@@ -14,7 +14,7 @@ cards:
 - id: reference-allocation-stated
   serves: states-reference-allocation
   type: yes_no
-  question: Does the reply either make no update or create recommendation, or, for its update or create recommendation, say what moves to references?
+  question: Does the reply either make no update or create recommendation, or, for its update or create recommendation, say what goes in references or that nothing new does?
   evidence:
   - finalMessage
 - id: script-need-stated

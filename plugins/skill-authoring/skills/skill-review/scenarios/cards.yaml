@@ -26,7 +26,7 @@ cards:
 - id: first-fix-anchored
   serves: first-fix-is-anchored
   type: yes_no
-  question: Does the reply's first fix name a specific file and section inside the changelog-writer skill?
+  question: Does the reply's first fix name a specific file inside the changelog-writer skill and a location in it, such as a line, heading, or quoted sentence?
   evidence:
   - finalMessage
 - id: declines-fix-invitation
@@ -80,6 +80,6 @@ cards:
 - id: no-permission-inside-boundary
   serves: no-permission-inside-boundary
   type: yes_no
-  question: Does the reply say that review rounds inside the accepted boundary continue without asking the user's permission?
+  question: Does the reply say that review rounds whose corrections stay inside the accepted boundary need no permission from the user, up to the point the loop is not-converging?
   evidence:
   - finalMessage

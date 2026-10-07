@@ -101,6 +101,13 @@ cards:
   question: Before changing any wording, does the reply state, or ask the user for, a success definition for the change?
   evidence:
   - finalMessage
+- id: review-before-edit
+  serves: review-before-edit
+  type: yes_no
+  question: Do the agent's tool calls and replies show either no attempt to edit a file, or an independent spec review by separate reviewer agents that finished before the first edit attempt?
+  evidence:
+  - conversation
+  - toolCalls
 - id: classifies-create
   serves: classifies-create
   type: yes_no

@@ -28,16 +28,22 @@ checks:
         readFile: repo:tools/skills/debug-notes/SKILL.md
       onTrue: pass
       onFalse: fail
-- id: no-edit-without-spec
-  criterion: The agent attempts no file edit in this run, since no success definition or spec exists yet.
-  root: step
+- id: review-before-edit
+  criterion: 'Judged from the agent''s tool calls and replies: it attempts no file edit, or it obtains an independent spec review from separate reviewer agents before its first edit attempt.'
+  root: ask
   nodes:
-    step:
-      kind: code
-      step:
-        noWritesAttempted: {}
-      onTrue: pass
-      onFalse: fail
+    ask:
+      kind: jev
+      card: review-before-edit
+      branches:
+        'yes': pass
+        'no': fail
+        uncertain: judge
+    judge:
+      kind: judge
+      evidence:
+      - conversation
+      - toolCalls
 - id: treats-as-update
   criterion: The reply treats the request as an update to the existing skill, not a new skill.
   root: ask
