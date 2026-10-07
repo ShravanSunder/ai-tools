@@ -1,0 +1,19 @@
+cards:
+- id: candidate-stays-unverified
+  serves: leaves-it-unverified
+  type: yes_no
+  question: Does the reply leave the candidate finding unverified rather than accepting it because the reviewer is confident or two others agree?
+  evidence:
+  - finalMessage
+- id: requires-exact-anchors
+  serves: requires-anchors
+  type: yes_no
+  question: Does the reply require reopening the exact governing requirement, implementation code, and proof anchors before the finding can be accepted?
+  evidence:
+  - finalMessage
+- id: no-remediation-asked
+  serves: no-remediation-request
+  type: yes_no
+  question: Does the reply avoid asking the reviewers to fix the problem?
+  evidence:
+  - finalMessage

@@ -11,14 +11,6 @@ const retiredSkillRoot = path.join(
   repoRoot,
   "plugins/shravan-dev-workflow/retired-skills",
 );
-const activeScenarioRoot = path.join(
-  repoRoot,
-  "tests/skills/pressure-scenarios/shravan-dev-workflow",
-);
-const retiredScenarioRoot = path.join(
-  repoRoot,
-  "tests/skills/retired-pressure-scenarios/shravan-dev-workflow",
-);
 const provenanceSkillNames = [
   "orchestrator-goal",
   "plan-creation-swarm",
@@ -42,20 +34,16 @@ const activeReplacementSkillNames = [
 ] as const;
 
 describe("retired skill runtime discoverability", () => {
-  test("keeps complete provenance outside active skill and scenario roots", () => {
+  test("keeps complete provenance outside the active skill root", () => {
     for (const skillName of provenanceSkillNames) {
       const activeSkillPath = path.join(activeSkillRoot, skillName);
       const retiredSkillPath = path.join(retiredSkillRoot, skillName);
-      const activeScenarioPath = path.join(activeScenarioRoot, skillName);
-      const retiredScenarioPath = path.join(retiredScenarioRoot, skillName);
 
       expect(existsSync(path.join(retiredSkillPath, "SKILL.retired.md"))).toBe(
         true,
       );
-      expect(existsSync(retiredScenarioPath)).toBe(true);
 
       expect(existsSync(activeSkillPath)).toBe(false);
-      expect(existsSync(activeScenarioPath)).toBe(false);
     }
   });
 

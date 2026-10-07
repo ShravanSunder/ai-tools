@@ -1,0 +1,19 @@
+cards:
+- id: account-is-tenant
+  serves: account-is-the-tenant
+  type: yes_no
+  question: Does the Specification define account as the tenant identified by the account ID on events, and never as the CX agent's login?
+  evidence:
+  - finalMessage
+- id: entities-implementation-free
+  serves: entities-free-of-implementation
+  type: yes_no
+  question: Are the entity definitions free of types, schemas, database tables, package names, and event payload fields?
+  evidence:
+  - finalMessage
+- id: no-added-behavior
+  serves: adds-no-behavior
+  type: yes_no
+  question: Does the Specification avoid adding behavior the owner did not state, such as notifications, retries, or more than one pending reminder per ticket?
+  evidence:
+  - finalMessage

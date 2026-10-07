@@ -1,20 +1,15 @@
 {
-  "name": "ai-tools-skill-pressure-tests",
+  "name": "ai-tools-skill-contract-tests",
   "private": true,
   "type": "module",
   "packageManager": "pnpm@11.8.0",
   "scripts": {
     "test": "vitest run lib --config vitest.config.ts",
-    "test:unit": "vitest run lib --config vitest.config.ts",
-    "test:evals": "vitest run evals --config vitest.config.ts",
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
     "@types/node": "^25.5.0",
-    "ajv": "^8.17.1",
-    "tinyrainbow": "^3.1.0",
     "typescript": "^5.8.3",
-    "vitest": "^4.1.11",
-    "vitest-evals": "^0.15.0"
+    "vitest": "^4.1.11"
   }
 }

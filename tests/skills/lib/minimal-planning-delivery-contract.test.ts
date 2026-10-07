@@ -4,10 +4,6 @@ import { describe, expect, test } from "vitest";
 
 const repoRoot = path.resolve(import.meta.dirname, "../../..");
 const pluginRoot = path.join(repoRoot, "plugins/shravan-dev-workflow");
-const pressureRoot = path.join(
-  repoRoot,
-  "tests/skills/pressure-scenarios/shravan-dev-workflow",
-);
 
 const readPluginFile = (relativePath: string): string =>
   readFileSync(path.join(pluginRoot, relativePath), "utf8");
@@ -230,22 +226,4 @@ describe("goal delivery intent hard cutover", () => {
     ).toBe(false);
   });
 
-  test("ships pressure scenarios for the new boundaries", () => {
-    const scenarioPaths = [
-      "orchestrator-implementation-goal/continue-ready-plan-without-approval.md",
-      "orchestrator-implementation-goal/respect-narrow-terminal.md",
-      "plan-implementation/direct-planning-establishes-intent.md",
-      "plan-implementation/orchestrated-plan-uses-project-tmp.md",
-      "orchestrator-design/continues-while-converging.md",
-      "orchestrator-design/ready-plan-keeps-main-default-contact.md",
-      "manage-agents/main-default-after-ready-plan.md",
-      "manage-agents/no-relay-supervisor.md",
-      "spec-program-review/one-review-one-remediation.md",
-      "implementation-review/stops-when-not-converging.md",
-    ];
-
-    for (const scenarioPath of scenarioPaths) {
-      expect(existsSync(path.join(pressureRoot, scenarioPath))).toBe(true);
-    }
-  });
 });

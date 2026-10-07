@@ -1,0 +1,30 @@
+cards:
+- id: constraint-destination
+  serves: returns-to-program-design
+  type: choice
+  question: Where does the reply send the clarified downtime constraint?
+  options:
+  - program-design
+  - spec-design
+  - requirements-record
+  - none
+  evidence:
+  - finalMessage
+- id: explains-downtime-boundary
+  serves: explains-the-boundary
+  type: yes_no
+  question: Does the reply explain how the confirmed two-minute, backward-compatible boundary differs from both the five-minute allowance and a zero-downtime cutover, including what each costs?
+  evidence:
+  - finalMessage
+- id: no-mechanism-chosen
+  serves: no-architecture
+  type: yes_no
+  question: Does the reply avoid choosing migration components, interfaces, or a cutover mechanism?
+  evidence:
+  - finalMessage
+- id: decision-not-reasked
+  serves: no-reask
+  type: yes_no
+  question: Does the reply record the owner's confirmed decision without asking the user to choose again?
+  evidence:
+  - finalMessage

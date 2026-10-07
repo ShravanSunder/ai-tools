@@ -108,6 +108,7 @@ Probed with a throwaway script: Deno 2.9.6 from npm, `acpx@0.19.4` `acpx/runtime
 - The adapter's bundled Codex rejects `gpt-6-luna` with HTTP 400 inside the reply text while the turn reports `completed` with empty `model_usage`.
 - A prompt that names a skill explicitly (`$name`) gets that `SKILL.md` injected into context with no tool call, and the subject follows it; a skill found through its description is read with a visible tool call.
 - Run inside another agent's Codex sandbox, the runner's subjects see plain reads escalate to permission requests (nested sandboxes); run from a normal shell, the same scenario reads with no requests. The runner refuses to start inside a Codex sandbox.
+- `pnpm dlx` caches a `file:` package by its path and reuses that copy for a day, so local edits run stale; the documented invocation is `pnpm --config.dlx-cache-max-age=0 dlx file:<dir>`, which installs the current folder each time (a few seconds).
 - `pnpm dlx file:<dir>` installs the package under `node_modules`, where Deno will not strip TypeScript types, so the `bin` shim copies `src/` to a temporary directory, links the package's own installed dependencies beside it, and starts Deno there.
 - With `features.multi_agent_v2.enabled = true` an isolated subject can start a helper agent; the parent's events show it as an `other` tool call titled `Start subagent <name>` plus a `wait`, while the helper's own reads stay in its own thread.
 

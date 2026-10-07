@@ -4,7 +4,7 @@ This reference owns how to run the skill eval runner and read what it returns. R
 
 ## Before You Run
 
-- **Runner path.** Run it only with `pnpm dlx file:<runner-dir>`, where `<runner-dir>` is the `packages/skill-eval-runner` folder of the ai-tools checkout. Ask the user for that path once if you do not know it. Never install the runner, Deno, Codex, or anything else; `pnpm dlx` leaves nothing behind.
+- **Runner path.** Run it only with `pnpm --config.dlx-cache-max-age=0 dlx file:<runner-dir>`, where `<runner-dir>` is the `packages/skill-eval-runner` folder of the ai-tools checkout. Ask the user for that path once if you do not know it. Never install the runner, Deno, Codex, or anything else; `pnpm dlx` leaves nothing behind. The cache flag matters: without it `pnpm dlx` reuses its first copy of a local folder for a day and runs stale code.
 - **Codex.** Subjects and the judge run on `gpt-6-luna` through Codex. The runner uses the `codex` on `PATH`, or `--codex-path <path>`. The user must be logged in to Codex with a file-based login.
 - **A normal shell.** Start the runner from a shell that is not itself inside an agent's sandbox. Inside a Codex sandbox the subjects' reads are blocked, so the runner refuses to start there; ask the user to run the command, or run it from an unsandboxed session.
 - **Cost.** Each Run is one subject session (Luna, medium effort) plus one judge session (Luna, high effort) per Check that reaches a judge leaf. Start with `--runs 1`.
@@ -13,18 +13,18 @@ This reference owns how to run the skill eval runner and read what it returns. R
 
 ```bash
 # check scenario files without running anything
-pnpm dlx file:<runner-dir> validate --repo <repo> --skill <skill-dir> [--scenario <id>]...
+pnpm --config.dlx-cache-max-age=0 dlx file:<runner-dir> validate --repo <repo> --skill <skill-dir> [--scenario <id>]...
 
 # run scenarios: one fresh subject per Run, in an isolated snapshot
-pnpm dlx file:<runner-dir> run --repo <repo> --skill <skill-dir> [--scenario <id>]... \
+pnpm --config.dlx-cache-max-age=0 dlx file:<runner-dir> run --repo <repo> --skill <skill-dir> [--scenario <id>]... \
   [--runs <n>] [--parallel <n>] [--rev working-tree|<git-rev>] [--out <dir>]
 
 # lint a skill set (code rules; Jev cards when the engine exists)
-pnpm dlx file:<runner-dir> lint --skill-set <dir> [--forbid <word>]...
+pnpm --config.dlx-cache-max-age=0 dlx file:<runner-dir> lint --skill-set <dir> [--forbid <word>]...
 
 # judge a done bar
-pnpm dlx file:<runner-dir> done-bar --kind new-from-intent --repo <repo> --skill <skill-dir> [--head <rev>]
-pnpm dlx file:<runner-dir> done-bar --kind fix-for-recorded-failure --repo <repo> --skill <skill-dir> \
+pnpm --config.dlx-cache-max-age=0 dlx file:<runner-dir> done-bar --kind new-from-intent --repo <repo> --skill <skill-dir> [--head <rev>]
+pnpm --config.dlx-cache-max-age=0 dlx file:<runner-dir> done-bar --kind fix-for-recorded-failure --repo <repo> --skill <skill-dir> \
   --scenario <id> --base <rev-before-fix> [--head <rev>]
 ```
 

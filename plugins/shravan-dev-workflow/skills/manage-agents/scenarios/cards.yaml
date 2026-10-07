@@ -1,0 +1,19 @@
+cards:
+- id: existing-command-needs-no-adapter
+  serves: no-adapter-needed
+  type: yes_no
+  question: Does the reply conclude that the existing ACP command needs no custom adapter and can be called directly?
+  evidence:
+  - finalMessage
+- id: build-gate-before-adapter
+  serves: build-gate-first
+  type: yes_no
+  question: Does the reply say an adapter should be built only after confirming why calling the existing command, a built-in agent, or a config-defined agent cannot do the job?
+  evidence:
+  - finalMessage
+- id: adapter-security-route
+  serves: security-route
+  type: yes_no
+  question: Does the reply route any adapter-building work through a security or sensitive-surface review before it starts?
+  evidence:
+  - finalMessage

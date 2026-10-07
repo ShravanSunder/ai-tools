@@ -6,9 +6,6 @@ export default defineConfig({
       truncateThreshold: 0,
     },
     globals: true,
-    include: ["lib/**/*.test.ts", "evals/**/*.eval.ts"],
-    maxConcurrency: 8,
-    reporters: ["vitest-evals/reporter"],
-    testTimeout: 900_000,
+    include: ["lib/**/*.test.ts"],
   },
 });
