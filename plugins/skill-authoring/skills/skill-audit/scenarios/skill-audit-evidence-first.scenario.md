@@ -16,7 +16,7 @@ I checked the current workflow skills first. Planning, plan review, implementati
 ```yaml
 checks:
 - id: no-master-skill
-  criterion: The reply recommends against one master skill covering every phase, offering a narrower change instead.
+  criterion: The reply declines to build one master skill covering planning, review, debugging, and handoff.
   root: ask
   nodes:
     ask:
@@ -30,13 +30,43 @@ checks:
       kind: judge
       evidence:
       - finalMessage
-- id: states-the-skill-shape
-  criterion: Unless it recommends skip, the reply says what stays in SKILL.md and what moves to references.
+- id: states-skill-md-boundary
+  criterion: If the reply recommends an update or a create, it says what stays in SKILL.md; a reply with no update or create recommendation passes.
   root: ask
   nodes:
     ask:
       kind: jev
-      card: skill-shape-stated
+      card: skill-md-boundary-stated
+      branches:
+        'yes': pass
+        'no': fail
+        uncertain: judge
+    judge:
+      kind: judge
+      evidence:
+      - finalMessage
+- id: states-reference-allocation
+  criterion: If the reply recommends an update or a create, it says what moves to references; a reply with no update or create recommendation passes.
+  root: ask
+  nodes:
+    ask:
+      kind: jev
+      card: reference-allocation-stated
+      branches:
+        'yes': pass
+        'no': fail
+        uncertain: judge
+    judge:
+      kind: judge
+      evidence:
+      - finalMessage
+- id: states-script-need
+  criterion: If the reply recommends an update or a create, it says whether anything belongs in scripts; a reply with no update or create recommendation passes.
+  root: ask
+  nodes:
+    ask:
+      kind: jev
+      card: script-need-stated
       branches:
         'yes': pass
         'no': fail
@@ -46,7 +76,7 @@ checks:
       evidence:
       - finalMessage
 - id: states-pressure-coverage
-  criterion: Unless it recommends skip, the reply gives the pressure-scenario status for its recommendation.
+  criterion: If the reply recommends an update or a create, it gives the pressure-scenario status; a reply with no update or create recommendation passes.
   root: ask
   nodes:
     ask:
@@ -61,7 +91,7 @@ checks:
       evidence:
       - finalMessage
 - id: names-the-fix-owner
-  criterion: Unless it recommends skip, the reply says whether the fix belongs in skill wording, a code check, or the tool.
+  criterion: The reply says whether the fix belongs in skill wording, a code check, or the tool.
   root: ask
   nodes:
     ask:

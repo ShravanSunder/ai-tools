@@ -60,7 +60,7 @@ Authority: `authorized` means an explicit owner decision recorded on the thread 
 | U11 | C1, C5 | The pressure-testing method belongs to skill-authoring, and the runner is portable: any repo can pressure-test its own skills, with scenarios living beside those skills. | authorized 10-02, portability 10-04 | must |
 | U12 | C1, S1 | Old names stop working at once; no compatibility shims (owner's standing hard-cutover rule). | authorized (standing rule) | must |
 | U34 | C1, C2, C5 | The eval runner is its own package: local use now, published as a real package later. | authorized 10-06 | must |
-| U35 | C1, C2, C5 | Run tools only with `pnpm dlx`; no skill installs an executable. | authorized 10-06 | must |
+| U35 | C1, C2, C5 | Run tools only with `pnpm dlx`; no skill installs an executable. Clarified 10-06: tools the user's host already provides (their Claude or Codex CLI and the validators those ship) are used as they are; any other tool runs only through `pnpm dlx`; nothing is installed. | authorized 10-06, scope clarified by the Lead 10-06 | must |
 
 ## Needs found in the evidence
 
