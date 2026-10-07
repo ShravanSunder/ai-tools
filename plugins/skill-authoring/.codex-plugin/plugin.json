@@ -1,0 +1,40 @@
+{
+  "name": "skill-authoring",
+  "version": "0.1.0",
+  "description": "Skill authoring for any repository: design and write skills, review them with independent agents, prove their behavior with fresh agent runs, and audit which skills to create, update, merge, or skip.",
+  "author": {
+    "name": "Shravan Sunder"
+  },
+  "keywords": [
+    "skill-authoring",
+    "skills",
+    "skill-orchestrator",
+    "skill-creation",
+    "skill-review",
+    "skill-pressure-testing",
+    "skill-audit",
+    "pressure-testing",
+    "evals",
+    "codex",
+    "claude-code"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Skill Authoring",
+    "shortDescription": "Create, review, pressure-test, and audit skills",
+    "longDescription": "Use Skill Authoring to carry a skill change from spec to release, design and write one skill with its skill spec, review it with independent agents and lint, prove its behavior with fresh Luna runs through a portable eval runner, and audit which skills a repository should create, update, merge, or skip.",
+    "developerName": "Shravan Sunder",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Interactive",
+      "Read"
+    ],
+    "defaultPrompt": [
+      "Use skill-orchestrator to carry this skill change from spec to release.",
+      "Use skill-creation to design or update one named skill.",
+      "Use skill-review to independently review this skill.",
+      "Use skill-pressure-testing to prove this skill change.",
+      "Use skill-audit to audit these skills against session evidence."
+    ]
+  }
+}

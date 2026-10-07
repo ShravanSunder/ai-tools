@@ -59,7 +59,7 @@ Every file in `skills-creation` and `skill-audit` was read in full on 2026-10-06
 
 | Today | Lines | New home | Edit on the way |
 |---|---|---|---|
-| `skills-creation/SKILL.md` craft: mental model, four surfaces, invocation, information hierarchy, call grammar, progressive disclosure, leading words, steering, what belongs in `SKILL.md` | 10–128 | `skill-creation/SKILL.md` | role emojis and Operator dispatch removed; the call grammar keeps only the reference forms |
+| `skills-creation/SKILL.md` craft: mental model, four surfaces, invocation, information hierarchy, call grammar, progressive disclosure, leading words, steering, what belongs in `SKILL.md` | 10–128 | `skill-creation/SKILL.md` | role emojis removed; the Operator dispatch form becomes "a helper agent running a prescribed procedure" |
 | `skills-creation/SKILL.md` steps 1–5 (promise and success, authoring basis and proof posture, trigger, main path, depth) and step 7 (implement) | 176–247, 253–255 | `skill-creation/SKILL.md` | `discuss-pathfinding` / `practices-research` become "ask the user" / "read the sources"; humanizer loads deleted |
 | `skills-creation/SKILL.md` lifecycle: two review stages, convergence rule, accepted boundary, run summary, workflow intro, steps 6, 8, 9, 10, completion blockers | 130–174, 249–251, 257–317 | `skill-orchestrator/SKILL.md` | owner brief becomes "bring the decision to the user"; trace lines deleted |
 | `review/spec-review.md` "Spec Artifact" (the Skill spec doc and its slots) | 9–27 | `skill-creation/references/skill-spec.md` | gains the run-status slot (`R8`) |

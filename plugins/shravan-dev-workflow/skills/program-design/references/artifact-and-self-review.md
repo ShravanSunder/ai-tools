@@ -106,7 +106,7 @@ Re-read the whole artifact:
 - Requirements and Specification remain separately identifiable, and the Program Design preserves rather than rewrites their authorized boundary and observable contract;
 - two capable implementers would build the same structural behavior and the same contract shapes.
 
-Run the self-check against the current program design and governing specification. Keep target classification, source/review coverage, readiness, acceptance, planning, PR, and release state in the returned result rather than durable program-design prose. A source pointer may remain when later readers need it for authoritative lookup. The self-check is not independent review.
+Run the self-check against the current program design and governing specification. Keep source/review coverage, readiness, acceptance, planning, PR, and release state in the returned result rather than durable program-design prose. A source pointer may remain when later readers need it for authoritative lookup. The self-check is not independent review.
 
 Complete when:
 

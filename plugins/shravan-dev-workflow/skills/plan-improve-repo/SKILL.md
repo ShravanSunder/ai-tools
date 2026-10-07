@@ -15,10 +15,6 @@ Inspired by the MIT-licensed `shadcn-improve` plugin mechanics: scout broadly, v
 
 ## Entry And Planning Admission
 
-Before repo recon, record `target classification: general-repo | runtime-skill-package`.
-
-If the request directly creates, updates, evaluates, or plans changes to one named runtime skill package, require the explicit `skills-creation` parent packet/result identity authorizing this composition. Without it, return the `skills-creation` route and stop before recon.
-
 Vetted findings and prioritized backlogs may be returned without planning admission. Before writing a new completed plan or returning a `ready` current-state validation receipt for an existing completed canonical plan, classify its planning basis:
 
 ```text
@@ -44,7 +40,7 @@ design-required
 
 `design-required` returns the vetted finding and exact missing semantic owner: Why/What to `spec-design`, structural How to `program-design`, or a complete but unreviewed/stale three-artifact design to `spec-program-review`. Do not write a new completed plan. For an existing plan, return `blocked` in the separate current-state validation receipt without rewriting it.
 
-Completion: target classification and, when applicable, the exact `skills-creation` parent identity are recorded; every written plan carries one current admissible planning basis, the current review result or a pointer to it when design-bearing, and its semantic-freshness record. Any `ready` label belongs only to a separate current-state validation receipt.
+Completion: every written plan carries one current admissible planning basis, the current review result or a pointer to it when design-bearing, and its semantic-freshness record. Any `ready` label belongs only to a separate current-state validation receipt.
 
 ## Core Rules
 
@@ -56,7 +52,7 @@ Completion: target classification and, when applicable, the exact `skills-creati
 - Treat subagent findings as candidates, not truth. Re-open cited files before accepting a finding.
 - Delegated audit work returns evidence and candidate findings only. Bounded mechanical validation or proof checks may also return observed results. The Lead performs admission, prioritization, all plan structure and prose, and the governing validation/acceptance judgment; no helper authors or accepts the plan.
 - Never quote or copy secret values. Report secret classes and file locations only when relevant.
-- If asked to implement a direct plan-only result, establish new delivery intent through `plan-implementation`; do not upgrade the existing plan. If asked for independent implementation review, route `general-repo` work to `implementation-review` and explicitly composed `runtime-skill-package` work back to `skills-creation`; never invoke a retired skill or treat validation as either execution or review.
+- If asked to implement a direct plan-only result, establish new delivery intent through `plan-implementation`; do not upgrade the existing plan. If asked for independent implementation review, route it to `implementation-review`; never invoke a retired skill or treat validation as either execution or review.
 - If asked to validate a generated plan, return a separate read-only current-state validation receipt. Validation never authorizes execution or changes the canonical plan record.
 - A ready direct plan defaults to `plan-only` and is not executable. An orchestrated goal returns the admitted finding pointer, basis classification, evidence pointers, and applicability anchors to `plan-implementation`; plan completion, validation, handoff, or ticket state never upgrades delivery intent.
 
@@ -117,7 +113,7 @@ Completion: target classification and, when applicable, the exact `skills-creati
 9. Route next:
    - `plan-handoff` to package the plan for another agent
    - `plan-implementation` when an owner explicitly requests delivery of a direct plan-only result
-   - `implementation-review` for `general-repo` independent implementation review, or `skills-creation` for an explicitly composed `runtime-skill-package`
+   - `implementation-review` for independent implementation review
 
 ## Plan Validation Flow
 

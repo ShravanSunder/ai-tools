@@ -71,8 +71,7 @@ development and fitting proof complete
   -> orchestrator assessment against the original need, design, plan, current diff, actual proof, complexity, PR boundaries, and integration
 
 orchestrator assessment complete
-  -> implementation-review for general-domain work
-  -> skills-creation implementation review for a composed runtime skill package
+  -> implementation-review
 
 accepted implementation finding; review has not returned not-converging
   -> implement-plan by the same implementer, fresh affected proof, then the same 🔎 Review Sidekick

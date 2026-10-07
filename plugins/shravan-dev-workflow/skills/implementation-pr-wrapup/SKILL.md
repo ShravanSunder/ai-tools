@@ -21,7 +21,7 @@ Use this for:
 - handling existing PR feedback and getting a PR merge-ready;
 - "merge when ready" or similar conditional merge requests.
 
-Do not use this for fresh code-review discovery. If the user asks to review a PR/diff for bugs, classify `general-domain | runtime-skill-package` and route to `implementation-review | skills-creation` respectively; do not substitute PR wrap-up, checks, comments, or thread handling for independent implementation review.
+Do not use this for fresh code-review discovery. If the user asks to review a PR/diff for bugs, route to `implementation-review`; do not substitute PR wrap-up, checks, comments, or thread handling for independent implementation review.
 
 ## Execution Ownership
 

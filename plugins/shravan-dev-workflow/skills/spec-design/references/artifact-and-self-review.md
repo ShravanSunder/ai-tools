@@ -35,7 +35,6 @@ Use linked slice specifications only when a vertical capability, protocol, domai
 
 Keep these workflow and process details out of the design artifact:
 
-- target classification;
 - source or review coverage;
 - self-check and readiness state;
 - acceptance narration;

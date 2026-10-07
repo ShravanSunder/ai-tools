@@ -1,0 +1,22 @@
+{
+  "name": "skill-authoring",
+  "version": "0.1.0",
+  "description": "Skill authoring for any repository: design and write skills, review them with independent agents, prove their behavior with fresh agent runs, and audit which skills to create, update, merge, or skip.",
+  "author": {
+    "name": "Shravan Sunder"
+  },
+  "keywords": [
+    "skill-authoring",
+    "skills",
+    "skill-orchestrator",
+    "skill-creation",
+    "skill-review",
+    "skill-pressure-testing",
+    "skill-audit",
+    "pressure-testing",
+    "evals",
+    "codex",
+    "claude-code"
+  ],
+  "skills": "./skills/"
+}

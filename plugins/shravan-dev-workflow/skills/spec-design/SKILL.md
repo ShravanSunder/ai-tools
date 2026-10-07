@@ -59,7 +59,7 @@ This skill admits or materializes durable Requirements from already-settled auth
 - proof modalities required by material obligations;
 - the specification artifact and author self-check.
 
-It does not elicit or confirm genuinely unwritten owner meaning and does not choose components, internal owners, dependency direction, state storage, call graphs, recovery mechanisms, task order, files, or exact validation commands, and it does not bind an entity to a package, schema, type, table, or wire shape. Route unwritten owner meaning to `discuss-pathfinding`, structural How and entity binding to `program-design`, review-only work to `spec-program-review`, and one named runtime-skill package to `skills-creation`.
+It does not elicit or confirm genuinely unwritten owner meaning and does not choose components, internal owners, dependency direction, state storage, call graphs, recovery mechanisms, task order, files, or exact validation commands, and it does not bind an entity to a package, schema, type, table, or wire shape. Route unwritten owner meaning to `discuss-pathfinding`, structural How and entity binding to `program-design`, and review-only work to `spec-program-review`.
 
 Routing cases:
 
@@ -104,8 +104,6 @@ When unmade owner meaning blocks Requirements or Specification, use `discuss-pat
 ## Workflow
 
 ### 1. Establish authority, audience, and artifact boundary
-
-Record `target classification: general-domain | runtime-skill-package`. If the target is one named runtime skill package, require the explicit `skills-creation` parent packet/result identity that authorizes this composition. Without it, return the `skills-creation` route and stop before authoring.
 
 Accept an optional call-scoped `new artifact home` policy. When the caller supplies `<project-root>/docs/specs/`, create any new file-backed Requirements and Specification as distinct resolvable paths beneath that home and return both exact paths. Preserve authoritative pre-existing artifacts elsewhere; do not relocate or reject them because of the policy. The artifact-home policy applies only to new outputs in the current call and is not persisted as workflow state.
 
@@ -253,9 +251,9 @@ Completion: the current artifact has a self-check result with exact passes and g
 
 ### 11. Obtain fresh local review when required
 
-Call `spec-program-review` using its `classify-review-requirement` operation with: target classification and the exact `skills-creation` parent packet/result identity when the target is a runtime skill package; requested future mode `specification-only`; the distinct Requirements and Specification identities; scope and claimed semantic effect; governing-source coverage; matched material-risk predicates; and `caller requirement: required | none` (default `none`). Consume the `review-required | non-substantial` result, decision branch, basis, source coverage, caller requirement, and preserved target/parent identities.
+Call `spec-program-review` using its `classify-review-requirement` operation with: requested future mode `specification-only`; the distinct Requirements and Specification identities; scope and claimed semantic effect; governing-source coverage; matched material-risk predicates; and `caller requirement: required | none` (default `none`). Consume the `review-required | non-substantial` result, decision branch, basis, source coverage, caller requirement, and preserved identities.
 
-When `review-required`, invoke `spec-program-review` separately in `specification-only` mode with fresh context and read-only authority, carrying the target classification, distinct Requirements and Specification identities, governing sources, confirmed goal boundary, accepted requirements set, constraints, non-goals, proof claims or gaps, and the exact `skills-creation` parent packet/result identity when applicable. Route accepted Why/What findings back here and follow `spec-program-review`'s bounded review-and-correction-round policy for its convergence rule, parent verification, and any later review.
+When `review-required`, invoke `spec-program-review` separately in `specification-only` mode with fresh context and read-only authority, carrying the distinct Requirements and Specification identities, governing sources, confirmed goal boundary, accepted requirements set, constraints, non-goals, and proof claims or gaps. Route accepted Why/What findings back here and follow `spec-program-review`'s bounded review-and-correction-round policy for its convergence rule, parent verification, and any later review.
 
 Completion: the permitted independent review coverage and parent-verified corrections are ready under `spec-program-review`'s policy, or the exact `non-substantial` basis or block is recorded.
 
@@ -290,7 +288,6 @@ The packet names the exact evidence question, sources, maximum authority, non-go
 
 Do not return `locally-ready` while any of these hold:
 
-- target classification is missing, or a runtime-skill-package target lacks the explicit `skills-creation` parent packet/result identity;
 - substantial file-backed work lacks a present, resolvable Requirements identity and a different present, resolvable Specification identity, or either identity cannot be inspected;
 - Requirements and Specification are collapsed into one artifact, including a combined `Requirements/spec` label or a Requirements artifact used as the Specification;
 - settled authoritative Requirements are duplicated instead of reused, or a normalized Requirements artifact invents or confirms missing owner meaning instead of routing it through `discuss-pathfinding`;
@@ -309,7 +306,7 @@ Do not return `locally-ready` while any of these hold:
 - a picture-type view is passed as fenced plain text while the destination renders Mermaid;
 - delegated evidence was copied as governing prose or a helper originated, organized, rewrote, or chose the expression of Requirements, Specification, a settled section, or a required view;
 - a required independent review is missing, stale, partial, silent, or blocked;
-- target classification, governing-source coverage, self-check, readiness, review state, or acceptance/PR narration appears as specification prose instead of returned workflow state;
+- governing-source coverage, self-check, readiness, review state, or acceptance/PR narration appears as specification prose instead of returned workflow state;
 - either Requirements or Specification identity, source coverage, or non-acceptance boundary is missing.
 - a `locally-ready` result omits `program-design`, recommends more than one next skill, or routes to planning, implementation, or pathfinding;
 - a non-ready terminal invents a continuation instead of returning its exact decision, evidence, or deferral stop;

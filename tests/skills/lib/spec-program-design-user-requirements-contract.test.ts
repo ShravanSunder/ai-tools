@@ -468,7 +468,7 @@ describe("user requirements and design-view contracts", () => {
       "requested future mode `specification-only`; the distinct Requirements and Specification identities; scope and claimed semantic effect",
     );
     expect(specDesign).toContain(
-      "carrying the target classification, distinct Requirements and Specification identities, governing sources, confirmed goal boundary, accepted requirements set, constraints, non-goals, proof claims or gaps",
+      "carrying the distinct Requirements and Specification identities, governing sources, confirmed goal boundary, accepted requirements set, constraints, non-goals, and proof claims or gaps",
     );
   });
 
