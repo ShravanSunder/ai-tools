@@ -31,3 +31,17 @@ Deno.test("fix bar needs base fail and three passes", () => {
     "met",
   );
 });
+Deno.test("fix bar ignores lint and requires every head run to pass", () => {
+  const result = assessDoneBar({
+    kind: "fix-for-recorded-failure",
+    lintClean: false,
+    jevLintAvailable: false,
+    baseVerdict: "fail",
+    runs: [{ id: "1", outcome: observed, verdict: "pass" }, {
+      id: "2",
+      outcome: observed,
+      verdict: "fail",
+    }, { id: "3", outcome: observed, verdict: "pass" }],
+  });
+  assertEquals(result, { kind: "not-met", reason: "fewer-than-3-passes" });
+});

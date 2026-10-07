@@ -19,7 +19,6 @@ export const treeNodeSchema = z.discriminatedUnion("kind", [
     step: codeStepSchema,
     onTrue: nodeRef,
     onFalse: nodeRef,
-    onUnavailable: nodeRef.default("inconclusive"),
   }),
   z.strictObject({
     kind: z.literal("jev"),

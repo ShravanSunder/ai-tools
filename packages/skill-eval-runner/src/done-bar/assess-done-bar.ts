@@ -9,14 +9,14 @@ export type DoneBarInput = {
   baseVerdict?: RunVerdict;
 };
 export function assessDoneBar(input: DoneBarInput): DoneBarResult {
-  if (input.runs.some((r) => r.outcome.kind === "execution-failed")) {
-    return { kind: "not-evaluable", reason: "execution-failed-run" };
-  }
-  if (input.runs.some((r) => r.verdict === "inconclusive")) {
-    return { kind: "not-evaluable", reason: "inconclusive-run" };
-  }
-  if (!input.lintClean) return { kind: "not-met", reason: "lint-failed" };
   if (input.kind === "new-from-intent") {
+    if (!input.lintClean) return { kind: "not-met", reason: "lint-failed" };
+    if (input.runs.some((r) => r.outcome.kind === "execution-failed")) {
+      return { kind: "not-evaluable", reason: "execution-failed-run" };
+    }
+    if (input.runs.some((r) => r.verdict === "inconclusive")) {
+      return { kind: "not-evaluable", reason: "inconclusive-run" };
+    }
     if (!input.jevLintAvailable) {
       return { kind: "not-evaluable", reason: "jev-lint-unavailable" };
     }
@@ -27,8 +27,15 @@ export function assessDoneBar(input: DoneBarInput): DoneBarResult {
   if (input.baseVerdict !== "fail") {
     return { kind: "not-met", reason: "failure-not-reproduced" };
   }
+  if (input.runs.some((r) => r.outcome.kind === "execution-failed")) {
+    return { kind: "not-evaluable", reason: "execution-failed-run" };
+  }
+  if (input.runs.some((r) => r.verdict === "inconclusive")) {
+    return { kind: "not-evaluable", reason: "inconclusive-run" };
+  }
   const passCount = input.runs.filter((r) => r.verdict === "pass").length;
-  return passCount >= 3
+  return passCount >= 3 && input.runs.length >= 3 &&
+      input.runs.every((run) => run.verdict === "pass")
     ? { kind: "met", bar: input.kind, runs: input.runs.map((r) => r.id) }
     : { kind: "not-met", reason: "fewer-than-3-passes" };
 }

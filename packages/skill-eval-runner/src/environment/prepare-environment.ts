@@ -9,6 +9,7 @@ export type PreparedEnvironment = {
   snapshotDir: string;
   homeDir: string;
   codexHome: string;
+  authPath: string;
   agentEnv: Readonly<Record<string, string>>;
   codexAcpBin: string;
   revision: Revision;
@@ -66,9 +67,12 @@ const copyDirectoryContents = async (
 export async function removeScenarioDirectoriesFromSnapshot(
   snapshot: string,
 ): Promise<void> {
+  const hasSkillFile = await Deno.stat(join(snapshot, "SKILL.md"))
+    .then(() => true)
+    .catch(() => false);
   for await (const entry of Deno.readDir(snapshot)) {
     const target = join(snapshot, entry.name);
-    if (entry.isDirectory && entry.name === "scenarios") {
+    if (entry.isDirectory && entry.name === "scenarios" && hasSkillFile) {
       await Deno.remove(target, { recursive: true });
     } else if (entry.isDirectory) {
       await removeScenarioDirectoriesFromSnapshot(target);
@@ -114,7 +118,13 @@ const exposeSkills = async (
     }
     await copyDirectoryContents(join(skillSetDir, entry.name), target, true);
   }
-  const shared = join(skillSetDir, "shared-references");
+  await copySharedReferences(skillSetDir, snapshot);
+};
+export async function copySharedReferences(
+  skillSetDir: string,
+  snapshot: string,
+): Promise<void> {
+  const shared = join(dirname(skillSetDir), "shared-references");
   try {
     await Deno.stat(shared);
     await copyDirectoryContents(
@@ -122,7 +132,7 @@ const exposeSkills = async (
       join(snapshot, ".agents", "shared-references"),
     );
   } catch { /* no shared references */ }
-};
+}
 const discoverCodex = async (): Promise<string> => {
   const configured = Deno.env.get("CODEX_PATH");
   if (configured) return configured;
@@ -150,6 +160,7 @@ export async function prepareEnvironment(
   revision: Revision = { kind: "working-tree" },
   fixtures: readonly ScenarioFixture[] = [],
   scenarioPath?: string,
+  codexPathOverride?: string,
 ): Promise<EnvironmentResult> {
   const root = await mkdtemp(join(tmpdir(), "skill-eval-env-")),
     snapshot = join(root, "snapshot");
@@ -171,14 +182,18 @@ export async function prepareEnvironment(
       ? skill.skillPath
       : join(skill.repoRoot, skill.skillPath);
     await exposeSkills(skillDir, snapshot);
-    const codexPath = await discoverCodex();
-    if (!codexPath) return { kind: "failed", reason: "codex-not-found" };
+    const codexPath = codexPathOverride ?? await discoverCodex();
+    if (!codexPath) {
+      await Deno.remove(root, { recursive: true });
+      return { kind: "failed", reason: "codex-not-found" };
+    }
     const sourceCodexHome = Deno.env.get("CODEX_HOME") ??
         join(Deno.env.get("HOME") ?? "", ".codex"),
       authPath = join(sourceCodexHome, "auth.json");
     try {
       await Deno.stat(authPath);
     } catch {
+      await Deno.remove(root, { recursive: true });
       return { kind: "failed", reason: "no-agent-login" };
     }
     const homeDir = join(root, "home"), codexHome = join(root, "codex-home");
@@ -192,6 +207,7 @@ export async function prepareEnvironment(
       features: {
         hooks: false,
         remote_plugin: false,
+        memories: false,
         multi_agent_v2: { enabled: true },
       },
     };
@@ -211,6 +227,7 @@ export async function prepareEnvironment(
         snapshotDir: snapshot,
         homeDir,
         codexHome,
+        authPath,
         agentEnv,
         codexAcpBin: join(dirname(packageJson), "dist/index.js"),
         revision,

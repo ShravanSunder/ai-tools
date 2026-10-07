@@ -15,7 +15,8 @@ import {
   normalizeAssistantMessage,
   normalizeRuntimeEvents,
   type RecordedRuntimeEvent,
-} from "./normalize-runtime-events.ts";
+} from "../runtime/normalize-acp-events.ts";
+import { decideSubjectPermission } from "./permission-policy.ts";
 import type { RunOutcome } from "../contracts/run.ts";
 
 const numeric = (value: unknown): number =>
@@ -81,27 +82,22 @@ export async function runSubject(
         timeoutMs: config.timeoutMs ??
           scenario.frontmatter.timeoutSeconds * 1000,
         onPermissionRequest: (request) => {
-          const requestTitle =
-            (request.raw as { toolCall?: { title?: string | null } }).toolCall
-              ?.title ?? "";
-          const rawRequest = JSON.stringify(request.raw);
-          const canRead = request.inferredKind === "read" ||
-            request.inferredKind === "search" ||
-            /^Read file\b/i.test(requestTitle) ||
-            /\b(?:cat|sed|head|tail|rg|grep)\b/i.test(requestTitle) ||
-            (/\.agents[\\/]skills[\\/]/.test(rawRequest) &&
-              !/\b(?:write|edit|delete|move|patch)\b/i.test(rawRequest));
+          const permissionDecision = decideSubjectPermission(
+            request.inferredKind,
+          );
+          const canRead = permissionDecision === "allow_once";
           if (!canRead) {
             permissionRequests.push({
               turnIndex: index,
               toolCallId: request.raw.toolCall.toolCallId,
               kind: request.inferredKind,
-              title: requestTitle || undefined,
+              title: (request.raw as { toolCall?: { title?: string | null } })
+                .toolCall?.title ?? undefined,
               decision: "rejected",
             });
           }
           return Promise.resolve({
-            outcome: canRead ? "allow_once" : "reject_once",
+            outcome: permissionDecision,
           });
         },
       });

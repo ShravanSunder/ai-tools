@@ -7,8 +7,13 @@ import { evaluateRun } from "./qa/evaluate-run.ts";
 import { NoEngineJev } from "./jev/jev-port.ts";
 import { AcpxJudge } from "./judge/acpx-judge.ts";
 import { lintSkills } from "./lint/lint-skills.ts";
-import { type BatchRun, writeBatch } from "./report/write-batch.ts";
-import type { SkillRef } from "./contracts/common.ts";
+import { assessDoneBar } from "./done-bar/assess-done-bar.ts";
+import {
+  type BatchRun,
+  summarizeBatch,
+  writeBatch,
+} from "./report/write-batch.ts";
+import type { Revision, SkillRef } from "./contracts/common.ts";
 const args = Deno.args;
 const command = args[0] ?? "help";
 const value = (name: string, required = true): string | undefined => {
@@ -17,6 +22,10 @@ const value = (name: string, required = true): string | undefined => {
   if (required && !result) throw new Error(`missing ${name}`);
   return result;
 };
+const values = (name: string): readonly string[] =>
+  args.flatMap((arg, index) =>
+    arg === name && args[index + 1] ? [args[index + 1]] : []
+  );
 const numberValue = (name: string, defaultValue: number): number => {
   const raw = value(name, false);
   if (!raw) return defaultValue;
@@ -26,40 +35,140 @@ const numberValue = (name: string, defaultValue: number): number => {
   }
   return parsed;
 };
-const repoSkill = (): SkillRef => {
-  const repo = value("--repo") ?? Deno.cwd(), skill = value("--skill") ?? ".";
-  return { repoRoot: repo, skillPath: skill };
+const repoSkill = (): SkillRef => ({
+  repoRoot: value("--repo") ?? Deno.cwd(),
+  skillPath: value("--skill") ?? ".",
+});
+const revision = (): Revision => {
+  const raw = value("--rev", false) ?? "working-tree";
+  return raw === "working-tree"
+    ? { kind: "working-tree" }
+    : { kind: "commit", value: raw };
 };
-const printJson = (v: unknown): void => console.log(JSON.stringify(v, null, 2));
+const printJson = (valueToPrint: unknown): void =>
+  console.log(JSON.stringify(valueToPrint, null, 2));
+const runOne = async (
+  scenario: import("./contracts/scenario.ts").Scenario,
+  skill: SkillRef,
+  runId: string,
+  rev: Revision,
+  codexPath: string | undefined,
+): Promise<BatchRun> => {
+  const env = await prepareEnvironment(
+    skill,
+    rev,
+    scenario.frontmatter.fixtures,
+    scenario.path,
+    codexPath,
+  );
+  if (env.kind !== "ready") {
+    return {
+      id: runId,
+      outcome: {
+        kind: "execution-failed",
+        runId,
+        cause: "agent-start-failed",
+        detail: env.reason,
+      },
+      checks: [],
+      verdict: "execution-failed",
+    };
+  }
+  try {
+    const outcome = await runSubject(scenario, env.environment, { runId });
+    const evaluated = outcome.kind === "observed"
+      ? await evaluateRun(scenario, outcome, {
+        jev: new NoEngineJev(),
+        judge: new AcpxJudge(env.environment),
+      })
+      : { checks: [], verdict: "execution-failed" as const };
+    return {
+      id: runId,
+      outcome,
+      checks: evaluated.checks,
+      verdict: evaluated.verdict,
+    };
+  } finally {
+    await env.environment.dispose();
+  }
+};
+const runScenarios = async (
+  skill: SkillRef,
+  scenarios: readonly import("./contracts/scenario.ts").Scenario[],
+  out: string,
+  count: number,
+  parallel: number,
+  rev: Revision,
+  codexPath: string | undefined,
+): Promise<
+  { summaries: readonly ReturnType<typeof summarizeBatch>[]; exitCode: number }
+> => {
+  const summaries: ReturnType<typeof summarizeBatch>[] = [];
+  let exitCode = 0;
+  for (
+    const scenario of scenarios.filter((candidate) =>
+      candidate.frontmatter.status === "active"
+    )
+  ) {
+    const results: Array<BatchRun | undefined> = [];
+    let nextIndex = 0;
+    await Promise.all(
+      Array.from({ length: Math.min(parallel, count) }, async () => {
+        while (nextIndex < count) {
+          const index = nextIndex++;
+          results[index] = await runOne(
+            scenario,
+            skill,
+            `${scenario.frontmatter.scenarioId}-${index + 1}`,
+            rev,
+            codexPath,
+          );
+        }
+      }),
+    );
+    const runs = results.filter((run): run is BatchRun => run !== undefined);
+    if (runs.some((run) => run.verdict !== "pass")) exitCode = 1;
+    await writeBatch(
+      join(out, scenario.frontmatter.scenarioId),
+      scenario,
+      runs,
+    );
+    summaries.push(summarizeBatch(scenario, runs));
+    console.log(join(out, scenario.frontmatter.scenarioId));
+  }
+  await Deno.writeTextFile(
+    join(out, "batch.json"),
+    JSON.stringify({ scenarios: summaries }, null, 2),
+  );
+  return { summaries, exitCode };
+};
 async function main(): Promise<number> {
   if (command === "help" || command === "--help") {
     console.log("skill-eval-runner validate|run|lint|done-bar");
     return 0;
   }
+  const scenarioIds = values("--scenario");
   if (command === "lint") {
     const dir = value("--skill-set", false) ?? value("--skill", false) ??
       Deno.cwd();
-    const forbidden: string[] = [];
-    for (let i = 0; i < args.length - 1; i++) {
-      if (args[i] === "--forbid") forbidden.push(args[i + 1]);
-    }
-    const findings = await lintSkills(dir, forbidden);
-    printJson(findings);
-    return findings.length ? 1 : 0;
-  }
-  if (command === "validate") {
-    const result = await loadScenarios(repoSkill());
+    const result = await lintSkills(dir, values("--forbid"));
     printJson(result);
-    return result.kind === "loaded" ? 0 : 2;
+    return result.findings.length ? 1 : 0;
+  }
+  const skill = repoSkill();
+  const loaded = await loadScenarios(
+    skill,
+    scenarioIds.length > 0 ? scenarioIds : undefined,
+  );
+  if (command === "validate") {
+    printJson(loaded);
+    return loaded.kind === "loaded" ? 0 : 2;
   }
   if (command === "run") {
-    const skill = repoSkill();
-    const loaded = await loadScenarios(skill);
     if (loaded.kind !== "loaded") {
       printJson(loaded);
       return 2;
     }
-    const count = numberValue("--runs", 1);
     const out = value("--out", false) ??
       join(
         Deno.env.get("XDG_CACHE_HOME") ??
@@ -69,84 +178,107 @@ async function main(): Promise<number> {
         crypto.randomUUID(),
       );
     await mkdir(out, { recursive: true });
-    let overall = 0;
-    for (
-      const scenario of loaded.scenarios.filter((s) =>
-        s.frontmatter.status === "active"
-      )
-    ) {
-      const parallel = numberValue("--parallel", 3);
-      const results: Array<BatchRun | undefined> = [];
-      let nextIndex = 0;
-      const runOne = async (index: number): Promise<BatchRun> => {
-        const runId = `${scenario.frontmatter.scenarioId}-${index + 1}`;
-        const env = await prepareEnvironment(
-          skill,
-          { kind: "working-tree" },
-          scenario.frontmatter.fixtures,
-          scenario.path,
-        );
-        if (env.kind !== "ready") {
-          return {
-            id: runId,
-            outcome: {
-              kind: "execution-failed",
-              runId,
-              cause: "agent-start-failed",
-              detail: env.reason,
-            },
-            checks: [],
-            verdict: "execution-failed",
-          };
-        }
-        try {
-          const outcome = await runSubject(scenario, env.environment, {
-            runId,
-          });
-          const judged = outcome.kind === "observed"
-            ? await evaluateRun(scenario, outcome, {
-              jev: new NoEngineJev(),
-              judge: new AcpxJudge(env.environment),
-            })
-            : { checks: [], verdict: "execution-failed" as const };
-          return {
-            id: runId,
-            outcome,
-            checks: judged.checks,
-            verdict: judged.verdict,
-          };
-        } finally {
-          await env.environment.dispose();
-        }
-      };
-      await Promise.all(
-        Array.from({ length: Math.min(parallel, count) }, async () => {
-          while (nextIndex < count) {
-            const index = nextIndex++;
-            results[index] = await runOne(index);
-          }
-        }),
-      );
-      const runs = results.filter((run): run is BatchRun => run !== undefined);
-      if (runs.some((run) => run.verdict !== "pass")) overall = 1;
-      const dir = await writeBatch(
-        join(out, scenario.frontmatter.scenarioId),
-        scenario,
-        runs,
-      );
-      console.log(dir);
-    }
-    return overall;
+    return (await runScenarios(
+      skill,
+      loaded.scenarios,
+      out,
+      numberValue("--runs", 1),
+      numberValue("--parallel", 3),
+      revision(),
+      value("--codex-path", false),
+    )).exitCode;
   }
   if (command === "done-bar") {
-    const skill = repoSkill();
-    const loaded = await loadScenarios(skill);
     if (loaded.kind !== "loaded") {
       printJson({ kind: "not-evaluable", reason: "no-active-scenario" });
       return 1;
     }
-    printJson({ kind: "not-evaluable", reason: "jev-lint-unavailable" });
-    return 1;
+    const out = value("--out", false) ??
+      join(
+        Deno.env.get("XDG_CACHE_HOME") ??
+          join(Deno.env.get("HOME") ?? "/tmp", ".cache"),
+        "skill-evals",
+        skill.repoRoot.replaceAll("/", "-"),
+        crypto.randomUUID(),
+      );
+    await mkdir(out, { recursive: true });
+    const kind = (value("--kind", false) ?? "new-from-intent") as
+      | "new-from-intent"
+      | "fix-for-recorded-failure";
+    const skillDirectory = skill.skillPath.startsWith("/")
+      ? skill.skillPath
+      : join(skill.repoRoot, skill.skillPath);
+    if (kind === "new-from-intent") {
+      const lintResult = await lintSkills(
+        join(skillDirectory, ".."),
+        values("--forbid"),
+      );
+      const result = assessDoneBar({
+        kind,
+        lintClean: lintResult.findings.length === 0,
+        jevLintAvailable: false,
+        runs: [],
+      });
+      await Deno.writeTextFile(
+        join(out, "done-bar.json"),
+        JSON.stringify(result, null, 2),
+      );
+      printJson(result);
+      return result.kind === "met" ? 0 : 1;
+    }
+    const selected = loaded.scenarios.filter((scenario) =>
+      scenario.frontmatter.status === "active"
+    );
+    if (selected.length !== 1) {
+      const result = {
+        kind: "not-evaluable",
+        reason: "no-active-scenario",
+      } as const;
+      await Deno.writeTextFile(
+        join(out, "done-bar.json"),
+        JSON.stringify(result, null, 2),
+      );
+      printJson(result);
+      return 1;
+    }
+    const scenario = selected[0];
+    const base = value("--base");
+    const headRaw = value("--head", false) ?? "working-tree";
+    const head: Revision = headRaw === "working-tree"
+      ? { kind: "working-tree" }
+      : { kind: "commit", value: headRaw };
+    const baseRun = await runOne(
+      scenario,
+      skill,
+      `${scenario.frontmatter.scenarioId}-base`,
+      { kind: "commit", value: base },
+      value("--codex-path", false),
+    );
+    const headRuns: BatchRun[] = [];
+    for (let index = 0; index < 3; index++) {
+      headRuns.push(
+        await runOne(
+          scenario,
+          skill,
+          `${scenario.frontmatter.scenarioId}-head-${index + 1}`,
+          head,
+          value("--codex-path", false),
+        ),
+      );
+    }
+    const result = assessDoneBar({
+      kind,
+      lintClean: true,
+      jevLintAvailable: true,
+      baseVerdict: baseRun.verdict,
+      runs: headRuns,
+    });
+    await Deno.writeTextFile(
+      join(out, "done-bar.json"),
+      JSON.stringify(result, null, 2),
+    );
+    printJson(result);
+    return result.kind === "met" ? 0 : 1;
   }
   throw new Error(`unknown command ${command}`);
 }

@@ -1,4 +1,5 @@
 import { parse as parseYaml } from "npm:yaml@2.9.1";
+import { basename } from "node:path";
 import { type CheckTree, checkTreeSchema } from "../contracts/check-tree.ts";
 import {
   type QuestionCard,
@@ -77,7 +78,7 @@ const inspectTree = (
     visiting.add(ref);
     let ok = false;
     if (node.kind === "code") {
-      ok = [node.onTrue, node.onFalse, node.onUnavailable].map(walk).every(
+      ok = [node.onTrue, node.onFalse].map(walk).every(
         Boolean,
       );
     } else if (node.kind === "jev") {
@@ -149,7 +150,15 @@ export async function loadScenarios(
       if (card.success) cards.set(card.data.id, card.data);
       else errors.push(`invalid question card: ${card.error.message}`);
     }
-  } catch { /* cards are optional */ }
+  } catch (error) {
+    if (!(error instanceof Deno.errors.NotFound)) {
+      errors.push(
+        `invalid cards.yaml: ${
+          error instanceof Error ? error.message : String(error)
+        }`,
+      );
+    }
+  }
   const scenarios: Scenario[] = [];
   for (const path of entries) {
     const text = await Deno.readTextFile(path);
@@ -163,6 +172,13 @@ export async function loadScenarios(
     if (!frontmatter.success) {
       errors.push(`${path}: invalid frontmatter: ${frontmatter.error.message}`);
       continue;
+    }
+    if (frontmatter.data.skill !== basename(skillDir)) {
+      errors.push(
+        `${path}: skill must equal scenario skill directory ${
+          basename(skillDir)
+        }`,
+      );
     }
     if (ids && !ids.includes(frontmatter.data.scenarioId)) continue;
     const sections = parseSections(fm.body);
@@ -183,6 +199,9 @@ export async function loadScenarios(
     const rawChecks = isRecord(parsed) && Array.isArray(parsed.checks)
       ? parsed.checks
       : [];
+    if (rawChecks.length === 0) {
+      errors.push(`${path}: at least one check is required`);
+    }
     const checks: CheckTree[] = [];
     for (const raw of rawChecks) {
       const parsedCheck = checkTreeSchema.safeParse(raw);
@@ -247,21 +266,32 @@ export async function loadScenarios(
       path,
     };
     const scenario: Scenario = scenarioCandidate;
-    const references: string[] = cards.size
-      ? [...cards.values()].flatMap((card) =>
-        card.evidence.flatMap((evidence) =>
-          typeof evidence === "object" ? [evidence.file] : []
-        )
-      )
-      : [];
+    const fixtureTargets = new Set(
+      frontmatter.data.fixtures.map((fixture) => fixture.target),
+    );
+    for (const card of cards.values()) {
+      for (const evidence of card.evidence) {
+        if (typeof evidence === "object") {
+          errors.push(
+            `${path}: file evidence is not supported in the first pass`,
+          );
+          if (credentialPattern.test(evidence.file)) {
+            errors.push(
+              `${path}: credential-pattern evidence file ${evidence.file}`,
+            );
+          }
+        }
+      }
+    }
+    const references: string[] = [];
     for (const check of checks) {
       for (const node of Object.values(check.nodes)) {
         if (node.kind === "judge") {
-          references.push(
-            ...node.evidence.flatMap((evidence) =>
-              typeof evidence === "object" ? [evidence.file] : []
-            ),
-          );
+          if (node.evidence.some((evidence) => typeof evidence === "object")) {
+            errors.push(
+              `${path}: file evidence is not supported in the first pass`,
+            );
+          }
         }
         if (node.kind === "code" && "readFile" in node.step) {
           references.push(node.step.readFile);
@@ -269,10 +299,10 @@ export async function loadScenarios(
       }
     }
     for (const reference of references) {
-      if (credentialPattern.test(reference)) {
-        errors.push(`${path}: credential-pattern evidence file ${reference}`);
-        continue;
-      }
+      const fixtureReference = reference.startsWith("repo:")
+        ? reference.slice(5)
+        : reference;
+      if (fixtureTargets.has(fixtureReference)) continue;
       try {
         await Deno.stat(resolveFileReference(skill, reference));
       } catch {

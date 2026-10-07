@@ -52,15 +52,16 @@ Deno.test("rejects unknown card and cyclic tree", async () => {
 Deno.test("banned word inflections reject while evaluation is allowed", async () => {
   const dir = await Deno.makeTempDir();
   await Deno.mkdir(`${dir}/scenarios`);
+  const skillName = dir.split("/").at(-1)!;
   await Deno.writeTextFile(
     `${dir}/scenarios/inflection.scenario.md`,
-    `---\nscenarioId: inflection\nskill: s\nstatus: active\n---\n## Prompt\nPlease provide an evaluation of this approach.\n## Checks\nchecks: []`,
+    `---\nscenarioId: inflection\nskill: ${skillName}\nstatus: active\n---\n## Prompt\nPlease provide an evaluation of this approach.\n## Checks\nchecks:\n  - id: c\n    criterion: explain\n    root: a\n    nodes:\n      a: {kind: code, step: {toolCallCount: {max: 2}}, onTrue: pass, onFalse: fail}`,
   );
   const allowed = await loadScenarios({ repoRoot: dir, skillPath: dir });
   assertEquals(allowed.kind, "loaded");
   await Deno.writeTextFile(
     `${dir}/scenarios/inflection.scenario.md`,
-    `---\nscenarioId: inflection\nskill: s\nstatus: active\n---\n## Prompt\nPlease compare these approaches.\n## Checks\nchecks: []`,
+    `---\nscenarioId: inflection\nskill: ${skillName}\nstatus: active\n---\n## Prompt\nPlease compare these approaches.\n## Checks\nchecks: []`,
   );
   const rejected = await loadScenarios({ repoRoot: dir, skillPath: dir });
   assertEquals(rejected.kind, "invalid");
@@ -70,7 +71,7 @@ Deno.test("rejects invalid scenario fixtures", async () => {
   await Deno.mkdir(`${dir}/scenarios`);
   await Deno.writeTextFile(
     `${dir}/scenarios/bad.scenario.md`,
-    `---\nscenarioId: bad\nskill: s\nstatus: active\nfixtures:\n  - source: missing.md\n    target: ../escape.md\n---\n## Prompt\nPlease explain this.\n## Checks\nchecks: []`,
+    `---\nscenarioId: bad\nskill: bad\nstatus: active\nfixtures:\n  - source: missing.md\n    target: ../escape.md\n---\n## Prompt\nPlease explain this.\n## Checks\nchecks: []`,
   );
   const result = await loadScenarios({ repoRoot: dir, skillPath: dir });
   assertEquals(result.kind, "invalid");
@@ -86,11 +87,50 @@ Deno.test("rejects loadedSkill when prompt names the skill explicitly", async ()
   await Deno.mkdir(`${dir}/scenarios`);
   await Deno.writeTextFile(
     `${dir}/scenarios/explicit.scenario.md`,
-    `---\nscenarioId: explicit\nskill: sample-skill\nstatus: active\n---\n## Prompt\nUse $sample-skill to answer this request.\n## Checks\nchecks:\n  - id: c\n    criterion: read\n    root: a\n    nodes:\n      a: {kind: code, step: {loadedSkill: sample-skill}, onTrue: pass, onFalse: fail, onUnavailable: inconclusive}`,
+    `---\nscenarioId: explicit\nskill: sample-skill\nstatus: active\n---\n## Prompt\nUse $sample-skill to answer this request.\n## Checks\nchecks:\n  - id: c\n    criterion: read\n    root: a\n    nodes:\n      a: {kind: code, step: {loadedSkill: sample-skill}, onTrue: pass, onFalse: fail}`,
   );
   const result = await loadScenarios({ repoRoot: dir, skillPath: dir });
   assertEquals(result.kind, "invalid");
   if (result.kind === "invalid") {
     assert(result.errors.some((error) => error.includes("explicitly named")));
+  }
+});
+Deno.test("loader enforces skill name, nonempty checks, and file evidence rules", async () => {
+  const dir = await Deno.makeTempDir();
+  await Deno.mkdir(`${dir}/scenarios`);
+  await Deno.writeTextFile(
+    `${dir}/scenarios/cards.yaml`,
+    "- id: bad\n  serves: x\n  type: yes_no\n  question: x\n  evidence:\n    - file: secret-token.md\n",
+  );
+  await Deno.writeTextFile(
+    `${dir}/scenarios/bad.scenario.md`,
+    `---\nscenarioId: bad\nskill: wrong\nstatus: active\n---\n## Prompt\nPlease explain.\n## Checks\nchecks: []`,
+  );
+  const result = await loadScenarios({ repoRoot: dir, skillPath: dir });
+  assertEquals(result.kind, "invalid");
+  if (result.kind === "invalid") {
+    assert(result.errors.some((error) => error.includes("skill must equal")));
+    assert(result.errors.some((error) => error.includes("at least one check")));
+    assert(
+      result.errors.some((error) =>
+        error.includes("file evidence is not supported")
+      ),
+    );
+  }
+});
+Deno.test("invalid cards YAML is reported while missing cards YAML is allowed", async () => {
+  const dir = await Deno.makeTempDir();
+  await Deno.mkdir(`${dir}/scenarios`);
+  await Deno.writeTextFile(
+    `${dir}/scenarios/bad.scenario.md`,
+    `---\nscenarioId: bad\nskill: ${
+      dir.split("/").at(-1)
+    }\nstatus: active\n---\n## Prompt\nPlease explain.\n## Checks\nchecks:\n  - id: c\n    criterion: x\n    root: a\n    nodes:\n      a: {kind: code, step: {toolCallCount: {max: 1}}, onTrue: pass, onFalse: fail}`,
+  );
+  await Deno.writeTextFile(`${dir}/scenarios/cards.yaml`, "[");
+  const result = await loadScenarios({ repoRoot: dir, skillPath: dir });
+  assertEquals(result.kind, "invalid");
+  if (result.kind === "invalid") {
+    assert(result.errors.some((error) => error.includes("invalid cards.yaml")));
   }
 });

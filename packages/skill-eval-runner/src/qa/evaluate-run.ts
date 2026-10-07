@@ -87,12 +87,16 @@ async function evaluateCheck(
         outcome: r.kind,
         evidence: r.evidence,
       });
+      if (r.kind === "unavailable") {
+        return {
+          checkId: check.id,
+          result: "inconclusive",
+          decidedBy: "code",
+          path,
+        };
+      }
       decidedBy = "code";
-      ref = r.kind === "true"
-        ? node.onTrue
-        : r.kind === "false"
-        ? node.onFalse
-        : node.onUnavailable;
+      ref = r.kind === "true" ? node.onTrue : node.onFalse;
       continue;
     }
     if (node.kind === "jev" || node.kind === "jev-choice") {
@@ -113,12 +117,15 @@ async function evaluateCheck(
           outcome: "unavailable",
           evidence: ev.values,
         });
-        ref = node.kind === "jev" ? node.branches.uncertain : node.uncertain;
-        decidedBy = "jev";
-        continue;
+        return {
+          checkId: check.id,
+          result: "inconclusive",
+          decidedBy: "jev",
+          path,
+        };
       }
       const answer = await ports.jev.ask(card, ev.values);
-      const outcome = band(answer, card.type);
+      const outcome = band(answer, card.type, card.calibration);
       path.push({ nodeId: ref, kind: node.kind, outcome, evidence: ev.values });
       decidedBy = "jev";
       ref = node.kind === "jev"

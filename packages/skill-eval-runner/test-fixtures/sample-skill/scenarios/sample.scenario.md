@@ -24,7 +24,6 @@ checks:
           loadedSkill: sample-skill
         onTrue: pass
         onFalse: fail
-        onUnavailable: inconclusive
   - id: answer-quality
     criterion: The response addresses the request.
     root: answer

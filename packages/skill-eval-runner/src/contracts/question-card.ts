@@ -8,6 +8,8 @@ export const questionCardSchema = z.strictObject({
   options: z.array(z.string()).optional(),
   evidence: z.array(evidenceSourceSchema).min(1),
   combine: z.unknown().optional(),
+  calibration: z.strictObject({ bands: z.record(z.string(), z.number()) })
+    .optional(),
 }).superRefine((c, ctx) => {
   if (c.type === "choice" && (!c.options || c.options.length === 0)) {
     ctx.addIssue({
