@@ -50,6 +50,8 @@ Corrections return to the same review lead with its review history, which verifi
 >
 > When earlier review history is unavailable, the current review sets the baseline, and both conditions count from there. A correction outside the accepted boundary is not a pass.
 
+Worked example: open accepted findings go 3 → 2 → 2 → 3 over four reviews. 3 → 2 is progress; 2 → 2 and 2 → 3 are two adjacent comparisons without a drop, so the fourth review returns `not-converging` — the stop rule is already met there, not one round later.
+
 The accepted boundary:
 
 > A correction is inside the accepted boundary when it changes no design meaning, scope, contract, or user decision. Only those corrections get further review rounds automatically. A correction that changes, or might change, any of those goes to the user first. Once the user settles it, review continues under the convergence rule without a permission prompt.

@@ -10,7 +10,7 @@ Before any reviewer starts, MUST load `jev-lint.md` and return the lint findings
 
 ## Ordered Checks
 
-The artifact is changed or existing skill files. Select checks by touched surface:
+The artifact is changed or existing skill files. For a scoped wording change, select the check that owns the targeted failure form and `rule-agreement`, and record all other checks `complete` with `not selected: <reason>`; this holds at implementation review as at spec review, and a request for the full review treatment does not widen it to the table row. For an unscoped change, select checks by touched surface:
 
 | Reviewed surface | Check references to load |
 | --- | --- |
@@ -20,7 +20,7 @@ The artifact is changed or existing skill files. Select checks by touched surfac
 | Behavior-proof claim | `claim-vs-evidence` |
 | Sensitive surface | `sensitive-surface` |
 
-Each name resolves to `checks/<name>.md`. Deduplicate the selected set. For a scoped wording change, select the check that owns the targeted failure form and `rule-agreement`; record all other checks `complete` with `not selected: <reason>`. For an evaluation of existing files, use current files as the reviewed surface and read them whole. A `create` run reviews new files. Sensitive-surface ownership stays in `../../skill-creation/references/security-gate.md`.
+Each name resolves to `checks/<name>.md`. Deduplicate the selected set. For an evaluation of existing files, use current files as the reviewed surface and read them whole. A `create` run reviews new files. Sensitive-surface ownership stays in `../../skill-creation/references/security-gate.md`.
 
 Then split the selected checks across reviewer agents by family, each agent in its own session with no authoring history, each loading `checks/review-schema.md` first and walking its checks in the order listed:
 
