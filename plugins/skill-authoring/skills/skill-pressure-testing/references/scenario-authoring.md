@@ -22,7 +22,7 @@ Grade what the agent did before what it said. The code-step catalog reads record
 
 The `## Prompt` section is exactly what the subject receives. Write it the way a real user would ask in that situation, including the pressure that tempts the shortcut (urgency, "it's just a label swap", "I already know the fix").
 
-- It may invoke the skill by name (`$skill-creation`) when the scenario tests the body; leave the name out when it tests the trigger.
+- It may invoke the skill by name (`$skill-creation`) when the scenario tests the body; leave the name out when it tests the trigger. A named skill is put into the agent's context directly, without a file read, so `loadedSkill` only proves anything when the prompt leaves the name out.
 - It never contains the checklist or a hint of it, never asks which skills or files the agent used, and never uses the words eval, test, judge, experiment, rubric, score, compare, benchmark, candidate, or arena. `validate` rejects these words.
 - Files the request needs must exist in the repository snapshot. Point at real paths; a fixture describing a simulated situation lives in the repository under a path a user would plausibly name.
 

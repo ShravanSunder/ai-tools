@@ -106,6 +106,8 @@ Probed with a throwaway script: Deno 2.9.6 from npm, `acpx@0.19.4` `acpx/runtime
 - `CODEX_HOME` and `HOME` pointed at fresh temporary directories, plus `features.remote_plugin = false`, leave only the snapshot's skills and Codex's bundled skills (`imagegen`, `openai-docs`, `skill-creator`, `skill-installer`); input tokens drop from 31k to 3k. `features.skip_host_skill_discovery` changes nothing. A symlinked `auth.json` is enough to log in.
 - A write attempt in the read-only sandbox reaches the client's permission handler as an `execute` request; rejecting it fails the tool call and leaves the snapshot unchanged.
 - The adapter's bundled Codex rejects `gpt-6-luna` with HTTP 400 inside the reply text while the turn reports `completed` with empty `model_usage`.
+- A prompt that names a skill explicitly (`$name`) gets that `SKILL.md` injected into context with no tool call, and the subject follows it; a skill found through its description is read with a visible tool call.
+- With `features.multi_agent_v2.enabled = true` an isolated subject can start a helper agent; the parent's events show it as an `other` tool call titled `Start subagent <name>` plus a `wait`, while the helper's own reads stay in its own thread.
 
 ## Where each entity lives
 
@@ -159,6 +161,9 @@ status: active                                 # draft | active | retired
 allowWrites: false                             # first pass accepts only false
 timeoutSeconds: 600                            # optional
 followUps: []                                  # optional scripted user turns, same session
+fixtures:                                      # optional: files the request points at, placed in the snapshot
+  - source: fixtures/example-spec.md           # relative to this scenarios/ folder
+    target: docs/wip/skills-authoring/2026-08-02-example/spec.md   # repo-relative path in the snapshot
 ---
 
 ## Prompt
@@ -183,7 +188,7 @@ checks:
 ```
 ````
 
-Sections other than `## Prompt` and `## Checks` are allowed and ignored by the runner; nothing but the Prompt and follow-ups reaches the subject (`R22`). File references in steps and evidence are strings: `skill:<path>` (the scenario's skill), `skill(<name>):<path>` (a sibling skill in the same set), `repo:<path>`.
+Sections other than `## Prompt` and `## Checks` are allowed and ignored by the runner; nothing but the Prompt and follow-ups reaches the subject (`R22`). Banned words match as whole words and their simple inflections, case-insensitively (`test`, `tests`, `testing`; `evaluate` is allowed). A fixture's target must stay inside the snapshot and must not already exist there. File references in steps and evidence are strings: `skill:<path>` (the scenario's skill), `skill(<name>):<path>` (a sibling skill in the same set), `repo:<path>`.
 
 ### Contract shapes the runner exposes
 
@@ -264,9 +269,10 @@ export type JudgeVerdict =
 
 **The code-step catalog** (`runner/src/qa/code-steps.ts`) is closed, so scenario authors compose and never script. Every step reads recorded actions only; none reads the subject's prose (`R24`):
 - `readFile: <fileRef>`: a completed tool call's title or input names the file (by snapshot path, repo-relative path, or exposed skill path);
-- `loadedSkill: <name?>`: `readFile` of that skill's `SKILL.md` (default: the scenario's skill);
+- `loadedSkill: <name?>`: `readFile` of that skill's `SKILL.md` (default: the scenario's skill). Only meaningful when the prompt does not name the skill: an explicitly named skill is injected without a read, so the loader rejects `loadedSkill` for a skill the prompt names;
 - `noWritesAttempted: {}`: no permission request and no `edit`, `delete` or `move` tool call;
-- `toolCallCount: {max: n}`.
+- `toolCallCount: {max: n}`;
+- `startedSubagents: {min: n}`: at least `n` tool calls started a separate agent (Codex titles them `Start subagent <name>`); a helper's own actions are not in the parent's Observation.
 
 `onUnavailable` fires when the Observation lacks the field a step needs (`R26`).
 
@@ -298,10 +304,10 @@ export type JudgeVerdict =
 
 ### How the subject environment is built (R30, R51)
 
-1. **Snapshot.** `working-tree` (default) copies every tracked and untracked-not-ignored file (`git ls-files -co --exclude-standard -z`) into a fresh temporary directory; a commit revision uses `git archive <rev> | tar -x`. The snapshot is then made a one-commit git repository so the agent sees an ordinary checkout. The repository under test is never written.
-2. **Expose the skill set.** The skill under test's parent directory is its skill set (for plugins, `<plugin>/skills/`). Every sibling directory holding a `SKILL.md` is copied to `<snapshot>/.agents/skills/<name>/`; a `shared-references/` beside the skill set is copied to `<snapshot>/.agents/shared-references/`, so `../../shared-references/` paths still resolve. A skill already under `.agents/skills/` or `.codex/skills/` is used in place. A name that already exists there is `failed(skill-name-conflict)`.
+1. **Snapshot.** `working-tree` (default) copies every tracked and untracked-not-ignored file (`git ls-files -co --exclude-standard -z`) into a fresh temporary directory; a commit revision uses `git archive <rev> | tar -x`. Every skill's `scenarios/` folder is removed from the snapshot, so no subject can read a checklist (`R25`); then the Scenario's fixtures are copied to their targets. The snapshot is then made a one-commit git repository so the agent sees an ordinary checkout. The repository under test is never written.
+2. **Expose the skill set.** The skill under test's parent directory is its skill set (for plugins, `<plugin>/skills/`). Every sibling directory holding a `SKILL.md` is copied, without its `scenarios/` folder, to `<snapshot>/.agents/skills/<name>/`; a `shared-references/` beside the skill set is copied to `<snapshot>/.agents/shared-references/`, so `../../shared-references/` paths still resolve. A skill already under `.agents/skills/` or `.codex/skills/` is used in place. A name that already exists there is `failed(skill-name-conflict)`.
 3. **Isolate the agent home.** Fresh `0700` directories for `CODEX_HOME` and `HOME`; `CODEX_HOME/auth.json` is a symlink to the user's `${CODEX_HOME:-~/.codex}/auth.json`. The runner checks only that the link target exists; it never reads, copies, or logs it (security decision: allowed, link only). No file-based login → `failed(no-agent-login)`.
-4. **Launch settings.** Agent argv `[node, <codex-acp@1.6.2 bin from the runner's own dependencies>]`; environment `CODEX_HOME`, `HOME`, `CODEX_PATH` (`--codex-path`, else `codex` on `PATH`, else `failed(codex-not-found)`), `INITIAL_AGENT_MODE=read-only`, and `CODEX_CONFIG` = `{model, model_reasoning_effort, approvals_reviewer: "user", features: {hooks: false, remote_plugin: false}}`.
+4. **Launch settings.** Agent argv `[node, <codex-acp@1.6.2 bin from the runner's own dependencies>]`; environment `CODEX_HOME`, `HOME`, `CODEX_PATH` (`--codex-path`, else `codex` on `PATH`, else `failed(codex-not-found)`), `INITIAL_AGENT_MODE=read-only`, and `CODEX_CONFIG` = `{model, model_reasoning_effort, approvals_reviewer: "user", features: {hooks: false, remote_plugin: false, multi_agent_v2: {enabled: true}}}`. Subagents are on because `skill-review` and `skill-orchestrator` must start separate agents.
 5. **Dispose.** The runner deletes only the temporary directories it created, after the Run's files are written.
 
 ## One run, from command to verdict
@@ -530,7 +536,7 @@ Jev lint cards (duplicated rule, a rule losing its home, trigger overlap; `R19`)
 
 **Illegal states kept out:**
 - **Unrepresentable (Zod):** a judge leaf with tools (first pass); a `RunVerdict` of `pass` with a failing `CheckResult` (aggregation derives it).
-- **Rejected at the loader:** a regex or `expect_*` field, a banned word, a tree that cannot reach a terminal, an unknown card or step, an evidence file matching the credential pattern, `allowWrites: true` (first pass).
+- **Rejected at the loader:** a regex or `expect_*` field, a banned word, a tree that cannot reach a terminal, an unknown card or step, an evidence file matching the credential pattern, `allowWrites: true` (first pass), a fixture whose source is missing or whose target escapes the snapshot.
 - **Rejected at runtime:** a subject write, by the permission handler.
 
 ## Open items
