@@ -1,6 +1,6 @@
 # Skill authoring plugin: Specification
 
-What must be observably true of the standalone `skill-authoring` plugin and its eval framework. Why, for whom, and the confirmed boundary live in [user-requirements.md](user-requirements.md) (rows `U1`–`U33`). How it is built lives in the Program Design beside this file.
+What must be observably true of the standalone `skill-authoring` plugin and its eval framework. Why, for whom, and the confirmed boundary live in [user-requirements.md](user-requirements.md) (rows `U1`–`U35`). How it is built lives in the Program Design beside this file.
 
 ## The model in one picture
 
@@ -34,8 +34,8 @@ The entity table is normative. Program Design binds these to files, schemas, and
 | ID | Entity | Identity rule | Relationships | Invariants | Observable states | Basis |
 |---|---|---|---|---|---|---|
 | E1 | **Skill package** | one directory holding a `SKILL.md`, identified by its repository and its path in that repository; the same path at another revision is the same package at a different revision | belongs to one repository; has 0..n Scenarios (E4); may belong to one plugin (E14) | its references and scripts live inside its own directory | (none) | U1, U3 |
-| E2 | **Skill change** | one owner-authorized change to one or more Skill packages; a later, separately authorized request is a new Skill change even when it touches the same packages | covers 1..n E1; has exactly 1 Change record (E3); has 0..n Review findings (E11); has 1 Done-bar result (E10) | its kind is fixed when authorized: `new-from-intent` or `fix-for-recorded-failure` | proposed → implemented → reviewed → shipped; or abandoned from any state before shipped | U9, U13, U15 |
-| E3 | **Change record** | one per Skill change; for a multi-run change it is that change's skill-change spec | belongs to exactly one E2 | each listed item carries exactly one of proposed, implemented, reviewed, shipped; a decision once recorded is superseded by a later entry, never rewritten | (follows its items) | U10, U13 |
+| E2 | **Skill change** | one owner-authorized change to one or more Skill packages; a later, separately authorized request is a new Skill change even when it touches the same packages | covers 1..n E1; has exactly 1 Skill spec (E3); has 0..n Review findings (E11); has 1 Done-bar result (E10) | its kind is fixed when authorized: `new-from-intent` or `fix-for-recorded-failure` | proposed → implemented → reviewed → shipped; or abandoned from any state before shipped | U9, U13, U15 |
+| E3 | **Skill spec** | one per Skill change: its promise, success definition, authoring basis, which surface (trigger, main path, depth, proof) carries each part, decisions, and runs in order | belongs to exactly one E2 | each run in it carries exactly one of proposed, implemented, reviewed, shipped; a decision once recorded is superseded by a later entry, never rewritten; it is a document whenever the change spans more than one run, carries decisions a later run must honor, or must outlive the session, and otherwise stays in the conversation | (follows its runs) | U4, U10, U13 |
 | E4 | **Scenario** | one pressure scenario for exactly one Skill package, identified by that package plus a scenario id stable across edits | belongs to 1 E1; has 1..n Checks (E5); has 0..n Runs (E6) | stored beside its Skill package; its checklist is never part of what the subject sees | draft → active → retired | U6, U11, U25 |
 | E5 | **Check** | one checklist item in one Scenario, identified by that scenario plus a check id | belongs to 1 E4; is decided by exactly 1 decision tree whose Jev nodes use Question cards (E15) | its decision tree is made of code steps and Jev questions whose branches are named bands (yes / uncertain / no, or high / mid / low); every path ends in pass, fail, inconclusive, or a judge leaf; it names the evidence each node needs | (none) | U6, U8, U26 |
 | E6 | **Run** | one execution of one Scenario against one Skill package revision by one subject configuration; two Runs are fresh when neither shares conversation history with the other | belongs to 1 E4; produces 0..1 Observation (E7) | the subject is a Luna agent | started → observed, or started → execution-failed | U7, U29, U30 |
@@ -43,7 +43,7 @@ The entity table is normative. Program Design binds these to files, schemas, and
 | E8 | **Check result** | one Check applied to one Observation | belongs to 1 E5 and 1 E7 | carries the evidence it relied on and which grader decided it | pass, fail, or inconclusive; decided by `code`, by `jev` (certain), or by `judge` | U8, U23, U24 |
 | E9 | **Run verdict** | one per Run | summarizes the E8 results of 1 E6 | a fail or inconclusive result is never replaced by a later pass | execution-failed, inconclusive, fail, or pass | U27, U28 |
 | E10 | **Done-bar result** | one per Skill change, at the revision being judged | belongs to 1 E2; reads E9 verdicts of its packages' Scenarios | uses the bar for its change kind | met, not met, or not evaluable | U9 |
-| E11 | **Review finding** | one candidate defect at one anchor (file and line or section) in one Skill change, raised by a reviewer agent or a Jev lint check | belongs to 1 E2 | names the property it concerns: teaching, trigger, rule agreement, placement, or claim strength | candidate → verified-at-anchor → accepted or rejected | U20, U21, U22 |
+| E11 | **Review finding** | one candidate defect at one anchor (file and line or section) in one Skill change, raised by a reviewer agent or a Jev lint check | belongs to 1 E2 | names the review check that raised it, and so the property it concerns: teaching, trigger, rule agreement, placement, claim strength, or safety | candidate → verified-at-anchor → accepted or rejected | U20, U21, U22 |
 | E12 | **Calibration** | one Jev engine plus one Question card, measured on one labelled set | belongs to 1 E15 | the labelled set was not used to write the Check's question; recorded with its engine, date, and set | (none) | U8, U22 |
 | E13 | **Audit recommendation** | one recommendation for one signal about one or more Skill packages | cites 1..n recorded signals | names its action and the owner of the fix, with recurrence evidence | update, create, merge, or skip; fix owner: prose, a code check, or the tool | U31, U32, U33 |
 | E15 | **Question card** | one predefined Jev question, identified by a card id stable across edits | used by 1..n Checks (E5) and by the judge's prescribed tools; has 0..n Calibrations (E12), one per engine | asks one judgement over named evidence; its type is yes/no or choice; it never asks whether work is good overall | (none) | U8, U22, owner 10-06 |
@@ -61,7 +61,7 @@ erDiagram
   CHECK }o--o{ QUESTION_CARD : "decision tree uses"
   QUESTION_CARD ||--o{ CALIBRATION : "per Jev engine"
   SKILL_CHANGE }|--|{ SKILL_PACKAGE : "covers"
-  SKILL_CHANGE ||--|| CHANGE_RECORD : "recorded in"
+  SKILL_CHANGE ||--|| SKILL_SPEC : "written in"
   SKILL_CHANGE ||--o{ REVIEW_FINDING : "has"
   SKILL_CHANGE ||--|| DONE_BAR_RESULT : "judged by"
   PLUGIN ||--o{ SKILL_PACKAGE : "contains"
@@ -77,11 +77,11 @@ Each requirement names the entities it is written over and the user rows it serv
 
 | ID | Requirement | Entities | Basis |
 |---|---|---|---|
-| R1 | The plugin MUST provide exactly five skills: an orchestration skill, skill creation, skill review, pressure testing, and skill audit. | E1, E14 | U1, U4 |
+| R1 | The plugin MUST provide exactly five skills: `skill-orchestrator`, `skill-creation`, `skill-review`, `skill-pressure-testing`, and `skill-audit`. | E1, E14 | U1, U4 |
 | R2 | The plugin MUST load and run with `shravan-dev-workflow` not installed, in Claude Code and in Codex. | E14 | U2 |
 | R3 | Files in the plugin MUST NOT name a `shravan-dev-workflow` skill or load a `shravan-dev-workflow` file, and files in `shravan-dev-workflow` MUST NOT name a `skill-authoring` skill. | E14 | U2 |
 | R4 | `shravan-dev-workflow` MUST contain no skill-package classification, gate, or routing: its phases treat a skill like any other target, and `ready-for-review` always means ordinary implementation review. | E14 | U2, owner 10-06 |
-| R5 | After the cutover, `skills-creation` and `skill-audit` MUST no longer exist in `shravan-dev-workflow`, and files in this repository MUST NOT refer to them by their old names. | E14 | U1, U12 |
+| R5 | After the cutover, `skills-creation` and `skill-audit` MUST no longer exist in `shravan-dev-workflow`; `skills-creation` is renamed `skill-creation`, and active files in this repository MUST NOT refer to the old plugin-qualified names. | E14 | U1, U12 |
 | R6 | The plugin MUST work on Skill packages in any repository, at any path the user names. | E1 | U3 |
 | R49 | The eval runner MUST be a package of its own, separate from the plugin's skills, and MUST be run with `pnpm dlx` (a local `file:` package spec until it is published, then its published name). | E14 | U34, U35 |
 | R50 | Skills in the plugin MUST NOT install an executable, a global tool, or a dependency into the repository under test; anything a skill runs goes through `pnpm dlx`. | E1, E14 | U35 |
@@ -91,7 +91,7 @@ Each requirement names the entities it is written over and the user rows it serv
 | ID | Requirement | Entities | Basis |
 |---|---|---|---|
 | R7 | Before an authoring agent states a fact about a Skill package, the plugin MUST lead it to read that package's current files; a claim about content not read in the current revision is not made. | E1 | U10, U14 |
-| R8 | Every Skill change MUST have a Change record that shows each item as proposed, implemented, reviewed, or shipped; an item not shown as shipped is never reported as shipped. | E2, E3 | U10, U13 |
+| R8 | Every Skill change MUST have a Skill spec that shows each run as proposed, implemented, reviewed, or shipped; a run not shown as shipped is never reported as shipped. | E2, E3 | U10, U13 |
 | R9 | Every behaviour-changing Skill change MUST be checked by a second agent that did not write it, before it is reported as reviewed. | E2, E11 | U10, U20 |
 | R10 | For any general practice other than R7–R9 (for example board traces, decision-brief formats, or prose rewriting), the plugin MUST ask the user instead of assuming one. | E2 | U10 |
 | R11 | A Skill change's authorization to be written MUST be recorded separately from its proof of working; an intent-first change is never blocked for lacking a reproduced failure. | E2 | U15 |
@@ -111,7 +111,7 @@ Each requirement names the entities it is written over and the user rows it serv
 |---|---|---|---|
 | R16 | Skill review MUST use more than one reviewer agent and Jev lint checks. | E11 | U4 |
 | R17 | A Review finding MUST be verified at its anchor in the current revision before it is accepted; an absence claim requires opening the file where the item would be. | E11 | U20 |
-| R18 | Review MUST judge teaching, trigger, rule agreement, placement, and claim strength as separate properties; passing one never implies another. | E11 | U21 |
+| R18 | Review MUST judge teaching, trigger, rule agreement, placement, claim strength, and safety as separate properties; passing one never implies another. | E11 | U21 |
 | R19 | Jev lint checks MUST ask narrow questions (duplicated rule, rule lost its home, trigger overlap), with the files they apply to chosen by code; Jev never judges whether a finding is valid. | E5, E11 | U22 |
 | R20 | The number of reviewers who agree MUST NOT stand in for verification; accepted requirements outrank reviewer consensus. | E11 | U20 |
 
@@ -139,12 +139,13 @@ Each requirement names the entities it is written over and the user rows it serv
 | R33 | A judge leaf's agent MUST receive the evidence and the Check's criterion, and never the Jev answer, probability, leaning, or route that led to it. It gets tools only when its Check requires code execution or composing several questions, and then only that Check's prescribed Question cards, never free-form Jev access. | E8, E15 | U8, U20, owner 10-06 |
 | R34 | A Run in which no Check's tree reaches a judge leaf MUST make no agent-judge call. | E8, E9 | U5 |
 | R35 | Several Runs MUST be able to execute in parallel without sharing conversation history, and each MUST be fresh. | E6 | U7, U29 |
+| R51 | A subject MUST see only the repository under test at the chosen revision, the Skill packages under test, and the agent's own built-in skills; never the runner host's personal instructions, installed plugins, or user-level skills. | E6 | U3, U7, U25 |
 
 ### Verdicts and done bars
 
 | ID | Requirement | Entities | Basis |
 |---|---|---|---|
-| R36 | A Run verdict MUST be `execution-failed` when the subject never produced an Observation (permission stop, agent or ACPX failure, timeout); never `fail`. | E9 | U28 |
+| R36 | A Run verdict MUST be `execution-failed` when the subject never produced an Observation (permission stop, agent or ACPX failure, timeout, or a turn that ends without the model having run); never `fail`. | E9 | U28 |
 | R37 | Otherwise the Run verdict MUST be `fail` if any Check result fails, else `inconclusive` if any is inconclusive, else `pass`. A later passing Check never hides an earlier failing one. | E8, E9 | U27, U28 |
 | R38 | For a `new-from-intent` Skill change, the Done-bar result MUST be `met` only when the changed packages' Jev lint and code checks pass and at least one Run of each active Scenario of each changed package is `pass`. | E10 | U9 |
 | R39 | For a `fix-for-recorded-failure` Skill change, the Done-bar result MUST be `met` only when a Scenario reproduces the recorded failure as `fail` at the revision before the fix, and the same Scenario then has 3 fresh Runs at the fixed revision, all `pass`. | E10 | U9, owner 10-04 |
@@ -172,7 +173,7 @@ Each requirement names the entities it is written over and the user rows it serv
 
 ### C1 · Plugin install and invocation (R1–R6)
 - **Consumers:** Claude Code and Codex users, any repository.
-- **Normal:** installing `skill-authoring` alone makes its five skills invocable under the `skill-authoring:` namespace.
+- **Normal:** installing `skill-authoring` alone makes its five skills invocable under the `skill-authoring:` namespace (`skill-authoring:skill-orchestrator`, `:skill-creation`, `:skill-review`, `:skill-pressure-testing`, `:skill-audit`).
 - **Boundary:** with both plugins installed, each still names only its own skills; the user combines them by invoking both.
 - **Failure:** invoking an old name (`shravan-dev-workflow:skills-creation`) finds no skill. There is no alias.
 - **Undefined:** Cursor support is neither promised nor excluded.
@@ -200,7 +201,7 @@ Each requirement names the entities it is written over and the user rows it serv
 
 ### C5 · No hand-off between the plugins (R4)
 - **Consumer:** users of either plugin.
-- **Contract:** skill work starts in `skill-authoring`; its skill-change spec lives there (the orchestration skill's Change record). `shravan-dev-workflow` phases neither detect nor redirect skill work.
+- **Contract:** skill work starts in `skill-authoring`; the Skill spec lives there (written by `skill-creation`, carried across runs by `skill-orchestrator`). `shravan-dev-workflow` phases neither detect nor redirect skill work, and its `spec-design` is never used for a skill.
 
 ## Cross-cutting obligations
 
@@ -230,7 +231,7 @@ Each requirement names the entities it is written over and the user rows it serv
 | V6 | R26, R36, R37, R40 | automated tests with recorded Observations: absent evidence → inconclusive; ACPX failure → execution-failed; a fail followed by a pass stays fail |
 | V7 | R31–R34 | on a labelled set of Observations: per-Check agreement with settled answers, escalation rate, and no judge call on all-certain Runs; Calibration held out from question writing |
 | V8 | R33, C4 | captured judge inputs contain none of the forbidden items |
-| V9 | R29, R30, R35 | runtime evidence: a subject's write attempt denied and recorded; parallel Runs with no shared history |
+| V9 | R29, R30, R35, R51 | runtime evidence: a subject's write attempt denied and recorded; parallel Runs with no shared history; a subject asked to list its skills names only the snapshot's skills and the agent's built-in ones |
 | V10 | R39 | one fix case: `fail` before, 3 fresh `pass` after |
 | V11 | R46, R47, R48 | inventory of converted and not-running Scenarios; the five skills' done bars met |
 | V12 | R49, R50 | runtime transcript: the runner runs via `pnpm dlx` from a clean shell and no new executable remains on PATH afterwards; automated search of the plugin's skills for install commands |
@@ -241,11 +242,11 @@ Each requirement names the entities it is written over and the user rows it serv
 |---|---|---|
 | U1 | R1, R5 | V1, V2 |
 | U2 | R2, R3, R4 | V1, V2, V3 |
-| U3 | R6 | V1 |
+| U3 | R6, R51 | V1, V9 |
 | U4 | R1, R16 | V1, V4 |
 | U5 | R34 | V7 |
 | U6 | R23, R24, R45 | V5 |
-| U7 | R28, R35 | V9 |
+| U7 | R28, R35, R51 | V9 |
 | U8 | R31, R32, R33 | V7, V8 |
 | U9 | R38, R39 | V4, V10 |
 | U10 | R7, R8, R9, R10 | V4 |
@@ -265,7 +266,7 @@ Each requirement names the entities it is written over and the user rows it serv
 | U22 | R19 | V4, V7 |
 | U23 | R24 | V5, V6 |
 | U24 | R25 | V4 |
-| U25 | R22 | V5 |
+| U25 | R22, R51 | V5, V9 |
 | U26 | R26 | V6 |
 | U27 | R37 | V6 |
 | U28 | R30, R36, R40 | V6, V9 |
@@ -282,5 +283,5 @@ Every entity E1–E15 is used by at least one requirement.
 - **Proving set (R46):** its size and which `shravan-dev-workflow` packages it covers are chosen in Program Design. The owner set only "small".
 - **Certain band (R32):** an uncalibrated `jev` Check always escalates. This follows from the owner's "if Jev is not certain" plus the measured fact that thresholds do not transfer across engines; it means early runs call the judge often until Calibrations exist.
 - **New-from-intent run count (R38):** one passing Run per active Scenario. The owner's bar says "Luna runs"; repeated runs are required only for fixes and improvement claims.
-- **Jev tool:** another agent builds it. Until it exists, every Jev node answers in the uncertain band (R32); this is a dependency, not a fallback design.
+- **Jev tool:** another agent builds it. Until it exists, every Jev node answers in the uncertain band (R32), and Jev lint cannot run, so a `new-from-intent` Done-bar result is `not evaluable` (R38, R40) until it does; this is a dependency, not a fallback design.
 - **Shared shape:** Question cards and decision trees use the same card and tree shape as the orchestration Inspector's guards (owned by the orchestration maintainers), so the Jev tool has one schema for both consumers.
