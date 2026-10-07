@@ -69,3 +69,13 @@ Deno.test("fix bar is not evaluable when the base Run broke or was inconclusive"
     reason: "inconclusive-run",
   });
 });
+Deno.test("new bar with zero Runs is not evaluable, never met", () =>
+  assertEquals(
+    assessDoneBar({
+      kind: "new-from-intent",
+      lintClean: true,
+      jevLintAvailable: true,
+      runs: [],
+    }),
+    { kind: "not-evaluable", reason: "no-active-scenario" },
+  ));

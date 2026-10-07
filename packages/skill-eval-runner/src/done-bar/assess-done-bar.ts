@@ -20,6 +20,10 @@ export function assessDoneBar(input: DoneBarInput): DoneBarResult {
     if (!input.jevLintAvailable) {
       return { kind: "not-evaluable", reason: "jev-lint-unavailable" };
     }
+    // `every` over no Runs is true; a bar with nothing run has shown nothing.
+    if (input.runs.length === 0) {
+      return { kind: "not-evaluable", reason: "no-active-scenario" };
+    }
     return input.runs.every((r) => r.verdict === "pass")
       ? { kind: "met", bar: input.kind, runs: input.runs.map((r) => r.id) }
       : { kind: "not-met", reason: "check-failed" };
