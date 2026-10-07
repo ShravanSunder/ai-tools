@@ -1,4 +1,4 @@
-import { dirname, join } from "node:path";
+import { dirname, isAbsolute, join, relative, resolve } from "node:path";
 import { tmpdir } from "node:os";
 import { copyFile, mkdir, mkdtemp, symlink } from "node:fs/promises";
 import { createRequire } from "node:module";
@@ -92,12 +92,41 @@ const applyFixtures = async (
     await copyFile(join(sourceDirectory, fixture.source), target);
   }
 };
+export type SkillSetSource =
+  | { kind: "snapshot"; relativeSkillSetDir: string }
+  | { kind: "live"; skillSetDir: string }
+  | { kind: "invalid"; reason: string };
+const realOrResolvedPath = (path: string): Promise<string> =>
+  Deno.realPath(path).catch(() => resolve(path));
+export async function resolveSkillSetSource(
+  skill: SkillRef,
+  revision: Revision,
+): Promise<SkillSetSource> {
+  const repoRoot = await realOrResolvedPath(skill.repoRoot);
+  const skillDir = await realOrResolvedPath(
+    isAbsolute(skill.skillPath)
+      ? skill.skillPath
+      : join(skill.repoRoot, skill.skillPath),
+  );
+  const skillSetDir = dirname(skillDir);
+  const relativeSkillSetDir = relative(repoRoot, skillSetDir);
+  const outsideRepo = isAbsolute(relativeSkillSetDir) ||
+    relativeSkillSetDir === ".." || relativeSkillSetDir.startsWith("../");
+  if (!outsideRepo) return { kind: "snapshot", relativeSkillSetDir };
+  if (revision.kind === "commit") {
+    return {
+      kind: "invalid",
+      reason:
+        `skill-set-outside-repo: ${skillSetDir} is outside --repo ${repoRoot}, so it has no copy at revision ${revision.value}; put the skill set inside --repo or run the working tree`,
+    };
+  }
+  return { kind: "live", skillSetDir };
+}
 const exposeSkills = async (
-  skillDir: string,
+  skillSetDir: string,
   snapshot: string,
 ): Promise<void> => {
-  const skillSetDir = dirname(skillDir),
-    exposed = join(snapshot, ".agents", "skills");
+  const exposed = join(snapshot, ".agents", "skills");
   await mkdir(exposed, { recursive: true });
   for await (const entry of Deno.readDir(skillSetDir)) {
     if (!entry.isDirectory) continue;
@@ -162,6 +191,10 @@ export async function prepareEnvironment(
   scenarioPath?: string,
   codexPathOverride?: string,
 ): Promise<EnvironmentResult> {
+  const skillSetSource = await resolveSkillSetSource(skill, revision);
+  if (skillSetSource.kind === "invalid") {
+    return { kind: "failed", reason: skillSetSource.reason };
+  }
   const root = await mkdtemp(join(tmpdir(), "skill-eval-env-"));
   const homesRoot = await mkdtemp(join(tmpdir(), "skill-eval-agent-homes-"));
   const snapshot = join(root, "snapshot");
@@ -176,13 +209,16 @@ export async function prepareEnvironment(
       await extractArchive(archive.stdout, snapshot);
     } else await copyTracked(skill.repoRoot, snapshot);
     await removeScenarioDirectoriesFromSnapshot(snapshot);
+    // The skill set comes from the snapshot, so it is the run's revision; fixtures land after, so they never join it.
+    await exposeSkills(
+      skillSetSource.kind === "snapshot"
+        ? join(snapshot, skillSetSource.relativeSkillSetDir)
+        : skillSetSource.skillSetDir,
+      snapshot,
+    );
     await applyFixtures(scenarioPath, fixtures, snapshot);
     const initialized = await run(["git", "init", "-q"], snapshot);
     if (initialized.code !== 0) throw new Error(text(initialized.stderr));
-    const skillDir = skill.skillPath.startsWith("/")
-      ? skill.skillPath
-      : join(skill.repoRoot, skill.skillPath);
-    await exposeSkills(skillDir, snapshot);
     const codexPath = codexPathOverride ?? await discoverCodex();
     if (!codexPath) {
       await Deno.remove(root, { recursive: true });

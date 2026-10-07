@@ -1,7 +1,10 @@
 import { join } from "node:path";
 import { mkdir } from "node:fs/promises";
 import { loadScenarios } from "./scenarios/parse-scenario.ts";
-import { prepareEnvironment } from "./environment/prepare-environment.ts";
+import {
+  prepareEnvironment,
+  resolveSkillSetSource,
+} from "./environment/prepare-environment.ts";
 import { runSubject } from "./subjects/run-subject.ts";
 import { evaluateRun } from "./qa/evaluate-run.ts";
 import { NoEngineJev } from "./jev/jev-port.ts";
@@ -49,6 +52,16 @@ const revision = (): Revision => {
 };
 const printJson = (valueToPrint: unknown): void =>
   console.log(JSON.stringify(valueToPrint, null, 2));
+const invalidSkillSetReason = async (
+  skill: SkillRef,
+  revisions: readonly Revision[],
+): Promise<string | undefined> => {
+  for (const candidate of revisions) {
+    const source = await resolveSkillSetSource(skill, candidate);
+    if (source.kind === "invalid") return source.reason;
+  }
+  return undefined;
+};
 const runOne = async (
   scenario: import("./contracts/scenario.ts").Scenario,
   skill: SkillRef,
@@ -192,6 +205,12 @@ async function main(): Promise<number> {
       printJson({ kind: "invalid", errors: selectionErrors });
       return 2;
     }
+    const runRevision = revision();
+    const skillSetError = await invalidSkillSetReason(skill, [runRevision]);
+    if (skillSetError) {
+      console.error(skillSetError);
+      return 2;
+    }
     const out = value("--out", false) ??
       join(
         Deno.env.get("XDG_CACHE_HOME") ??
@@ -207,7 +226,7 @@ async function main(): Promise<number> {
       out,
       numberValue("--runs", 1),
       numberValue("--parallel", 3),
-      revision(),
+      runRevision,
       value("--codex-path", false),
     )).exitCode;
   }
@@ -278,6 +297,14 @@ async function main(): Promise<number> {
     const head: Revision = headRaw === "working-tree"
       ? { kind: "working-tree" }
       : { kind: "commit", value: headRaw };
+    const skillSetError = await invalidSkillSetReason(skill, [
+      { kind: "commit", value: base },
+      head,
+    ]);
+    if (skillSetError) {
+      console.error(skillSetError);
+      return 2;
+    }
     const baseRun = await runOne(
       scenario,
       skill,
