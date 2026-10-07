@@ -229,3 +229,95 @@ Deno.test("a different skill set that collides with .agents/skills is still a co
     reason: "skill-name-conflict:shared-name",
   });
 });
+const pathExists = (path: string): Promise<boolean> =>
+  Deno.stat(path).then(() => true, () => false);
+Deno.test(".skill-eval-hide paths leave the snapshot while fixtures under them still land", async () => {
+  const repo = await Deno.makeTempDir();
+  const files: Readonly<Record<string, string>> = {
+    ".skill-eval-hide":
+      "# evaluation material the subject must not read\n\neval-specs/\ndocs/changelog/2026-10-*-runner.md\nNOTES.eval\n",
+    "eval-specs/spec.md": "names the checks",
+    "docs/changelog/2026-10-07-runner.md": "names the checks",
+    "docs/changelog/2026-10-07-other.md": "keep",
+    "docs/changelog/nested/2026-10-07-runner.md":
+      "keep: * stays in one segment",
+    "docs/eval-specs": "keep: a file, and the pattern names directories",
+    "sub/NOTES.eval": "names the checks",
+    "plugin/skills/sample-skill/SKILL.md": "skill",
+    "plugin/skills/sample-skill/scenarios/case.scenario.md": "checklist",
+    "plugin/skills/sample-skill/scenarios/fixtures/brief.md": "fixture brief",
+  };
+  for (const [path, content] of Object.entries(files)) {
+    await Deno.mkdir(`${repo}/${path.split("/").slice(0, -1).join("/")}`, {
+      recursive: true,
+    });
+    await Deno.writeTextFile(`${repo}/${path}`, content);
+  }
+  await git(repo, "init", "-q");
+  const prepared = await prepareWithFixtureLogin(() =>
+    prepareEnvironment(
+      { repoRoot: repo, skillPath: "plugin/skills/sample-skill" },
+      { kind: "working-tree" },
+      [{ source: "fixtures/brief.md", target: "eval-specs/brief.md" }],
+      `${repo}/plugin/skills/sample-skill/scenarios/case.scenario.md`,
+      "codex-for-fixture",
+    )
+  );
+  assertEquals(prepared.kind, "ready");
+  if (prepared.kind !== "ready") return;
+  try {
+    const snapshot = prepared.environment.snapshotDir;
+    for (
+      const hidden of [
+        ".skill-eval-hide",
+        "eval-specs/spec.md",
+        "docs/changelog/2026-10-07-runner.md",
+        "sub/NOTES.eval",
+      ]
+    ) assertEquals(await pathExists(`${snapshot}/${hidden}`), false, hidden);
+    for (
+      const kept of [
+        "docs/changelog/2026-10-07-other.md",
+        "docs/changelog/nested/2026-10-07-runner.md",
+        "docs/eval-specs",
+        ".agents/skills/sample-skill/SKILL.md",
+      ]
+    ) assertEquals(await pathExists(`${snapshot}/${kept}`), true, kept);
+    assertEquals(
+      await Deno.readTextFile(`${snapshot}/eval-specs/brief.md`),
+      "fixture brief",
+    );
+  } finally {
+    await prepared.environment.dispose();
+  }
+});
+Deno.test("the repository's .skill-eval-hide also hides paths at a commit that predates it", async () => {
+  const repo = await Deno.makeTempDir();
+  await Deno.mkdir(`${repo}/eval-specs`, { recursive: true });
+  await Deno.mkdir(`${repo}/skills/sample-skill`, { recursive: true });
+  await Deno.writeTextFile(`${repo}/eval-specs/spec.md`, "names the checks");
+  await Deno.writeTextFile(`${repo}/skills/sample-skill/SKILL.md`, "skill");
+  await git(repo, "init", "-q");
+  await git(repo, "add", ".");
+  await git(repo, "commit", "-q", "-m", "base");
+  await Deno.writeTextFile(`${repo}/.skill-eval-hide`, "eval-specs/\n");
+  const prepared = await prepareWithFixtureLogin(() =>
+    prepareEnvironment(
+      { repoRoot: repo, skillPath: "skills/sample-skill" },
+      { kind: "commit", value: "HEAD" },
+      [],
+      undefined,
+      "codex-for-fixture",
+    )
+  );
+  assertEquals(prepared.kind, "ready");
+  if (prepared.kind !== "ready") return;
+  try {
+    assertEquals(
+      await pathExists(`${prepared.environment.snapshotDir}/eval-specs`),
+      false,
+    );
+  } finally {
+    await prepared.environment.dispose();
+  }
+});

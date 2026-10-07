@@ -4,6 +4,7 @@ import { copyFile, mkdir, mkdtemp, symlink } from "node:fs/promises";
 import { createRequire } from "node:module";
 import type { Revision, SkillRef } from "../contracts/common.ts";
 import type { ScenarioFixture } from "../contracts/scenario.ts";
+import { removeHiddenPathsFromSnapshot } from "./snapshot-hide-patterns.ts";
 const require = createRequire(import.meta.url);
 export type PreparedEnvironment = {
   snapshotDir: string;
@@ -209,6 +210,7 @@ export async function prepareEnvironment(
       await extractArchive(archive.stdout, snapshot);
     } else await copyTracked(skill.repoRoot, snapshot);
     await removeScenarioDirectoriesFromSnapshot(snapshot);
+    await removeHiddenPathsFromSnapshot(skill.repoRoot, snapshot);
     // The skill set comes from the snapshot, so it is the run's revision; fixtures land after, so they never join it.
     // A skill set that already lives at the repository's .agents/skills is in place in the snapshot.
     const skillSetInPlace = skillSetSource.kind === "snapshot" &&
