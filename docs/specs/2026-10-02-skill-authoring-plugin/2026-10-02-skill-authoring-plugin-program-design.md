@@ -40,7 +40,7 @@ flowchart TB
   QA --> JEV & JUDGE
   JEV -- "question card + retrieved evidence" --> EXT2(["Jev tool (built by another agent)"])
   JUDGE -- "ACPX library: gpt-6-luna high" --> EXT3(["Luna judge agent"])
-  SDW -. "runtime-skill-package routing result only;<br/>no name of either home" .-> X(("owner's skill index"))
+  SDW -. "no link: no skill-package<br/>handling at all" .-x PLUGIN
 ```
 
 **What changes and what stays.**
@@ -314,7 +314,7 @@ stateDiagram-v2
 2. Move `skills-creation` and `skill-audit` into it, rewriting their links to `shravan-dev-workflow` as plain needs (`R7`–`R10`). Their two shared files (`humanizer.md`, `owner-decision-brief.md`) are not copied: the evidence shows no benefit for skill work, so the needs become "ask the user" (`R10`).
 3. Add `skill-orchestrator`, `skill-review` and `skill-pressure-testing`.
 4. In `shravan-dev-workflow`, change every active file that names the old skills (30 files):
-   - **20 skill files:** composition gates in spec-design, program-design, plan-implementation, spec-program-review and implementation-review; the `ready-for-review` classification mapping in orchestrator-implementation-goal; examples and pointers elsewhere.
+   - **20 skill files:** delete the skill-package check and its `skills-creation` gate from spec-design, program-design, plan-implementation, spec-program-review and implementation-review; delete the `runtime-skill-package` classification from `ready-for-review` (`shared-references/phase-return-tokens.md`, orchestrator-implementation-goal), so it always means implementation review; delete examples and pointers elsewhere.
    - **5 files inside the two moving trees,** which move with them.
    - **3 plugin manifests' keywords,** the plugin README, and the humanizer file's consumer declaration.
    - **4 retired files keep their history.**
@@ -338,7 +338,7 @@ stateDiagram-v2
 | U1, U4 | R1 five skills exist | E1, E14 | plugin | skill directories | five `SKILL.md` under `plugins/skill-authoring/skills/` | none: static | none: static | V1 install transcript |
 | U2 | R2 loads without sdw | E14 | plugin | manifests | three `plugin.json` | none: static | none: static | V1 |
 | U2 | R3 no cross-names | E14 | plugin + sdw | forbidden-edge search | search rule over both trees | none: static | build fails on a hit | V2 automated search |
-| U2 | R4 routing result | E14 | sdw skills | runtime-skill-package result | `phase-return-tokens.md` (existing) | none: stateless | none | V3 scenario |
+| U2 | R4 no skill handling in sdw | E14 | sdw skills | none: the check is removed | `phase-return-tokens.md` (modified: classification removed) | none: stateless | none | V3 automated search |
 | U1, U12 | R5 old names gone | E14 | repo | search | — | none: static | build fails on a hit | V2 |
 | U3 | R6 any repo | E1 | eval CLI | `--repo`, `--skill` | `SkillRef` in `contracts/skill-ref.ts` | none: stateless | `invalid(unknown-path)` | V1, V5 |
 | U10, U14 | R7 read before claiming | E1 | skill-orchestrator | skill text step | orchestrator `SKILL.md` | none: method | review rejects unread claims | V4 scenario |

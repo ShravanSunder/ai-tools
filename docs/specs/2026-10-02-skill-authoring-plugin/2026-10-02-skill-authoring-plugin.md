@@ -18,14 +18,14 @@ flowchart LR
 
   owner -- "requests a skill change;<br/>reads done-bar results" --> SA
   author -- "invokes the five skills" --> SA
-  wfu -- "gets a routing result,<br/>never a skill-authoring name" --x SA
+  wfu -- "no link: skill work<br/>starts in skill-authoring" --x SA
   other -- "skills + scenarios<br/>beside them" --> SA
   SA -- "organic prompt only;<br/>criteria hidden" --> subj
   SA -- "one narrow question<br/>+ retrieved evidence" --> jev
   SA -- "evidence + criterion only;<br/>never Jev's answer" --> judge
 ```
 
-The plugin is one opaque system here. The crossed edge is negative space: `shravan-dev-workflow` hands skill-package work back through its existing routing result and never names a `skill-authoring` skill (`U2`).
+The plugin is one opaque system here. The crossed edge is negative space: `shravan-dev-workflow` has no skill-specific handling and never names a `skill-authoring` skill (`U2`).
 
 ## Domain entities
 
@@ -80,7 +80,7 @@ Each requirement names the entities it is written over and the user rows it serv
 | R1 | The plugin MUST provide exactly five skills: an orchestration skill, skill creation, skill review, pressure testing, and skill audit. | E1, E14 | U1, U4 |
 | R2 | The plugin MUST load and run with `shravan-dev-workflow` not installed, in Claude Code and in Codex. | E14 | U2 |
 | R3 | Files in the plugin MUST NOT name a `shravan-dev-workflow` skill or load a `shravan-dev-workflow` file, and files in `shravan-dev-workflow` MUST NOT name a `skill-authoring` skill. | E14 | U2 |
-| R4 | When a `shravan-dev-workflow` skill meets skill-package work, it MUST return its existing routing result for a runtime skill package instead of naming a skill. | E14 | U2 |
+| R4 | `shravan-dev-workflow` MUST contain no skill-package classification, gate, or routing: its phases treat a skill like any other target, and `ready-for-review` always means ordinary implementation review. | E14 | U2, owner 10-06 |
 | R5 | After the cutover, `skills-creation` and `skill-audit` MUST no longer exist in `shravan-dev-workflow`, and files in this repository MUST NOT refer to them by their old names. | E14 | U1, U12 |
 | R6 | The plugin MUST work on Skill packages in any repository, at any path the user names. | E1 | U3 |
 | R49 | The eval runner MUST be a package of its own, separate from the plugin's skills, and MUST be run with `pnpm dlx` (a local `file:` package spec until it is published, then its published name). | E14 | U34, U35 |
@@ -198,9 +198,9 @@ Each requirement names the entities it is written over and the user rows it serv
 - **Gets:** the Check's criterion, the retrieved evidence, and the Scenario's prompt; plus that Check's prescribed Question-card tools only when its Check requires code execution or composition.
 - **Never gets:** any Jev answer, probability, or leaning from the tree; the route that reached the leaf; free-form Jev access; the Skill package's author or revision label; other Runs' results.
 
-### C5 · Workflow routing result (R4)
-- **Consumer:** `shravan-dev-workflow` skills and the owner's skill index.
-- **Contract:** skill-package work yields the existing runtime-skill-package routing result; the owner's index maps it to `skill-authoring`.
+### C5 · No hand-off between the plugins (R4)
+- **Consumer:** users of either plugin.
+- **Contract:** skill work starts in `skill-authoring`; its skill-change spec lives there (the orchestration skill's Change record). `shravan-dev-workflow` phases neither detect nor redirect skill work.
 
 ## Cross-cutting obligations
 
@@ -224,7 +224,7 @@ Each requirement names the entities it is written over and the user rows it serv
 |---|---|---|
 | V1 | R2, C1 | install and invocation transcript in Claude Code and Codex with `shravan-dev-workflow` absent |
 | V2 | R3, R5 | automated search of both plugins and the repository for cross-plugin and old names |
-| V3 | R4, C5 | a `shravan-dev-workflow` scenario where skill-package work returns the routing result |
+| V3 | R4, C5 | automated search: no skill-package classification, gate, or `runtime-skill-package` value remains in `shravan-dev-workflow` |
 | V4 | R7–R20, R42–R44 | new-form Scenarios for the five skills, judged under R38 |
 | V5 | R22–R24, C2 | automated tests: invalid Scenarios rejected before any subject runs |
 | V6 | R26, R36, R37, R40 | automated tests with recorded Observations: absent evidence → inconclusive; ACPX failure → execution-failed; a fail followed by a pass stays fail |

@@ -48,7 +48,7 @@ Authority: `authorized` means an explicit owner decision recorded on the thread 
 | ID | Class | Need, in the owner's terms | Authority | Priority |
 |---|---|---|---|---|
 | U1 | C1, C2 | Skill authoring is its own plugin, `skill-authoring`, taking skills-creation, pressure testing, the skill-change spec, and skill-audit out of `shravan-dev-workflow`. | authorized 10-02 | must |
-| U2 | C1, S1 | Standalone both ways: neither plugin names the other; the owner combines them by invoking skills together, and his skill index routes between them. | authorized 10-02 | must |
+| U2 | C1, S1 | Standalone both ways: neither plugin names the other; the owner combines them by invoking skills together. `shravan-dev-workflow` does not care whether a target is a skill; skill specs live in skill-authoring. | authorized 10-02, clarified 10-06 | must |
 | U3 | C5 | It serves any repo's skills, not only this repo's plugins. | authorized 10-02 | must |
 | U4 | C1, C2 | Five skills: an orchestration skill; skill creation; skill review (multiple reviewer agents plus Jev lint checks); pressure testing and evals; skill audit. The skill-change spec is the orchestration skill's multi-run artifact. | authorized 10-02 | must |
 | U5 | C1 | Evals are cheaper and more reliable. | authorized 10-02 | must |
@@ -97,8 +97,8 @@ Recorded as having **no evidence** of benefit (not proven useless, and not carri
 - **Goal:** a standalone `skill-authoring` plugin that helps an authoring agent in any repo create, review, test, and audit skills, with evals that are cheap enough to run often and reliable enough to trust.
 - **Foundation to reuse:** the skill craft in `skills-creation` that the evidence supports (U16–U19); its review properties (U21); the repository's pressure-test runner as the starting point, made portable (U11); existing scenarios as input material, not as trusted tests.
 - **Actually missing:** the standalone plugin; the orchestration skill; the multi-agent skill-review skill with Jev lint; the eval framework with per-check graders and the Jev cascade; the two done bars.
-- **May change (ai-tools):** a new `plugins/skill-authoring/`; removal of skills-creation and skill-audit from `shravan-dev-workflow`, whose 20 handoff mentions become routing results; the runner's grading, its portability to other repos, and the scenario format; repository docs, manifests, marketplace entries, changelog.
-- **Protected:** the behaviour of every other `shravan-dev-workflow` skill beyond that handoff change; four of those files belong to the maintainer of work breakdown and skill review, and the Specification decides how they change with that maintainer; the owner's own settings and skill index; Router and board; agent-studio.
+- **May change (ai-tools):** a new `plugins/skill-authoring/`; removal of skills-creation and skill-audit from `shravan-dev-workflow`, whose skill-package checks and mentions of those skills are deleted; the runner's grading, its portability to other repos, and the scenario format; repository docs, manifests, marketplace entries, changelog.
+- **Protected:** the behaviour of every other `shravan-dev-workflow` skill beyond deleting its skill-package check; four of those files belong to the maintainer of work breakdown and skill review, and the Specification decides how they change with that maintainer; the owner's own settings and skill index; Router and board; agent-studio.
 - **Non-goals:** regression tracking (later); building the Jev tool (another agent; skill-authoring consumes its interface); the orchestration engine and Inspector; retired skills.
 - **Acceptable complexity (confirmed 10-04):** five skills, the eval framework, and its grader cascade. A run database, dashboards, cross-run governance, unattended automation, or automatic skill edits need renewed approval.
 - **Acceptable evidence (confirmed 10-04):**
