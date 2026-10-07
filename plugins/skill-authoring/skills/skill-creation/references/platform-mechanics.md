@@ -12,7 +12,7 @@ This reference owns platform scaffolding, manifests, marketplace metadata, valid
 - Codex invocation policy belongs in `agents/openai.yaml`. Use `policy.allow_implicit_invocation: false` only as the Codex encoding for a skill that is user-invocable but not automatically model-invocable through prompt matching. Do not add `disable-model-invocation` or `user-invocable` to shared `SKILL.md` frontmatter for Codex unless the active validator and target client explicitly support that field.
 - Optional resources: `references/`, `scripts/`, `assets/`.
 - Use `skill-creator` scripts for scaffolding or validation when they fit the repo workflow.
-- Run the Codex `skill-creator` quick validator for the target skill with PyYAML available. Resolve the validator path from the active Codex skill installation or local development environment; do not publish home-cache paths in shipped skill docs.
+- Run the Codex `skill-creator` quick validator for the target skill. Resolve the validator path from the active Codex skill installation or local development environment; do not publish home-cache paths in shipped skill docs. It needs PyYAML: if the host lacks it, report the validator as not-run with that reason. Never install PyYAML or anything else to run it.
 - Codex plugin availability comes from the source plugin and Codex marketplace policy/path metadata. Update that metadata only when availability, path, category, or policy changes.
 
 ## Claude Mechanics

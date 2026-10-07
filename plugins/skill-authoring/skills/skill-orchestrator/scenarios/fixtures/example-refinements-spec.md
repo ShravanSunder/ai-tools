@@ -1,31 +1,31 @@
-# debug-investigation refinements: skill spec
+# debug-notes refinements: skill spec
 
 Revision 2.
 
 ## Targets and runs
 
-Owner plugin: `shravan-dev-workflow`. Every run names one skill.
+Owner folder: `tools/skills/`. Every run names one skill.
 
 | Run | Target | Surface | State |
 | --- | --- | --- | --- |
-| A | `debug-investigation` | `SKILL.md` wording: when to write a repo-local debug artifact versus staying in chat | proposed |
-| B | `debug-investigation` | `references/background-monitoring.md`: watcher cancellation wording | proposed |
+| A | `debug-notes` | `SKILL.md` wording: when to write a repo-local notes file versus staying in chat | proposed |
+| B | `debug-notes` | `SKILL.md` workflow: closing out notes when the cause is found | proposed |
 
 ## Problem and evidence
 
-- Agents write a debug artifact for one-line chat questions (session log 2026-07-28, three occurrences).
-- Agents leave background watchers running after the answer is found (hypothesis; one observation).
+- Agents write a notes file for one-line chat questions (session log 2026-07-28, three occurrences).
+- Agents leave notes open-ended after the cause is found (hypothesis; one observation).
 
 ## Success definition
 
-A one-line debugging question stays in chat; a multi-step investigation with reproduction steps gets a repo-local artifact; a background watcher is cancelled when its question is answered.
+A one-line debugging question stays in chat; a multi-step investigation with reproduction steps gets a repo-local notes file; notes end with the cause and the fix once the cause is found.
 
 ## Decisions
 
 | Decision | Default taken | Rationale | Priority |
 | --- | --- | --- | --- |
-| Artifact threshold | write one only when there are reproduction steps to keep | the artifact exists to preserve steps across sessions | must |
-| Watcher cancellation | cancel on the answer, not on a timer | timers outlive short answers | should |
+| Notes threshold | write a notes file only when there are reproduction steps to keep | the file exists to preserve steps across sessions | must |
+| Close-out | end the notes with cause and fix | an open-ended note misleads the next reader | should |
 | Example in body | one short example inline | the predicate is easier to apply with one example | could |
 
 ## Proof plan

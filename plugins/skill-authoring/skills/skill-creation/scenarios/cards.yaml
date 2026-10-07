@@ -86,7 +86,7 @@ cards:
 - id: treats-as-update
   serves: treats-as-update
   type: yes_no
-  question: Does the reply treat the request as an update to the existing debug-investigation skill rather than creating a new skill?
+  question: Does the reply treat the request as an update to the existing debug-notes skill rather than creating a new skill?
   evidence:
   - finalMessage
 - id: defers-inventory

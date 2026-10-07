@@ -34,11 +34,11 @@ Each check answers one narrow question, stated in `criterion` as a plain sentenc
 
 Build each check as a decision tree, cheapest evidence first:
 
-1. **Code step** when the answer is in recorded actions. Steps: `readFile: <file>` (a completed tool call names the file), `loadedSkill: <name?>` (it opened that skill's `SKILL.md`), `noWritesAttempted: {}`, `toolCallCount: {max: n}`. File references are `skill:<path>` (the scenario's skill), `skill(<name>):<path>` (a sibling skill), or `repo:<path>`.
+1. **Code step** when the answer is in recorded actions. Steps: `readFile: <file>` (it read the file's content; mentioning the path is not a read), `loadedSkill: <name?>` (it read that skill's `SKILL.md`), `noWritesAttempted: {}`, `toolCallCount: {max: n}`, `startedSubagents: {min: n}` (it started at least `n` separate agents). File references are `skill:<path>` (the scenario's skill), `skill(<name>):<path>` (a sibling skill), or `repo:<path>`.
 2. **Jev card** when the answer is a narrow yes/no or choice about meaning. Its `uncertain` branch decides what happens when Jev is unsure: usually a judge leaf, sometimes `inconclusive`.
 3. **Judge leaf** only where the tree needs it. It sees the request, the criterion, and the evidence you list, nothing else.
 
-Every branch ends in `pass`, `fail`, `inconclusive`, or a judge leaf. Use `inconclusive` when the evidence cannot settle the question; a missing observation is never a `fail`.
+Every branch ends in `pass`, `fail`, `inconclusive`, or a judge leaf. A step that cannot be decided, or a node whose evidence is missing, makes the check `inconclusive` on its own; a missing observation is never a `fail`. Code steps check what was done, not when: write a criterion as "opens X", not "opens X before Y".
 
 ```yaml
 checks:

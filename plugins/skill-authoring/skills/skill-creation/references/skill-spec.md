@@ -25,7 +25,7 @@ run status: per run, proposed | implemented | reviewed | shipped
 review record: accepted revision label, checks, statuses, verdict, semantic coverage, acceptance
 ```
 
-Each decisions row records the default taken and its rationale so the user can strike it cheaply — after acceptance, striking a row is an edit like any other, and a row without a rationale gives the user nothing to strike against. Every problem or evidence claim names its source or is labeled a hypothesis. The coordination slot is read at implement and ship time: a slice run checks its base, pending edits, and version/changelog landing against it before editing.
+Each decisions row records the default taken and its rationale so the user can strike it cheaply — after acceptance, striking a row is an edit like any other, and a row without a rationale gives the user nothing to strike against. A recorded decision is never rewritten: when the user strikes or changes one, keep the original row and add a dated row that names the row it supersedes, so the effective decision and its history both stay readable. Every problem or evidence claim names its source or is labeled a hypothesis. The coordination slot is read at implement and ship time: a slice run checks its base, pending edits, and version/changelog landing against it before editing.
 
 ## Run Status
 
@@ -38,6 +38,6 @@ reviewed     the implementation review for the run returned great
 shipped      the change was released or merged as the user scoped
 ```
 
-A run not shown as `shipped` is never reported as shipped, and `implemented` is never reported as reviewed. Whoever moves a run forward records the evidence beside the new state: the diff for `implemented`, the review result for `reviewed`, the release or merge for `shipped`.
+A run not shown as `shipped` is never reported as shipped, and `implemented` is never reported as reviewed. A mechanical change, or one whose implementation review the user explicitly skipped, moves from `implemented` to `shipped` with that boundary written beside it; it is never shown as `reviewed`. Whoever moves a run forward records the evidence beside the new state: the diff for `implemented`, the review result for `reviewed`, the release or merge for `shipped`.
 
 Complete when: the form (conversation or doc) follows the predicates, and every slot carries what its consuming run can execute from without guessing, or its exact unknown; a slot holding TBD is neither.

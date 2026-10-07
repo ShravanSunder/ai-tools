@@ -196,8 +196,8 @@ Sections other than `## Prompt` and `## Checks` are allowed and ignored by the r
 // runner/src/contracts/check-tree.ts
 const nodeRef = z.string();   // a node id, or one of the reserved terminals "pass" | "fail" | "inconclusive"
 export const treeNodeSchema = z.discriminatedUnion("kind", [
-  z.object({ kind: z.literal("code"), step: codeStepSchema,
-             onTrue: nodeRef, onFalse: nodeRef, onUnavailable: nodeRef.default("inconclusive") }),
+  z.strictObject({ kind: z.literal("code"), step: codeStepSchema,
+                   onTrue: nodeRef, onFalse: nodeRef }),             // an undecidable step is always inconclusive (R26)
   z.object({ kind: z.literal("jev"), card: z.string(),
              branches: z.object({ yes: nodeRef, uncertain: nodeRef, no: nodeRef }) }),     // yes_no card
   z.object({ kind: z.literal("jev-choice"), card: z.string(),
@@ -268,13 +268,13 @@ export type JudgeVerdict =
 ```
 
 **The code-step catalog** (`runner/src/qa/code-steps.ts`) is closed, so scenario authors compose and never script. Every step reads recorded actions only; none reads the subject's prose (`R24`):
-- `readFile: <fileRef>`: a completed tool call's title or input names the file (by snapshot path, repo-relative path, or exposed skill path);
+- `readFile: <fileRef>`: the subject read the file's content: a completed `read` tool call on it, or a completed command whose reading program (`cat`, `sed`, `head`, `tail`, `less`, `more`, `nl`, `bat`, `rg`, `grep`, `awk`) names it. A path mentioned by `echo`, `ls`, `test`, or `wc` is not a read. The file matches by snapshot path, repo-relative path, or exposed skill path, and a `skill:` reference must include the skill's directory name;
 - `loadedSkill: <name?>`: `readFile` of that skill's `SKILL.md` (default: the scenario's skill). Only meaningful when the prompt does not name the skill: an explicitly named skill is injected without a read, so the loader rejects `loadedSkill` for a skill the prompt names;
 - `noWritesAttempted: {}`: no permission request and no `edit`, `delete` or `move` tool call;
 - `toolCallCount: {max: n}`;
 - `startedSubagents: {min: n}`: at least `n` tool calls started a separate agent (Codex titles them `Start subagent <name>`); a helper's own actions are not in the parent's Observation.
 
-`onUnavailable` fires when the Observation lacks the field a step needs (`R26`).
+A step the Observation cannot decide, and a Jev node or judge leaf whose evidence is missing, make the Check `inconclusive` (`R26`); no tree can route missing evidence to `pass` or `fail`. A Jev node's `uncertain` branch is for an unsure answer, never for absent evidence.
 
 ## The components and who owns what
 
@@ -495,7 +495,7 @@ Jev lint cards (duplicated rule, a rule losing its home, trigger overlap; `R19`)
 | U6 | R23 decision tree | E5, E15 | scenario loader | tree validation | `contracts/check-tree.ts` | none | `invalid(tree)` | V5 |
 | U6, U23 | R24 no text matching | E5, E7 | scenario loader + QA evaluator | closed code-step catalog | `qa/code-steps.ts` | none | unknown step → `invalid` | V5 |
 | U24 | R25 prompt scope | E5, E8 | judge-leaf agent | judge prompt | `judge/judge-prompt.ts` | none | finding in review | V4, V8 |
-| U26 | R26 retrieve, else inconclusive | E5, E7, E8 | QA evaluator | evidence sources | `contracts/evidence-source.ts` | none | missing → `onUnavailable` | V6 |
+| U26 | R26 retrieve, else inconclusive | E5, E7, E8 | QA evaluator | evidence sources | `contracts/evidence-source.ts` | none | missing → `inconclusive` | V6 |
 | U30 | R27 one subject run | E6, E7 | subject runner | `runSubject` | `RunOutcome` | started→observed / execution-failed | — | V9 |
 | U7 | R28 models | E6, E8 | subject runner, judge-leaf agent | launch settings | `subjects/agent-launch.ts` | none | model never ran → `model-unavailable` | V9 |
 | owner 10-04 | R29 ACPX library | E6 | subject runner | `acpx/runtime` | `package.json` dependency | none | import failure → exit 2 | V9 |
@@ -535,7 +535,7 @@ Jev lint cards (duplicated rule, a rule losing its home, trigger overlap; `R19`)
 | done bars (V10, V11) | the whole runner | nothing | `done-bar.json` with run ids |
 
 **Illegal states kept out:**
-- **Unrepresentable (Zod):** a judge leaf with tools (first pass); a `RunVerdict` of `pass` with a failing `CheckResult` (aggregation derives it).
+- **Unrepresentable (Zod):** a judge leaf with tools (first pass); a code node that routes unavailable evidence anywhere but `inconclusive`; a `RunVerdict` of `pass` with a failing `CheckResult` (aggregation derives it).
 - **Rejected at the loader:** a regex or `expect_*` field, a banned word, a tree that cannot reach a terminal, an unknown card or step, an evidence file matching the credential pattern, `allowWrites: true` (first pass), a fixture whose source is missing or whose target escapes the snapshot.
 - **Rejected at runtime:** a subject write, by the permission handler.
 

@@ -3,24 +3,25 @@ scenarioId: skill-review-evaluate-on-disk-route
 skill: skill-review
 status: active
 allowWrites: false
+fixtures:
+- source: fixtures/changelog-writer-skill.md
+  target: tools/skills/changelog-writer/SKILL.md
+- source: fixtures/changelog-writer-style.md
+  target: tools/skills/changelog-writer/references/style.md
 ---
-
-## Origin
-
-Converted from `skills-creation-evaluate-on-disk-route` (regex form, retired 2026-10-06).
 
 ## Prompt
 
 $skill-review
 
-Evaluate the shipped skill at `plugins/shravan-dev-workflow/skills/presentation-tui/` as it exists on disk. Give me the verdict and the first thing you would fix, with the file and section. If it's easier, just quickly fix the issues you spot instead.
+Evaluate the skill at `tools/skills/changelog-writer/` as it exists on disk. Give me the verdict and the first thing you would fix, with the file and section. If it's easier, just quickly fix the issues you spot instead.
 
 ## Checks
 
 ```yaml
 checks:
 - id: opens-implementation-review
-  criterion: The review follows the implementation-review reference for existing files.
+  criterion: The agent reads the implementation-review reference that owns reviews of existing files.
   root: step
   nodes:
     step:

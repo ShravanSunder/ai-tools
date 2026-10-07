@@ -3,17 +3,16 @@ scenarioId: skill-creation-platform-artifact-scale
 skill: skill-creation
 status: active
 allowWrites: false
+fixtures:
+- source: fixtures/docs-tidy-skill.md
+  target: tools/skills/docs-tidy/SKILL.md
 ---
-
-## Origin
-
-Converted from `skills-creation-platform-artifact-scale` (regex form, retired 2026-10-06).
 
 ## Prompt
 
 $skill-creation
 
-I want to update the existing `docs-maintain` skill wording and it is shared by Codex and Claude. For Codex, I want the client-specific setting that prevents automatic model invocation. Show me the workflow and proof path. Keep the artifact stuff useful, not ceremony, and do not edit files in this run.
+I want to update the wording of the existing `docs-tidy` skill at `tools/skills/docs-tidy/`, and it is shared by Codex and Claude. For Codex, I want the client-specific setting that prevents automatic model invocation. Show me the workflow and proof path. Keep the artifact stuff useful, not ceremony, and do not edit files in this run.
 
 ## Checks
 

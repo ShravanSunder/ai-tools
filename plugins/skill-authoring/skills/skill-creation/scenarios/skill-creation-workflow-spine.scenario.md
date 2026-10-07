@@ -5,15 +5,11 @@ status: active
 allowWrites: false
 ---
 
-## Origin
-
-Converted from `skills-creation-workflow-spine` (regex form, retired 2026-10-06).
-
 ## Prompt
 
 $skill-creation
 
-I want to create one new repo skill called `release-note-reviewer` in `shravan-dev-workflow`. It should help agents review changelog entries before a release ships. I also keep wondering which other skills should exist in this repo, but do not do a huge inventory right now.
+I want to create one new skill called `release-note-reviewer` in this repo's `tools/skills/` folder. It should help agents review changelog entries before a release ships. I also keep wondering which other skills should exist in this repo, but do not do a huge inventory right now.
 
 Tell me how you are classifying this request, what is in scope for this run, and draft the exact frontmatter `description:` line you would ship for the new skill.
 

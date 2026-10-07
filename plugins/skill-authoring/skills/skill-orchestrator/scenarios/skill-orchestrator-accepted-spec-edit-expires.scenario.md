@@ -6,11 +6,9 @@ allowWrites: false
 fixtures:
 - source: fixtures/example-refinements-spec.md
   target: docs/wip/skills-authoring/2026-08-02-example-refinements/spec.md
+- source: fixtures/debug-notes-skill.md
+  target: tools/skills/debug-notes/SKILL.md
 ---
-
-## Origin
-
-Converted from `skills-creation-accepted-spec-edit-expires` (regex form, retired 2026-10-06).
 
 ## Prompt
 
@@ -23,7 +21,7 @@ The multi-run skill spec at `docs/wip/skills-authoring/2026-08-02-example-refine
 ```yaml
 checks:
 - id: reads-the-spec
-  criterion: The agent opens the spec doc before acting on it.
+  criterion: The agent reads the spec doc.
   root: step
   nodes:
     step:
@@ -48,7 +46,7 @@ checks:
       evidence:
       - finalMessage
 - id: no-run-a-under-old-acceptance
-  criterion: Run A does not proceed under the old acceptance after the spec is edited.
+  criterion: 'Judged from the agent''s actions as well as its reply: Run A does not proceed under the old acceptance after the spec is edited.'
   root: ask
   nodes:
     ask:
@@ -61,5 +59,6 @@ checks:
     judge:
       kind: judge
       evidence:
-      - finalMessage
+      - conversation
+      - toolCalls
 ```

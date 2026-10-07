@@ -3,34 +3,33 @@ scenarioId: skill-creation-update-existing-skill
 skill: skill-creation
 status: active
 allowWrites: false
+fixtures:
+- source: fixtures/debug-notes-skill.md
+  target: tools/skills/debug-notes/SKILL.md
 ---
-
-## Origin
-
-Converted from `skills-creation-update-existing-skill` (regex form, retired 2026-10-06).
 
 ## Prompt
 
 $skill-creation
 
-Update the existing `debug-investigation` skill so it is clearer about when to write a repo-local debug artifact versus staying in chat. I do wonder whether there are adjacent debugging skills we should merge someday, but do not do a broad inventory right now. I already know the wording problem, so just make the change and confirm it reads better.
+Update the existing `debug-notes` skill at `tools/skills/debug-notes/` so it is clearer about when to write a repo-local notes file versus staying in chat. I do wonder whether there are adjacent debugging skills we should merge someday, but do not do a broad inventory right now. I already know the wording problem, so just make the change and confirm it reads better.
 
 ## Checks
 
 ```yaml
 checks:
 - id: reads-the-target-skill
-  criterion: The agent opens the current debug-investigation SKILL.md before saying anything about it.
+  criterion: The agent reads the current SKILL.md of the skill it was asked to update.
   root: step
   nodes:
     step:
       kind: code
       step:
-        readFile: repo:plugins/shravan-dev-workflow/skills/debug-investigation/SKILL.md
+        readFile: repo:tools/skills/debug-notes/SKILL.md
       onTrue: pass
       onFalse: fail
-- id: no-edit-before-spec
-  criterion: The agent attempts no edit before a success definition and spec exist.
+- id: no-edit-without-spec
+  criterion: The agent attempts no file edit in this run, since no success definition or spec exists yet.
   root: step
   nodes:
     step:
