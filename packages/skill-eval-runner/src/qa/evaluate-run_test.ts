@@ -1,7 +1,7 @@
 import { assertEquals } from "jsr:@std/assert@1";
 import { evaluateRun } from "./evaluate-run.ts";
 import { FakeJudge } from "../judge/judge-port.ts";
-import { NoEngineJev } from "../jev/jev-port.ts";
+import { type JevAnswer, NoEngineJev } from "../jev/jev-port.ts";
 import type { Scenario } from "../contracts/scenario.ts";
 import type { Observation } from "../contracts/observation.ts";
 const scenario: Scenario = {
@@ -257,106 +257,123 @@ Deno.test("a decided judge reply is never retried", async () => {
   });
   assertEquals(judge.calls, 1);
 });
-Deno.test("scripted Jev covers yes, no, uncertain, and choice branches", async () => {
-  const cards: Scenario["cards"] = [{
-    ...scenario.cards[0],
-    calibration: { bands: { yes: 0.9, no: 0.1 } },
-  }, {
-    id: "choice",
-    serves: "choice",
-    type: "choice" as const,
-    question: "Which?",
-    options: ["red", "blue"],
-    evidence: ["finalMessage"] as const,
-    calibration: { bands: { red: 0.9, blue: 0.9 } },
-  }];
-  const checks: Scenario["checks"] = [
-    {
-      id: "yes",
-      criterion: "yes",
-      root: "a",
-      nodes: {
-        a: {
-          kind: "jev" as const,
-          card: "q",
-          branches: { yes: "pass", no: "fail", uncertain: "inconclusive" },
-        },
-      },
-    },
-    {
-      id: "no",
-      criterion: "no",
-      root: "a",
-      nodes: {
-        a: {
-          kind: "jev" as const,
-          card: "q",
-          branches: { yes: "pass", no: "fail", uncertain: "inconclusive" },
-        },
-      },
-    },
-    {
-      id: "uncertain",
-      criterion: "uncertain",
-      root: "a",
-      nodes: {
-        a: {
-          kind: "jev" as const,
-          card: "q",
-          branches: { yes: "pass", no: "fail", uncertain: "inconclusive" },
-        },
-      },
-    },
-    {
-      id: "choice",
-      criterion: "choice",
-      root: "a",
-      nodes: {
-        a: {
-          kind: "jev-choice" as const,
-          card: "choice",
-          branches: { red: "fail", blue: "pass" },
-          uncertain: "inconclusive",
-        },
-      },
-    },
-  ];
-  const branchScenario = { ...scenario, cards, checks };
-  class ScriptedJev extends NoEngineJev {
-    private index = 0;
-    constructor(
-      private readonly answers:
-        readonly ({ value: string; score: number } | { unavailable: true })[],
-    ) {
-      super();
-    }
-    override ask(): Promise<import("../jev/jev-port.ts").JevAnswer> {
-      const answer = this.answers[this.index++];
-      return Promise.resolve(
-        "unavailable" in answer
-          ? { kind: "unavailable", reason: "script" }
-          : { kind: "answered", value: answer.value, score: answer.score },
-      );
-    }
+type ScriptedJevAnswer =
+  | { engine: string; value: string; score: number }
+  | { unavailable: true };
+class ScriptedJev extends NoEngineJev {
+  private index = 0;
+  constructor(private readonly answers: readonly ScriptedJevAnswer[]) {
+    super();
   }
+  override ask(): Promise<JevAnswer> {
+    const answer = this.answers[this.index++];
+    return Promise.resolve(
+      "unavailable" in answer ? { kind: "unavailable", reason: "script" } : {
+        kind: "answered",
+        engine: answer.engine,
+        value: answer.value,
+        score: answer.score,
+      },
+    );
+  }
+}
+const calibratedEngine = "calibrated-engine";
+const calibratedCards: Scenario["cards"] = [{
+  ...scenario.cards[0],
+  calibration: { [calibratedEngine]: { bands: { yes: 0.9, no: 0.1 } } },
+}, {
+  id: "choice",
+  serves: "choice",
+  type: "choice" as const,
+  question: "Which?",
+  options: ["red", "blue"],
+  evidence: ["finalMessage"] as const,
+  calibration: { [calibratedEngine]: { bands: { red: 0.9, blue: 0.9 } } },
+}];
+const yesNoCheck = (id: string): Scenario["checks"][number] => ({
+  id,
+  criterion: id,
+  root: "a",
+  nodes: {
+    a: {
+      kind: "jev" as const,
+      card: "q",
+      branches: { yes: "pass", no: "fail", uncertain: "inconclusive" },
+    },
+  },
+});
+const choiceCheck = (id: string): Scenario["checks"][number] => ({
+  id,
+  criterion: id,
+  root: "a",
+  nodes: {
+    a: {
+      kind: "jev-choice" as const,
+      card: "choice",
+      branches: { red: "fail", blue: "pass" },
+      uncertain: "inconclusive",
+    },
+  },
+});
+Deno.test("scripted Jev covers yes, no, uncertain, and choice branches", async () => {
+  const branchScenario = {
+    ...scenario,
+    cards: calibratedCards,
+    checks: [
+      yesNoCheck("yes"),
+      yesNoCheck("no"),
+      yesNoCheck("uncertain"),
+      choiceCheck("choice-below-band"),
+      choiceCheck("choice-inside-band"),
+    ],
+  };
   const result = await evaluateRun(branchScenario, {
     kind: "observed",
     runId: "r",
     observation,
   }, {
     jev: new ScriptedJev([
-      { value: "yes", score: 1 },
-      { value: "no", score: 0 },
+      { engine: calibratedEngine, value: "yes", score: 1 },
+      { engine: calibratedEngine, value: "no", score: 0 },
       { unavailable: true },
-      { value: "red", score: 0 },
+      { engine: calibratedEngine, value: "red", score: 0 },
+      { engine: calibratedEngine, value: "blue", score: 0.95 },
     ]),
     judge: new FakeJudge({ kind: "malformed", raw: "bad judge reply" }),
   });
-  assertEquals(result.checks.length, 4);
-  assertEquals(result.checks[0].result, "pass");
-  assertEquals(result.checks[1].result, "fail");
-  assertEquals(result.checks[2].result, "inconclusive");
-  assertEquals(result.checks[3].result, "fail");
+  assertEquals(result.checks.map((check) => check.result), [
+    "pass",
+    "fail",
+    "inconclusive",
+    "inconclusive",
+    "pass",
+  ]);
+});
+Deno.test("Jev answers from an engine without a calibration for the card are uncertain", async () => {
+  const uncalibratedScenario = {
+    ...scenario,
+    cards: calibratedCards,
+    checks: [yesNoCheck("yes-no"), choiceCheck("choice")],
+  };
+  const result = await evaluateRun(uncalibratedScenario, {
+    kind: "observed",
+    runId: "r",
+    observation,
+  }, {
+    jev: new ScriptedJev([
+      { engine: "other-engine", value: "yes", score: 1 },
+      { engine: "other-engine", value: "blue", score: 1 },
+    ]),
+    judge: new FakeJudge({ kind: "malformed", raw: "bad judge reply" }),
+  });
+  assertEquals(result.checks.map((check) => check.result), [
+    "inconclusive",
+    "inconclusive",
+  ]);
+  assertEquals(result.checks.map((check) => check.path[0].outcome), [
+    "uncertain",
+    "uncertain",
+  ]);
 });
 Deno.test("zero model usage maps to model-unavailable", async () => {
   const { completedWithoutModelUsage } = await import(

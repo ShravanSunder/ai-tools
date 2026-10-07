@@ -1,5 +1,6 @@
 import type { Scenario } from "../contracts/scenario.ts";
 import type { CheckTree } from "../contracts/check-tree.ts";
+import type { QuestionCard } from "../contracts/question-card.ts";
 import type { Observation } from "../contracts/observation.ts";
 import type { CheckResult, JudgeAudit } from "../contracts/check-result.ts";
 import type { RunOutcome } from "../contracts/run.ts";
@@ -62,22 +63,26 @@ const askJudge = async (
     };
   }
 };
-const band = (
-  answer: JevAnswer,
-  cardType: "yes_no" | "choice",
-  calibration?: { bands: Record<string, number> },
-): string => {
+// R32: an answer leaves the uncertain band only inside the bands measured for this card and
+// the engine that answered. No calibration for that engine, or no band for the answer, is uncertain.
+const band = (answer: JevAnswer, card: QuestionCard): string => {
   if (answer.kind !== "answered") return "uncertain";
-  if (!calibration) return "uncertain";
-  if (cardType === "yes_no") {
-    const yes = calibration.bands.yes ?? 0.9, no = calibration.bands.no ?? 0.1;
+  const bands: Readonly<Record<string, number | undefined>> | undefined = card
+    .calibration?.[answer.engine]?.bands;
+  if (!bands) return "uncertain";
+  if (card.type === "yes_no") {
+    const yes = bands.yes, no = bands.no;
+    if (yes === undefined || no === undefined) return "uncertain";
     return answer.score >= yes
       ? "yes"
       : answer.score <= no
       ? "no"
       : "uncertain";
   }
-  return answer.value;
+  const chosenThreshold = bands[answer.value];
+  return chosenThreshold !== undefined && answer.score >= chosenThreshold
+    ? answer.value
+    : "uncertain";
 };
 async function evaluateCheck(
   check: CheckTree,
@@ -145,7 +150,7 @@ async function evaluateCheck(
         };
       }
       const answer = await ports.jev.ask(card, ev.values);
-      const outcome = band(answer, card.type, card.calibration);
+      const outcome = band(answer, card);
       path.push({ nodeId: ref, kind: node.kind, outcome, evidence: ev.values });
       decidedBy = "jev";
       ref = node.kind === "jev"

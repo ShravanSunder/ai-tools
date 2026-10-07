@@ -8,8 +8,11 @@ export const questionCardSchema = z.strictObject({
   options: z.array(z.string()).optional(),
   evidence: z.array(evidenceSourceSchema).min(1),
   combine: z.unknown().optional(),
-  calibration: z.strictObject({ bands: z.record(z.string(), z.number()) })
-    .optional(),
+  // Keyed by the Jev engine the bands were measured for: a score is trusted only for that engine.
+  calibration: z.record(
+    z.string(),
+    z.strictObject({ bands: z.record(z.string(), z.number()) }),
+  ).optional(),
 }).superRefine((c, ctx) => {
   if (c.type === "choice" && (!c.options || c.options.length === 0)) {
     ctx.addIssue({
