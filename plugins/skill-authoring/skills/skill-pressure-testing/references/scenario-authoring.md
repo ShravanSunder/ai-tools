@@ -43,7 +43,7 @@ Every branch ends in `pass`, `fail`, `inconclusive`, or a judge leaf. A step tha
 ```yaml
 checks:
   - id: reads-the-review-reference
-    criterion: The agent opens the implementation-review reference before giving its verdict.
+    criterion: The agent reads the implementation-review reference.
     root: opened
     nodes:
       opened:

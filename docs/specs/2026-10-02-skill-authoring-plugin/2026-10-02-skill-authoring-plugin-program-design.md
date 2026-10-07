@@ -270,7 +270,7 @@ export type JudgeVerdict =
 ```
 
 **The code-step catalog** (`runner/src/qa/code-steps.ts`) is closed, so scenario authors compose and never script. Every step reads recorded actions only; none reads the subject's prose (`R24`):
-- `readFile: <fileRef>`: the subject read the file's content: a completed `read` tool call on it, or a completed command whose reading program (`cat`, `sed`, `head`, `tail`, `less`, `more`, `nl`, `bat`, `rg`, `grep`, `awk`) names it. A path mentioned by `echo`, `ls`, `test`, or `wc` is not a read. The file matches by snapshot path, repo-relative path, or exposed skill path, and a `skill:` reference must include the skill's directory name;
+- `readFile: <fileRef>`: the subject read the file's content: a completed `read` tool call on it, or a completed command segment that reads the named file's content: `cat`, `head`, `tail`, `less`, `more`, `nl`, `bat`, `awk`, `sed` without `-i`, or `rg`/`grep` searching inside it. Listing or naming modes are not reads: `echo`, `ls`, `test`, `wc`, `rg --files`, `rg -l`/`--files-with-matches`, `grep -l`, `grep -c`. Authored references keep their `skill:<relative-path>` form; when matching, the resolved path must include the skill's directory name (exposed or repo-relative), so another skill's file of the same name does not match;
 - `loadedSkill: <name?>`: `readFile` of that skill's `SKILL.md` (default: the scenario's skill). Only meaningful when the prompt does not name the skill: an explicitly named skill is injected without a read, so the loader rejects `loadedSkill` for a skill the prompt names;
 - `noWritesAttempted: {}`: no permission request and no `edit`, `delete` or `move` tool call;
 - `toolCallCount: {max: n}`;
