@@ -245,7 +245,7 @@ export type Observation = {
 export type RunOutcome =
   | { readonly kind: "observed"; readonly runId: string; readonly observation: Observation }
   | { readonly kind: "execution-failed"; readonly runId: string;
-      readonly cause: "permission-stop" | "agent-start-failed" | "model-unavailable" | "acpx-error" | "timeout" | "cancelled";
+      readonly cause: "permission-stop" | "agent-start-failed" | "model-unavailable" | "acpx-error" | "timeout" | "cancelled" | "credential-exposure";
       readonly detail: string };
 
 // runner/src/contracts/check-result.ts
@@ -443,6 +443,7 @@ Jev lint cards (duplicated rule, a rule losing its home, trigger overlap; `R19`)
 - **Subjects can't write** (`R30`): read-only sandbox, a permission handler that approves only read and search requests and rejects and records every other request, and a snapshot copy, so nothing reaches the repository under test.
 - **Subjects see nothing of the host** (`R51`): isolated `CODEX_HOME` and `HOME`; remote plugins off; only the snapshot's skills exposed.
 - **The login is linked, never handled:** the only host credential path is the `auth.json` symlink target; the runner checks existence only.
+- **A subject can read the linked login, so the runner withholds it and fails the Run:** the read-only sandbox still lets a subject read `CODEX_HOME/auth.json` (measured 2026-10-08: readable, no permission request). Subject shells do not inherit `CODEX_HOME` (`shell_environment_policy.exclude`). Any tool call whose title, input or output names the subject's Codex home, `auth.json` or `CODEX_HOME` has its input and output withheld, and the Run becomes `execution-failed(credential-exposure)`: its Observation is dropped before anything is written or judged, so it never counts. The runner itself still never reads the credential. A read that names none of those strings (for example a glob reached through `$HOME/..`) is not caught.
 - **The judge is isolated:** its own session in an empty directory; it sees only the request, criterion, and evidence; it never sees subject identity, revision labels, or Jev answers.
 - **Secrets stay out of Jev:** evidence is assembled by code; the loader rejects card evidence that names files matching the credential pattern (`credential|escrow|token|secret|password|keychain|auth|api.?key|private.?key`), per the owner's standing rule.
 - **Nothing gets installed** (`R49`, `R50`): `pnpm dlx` runs the package in a temporary environment; Deno and codex-acp come from the package's own dependencies; the user's existing `codex` is used, never installed.
