@@ -1,4 +1,4 @@
-import { assert, assertEquals, assertStringIncludes } from "jsr:@std/assert@1";
+import { assertEquals, assertStringIncludes } from "jsr:@std/assert@1";
 import {
   copySharedReferences,
   type EnvironmentResult,
@@ -44,6 +44,8 @@ const prepareWithFixtureLogin = async (
     else Deno.env.set("CODEX_HOME", previous);
   }
 };
+const pathExists = (path: string): Promise<boolean> =>
+  Deno.stat(path).then(() => true, () => false);
 Deno.test("snapshot removes scenarios only beside skills", async () => {
   const root = await Deno.makeTempDir();
   await Deno.mkdir(`${root}/one/scenarios`, { recursive: true });
@@ -52,10 +54,11 @@ Deno.test("snapshot removes scenarios only beside skills", async () => {
   await Deno.writeTextFile(`${root}/one/scenarios/hidden.md`, "hidden");
   await Deno.writeTextFile(`${root}/src/scenarios/keep.md`, "keep");
   await removeScenarioDirectoriesFromSnapshot(root);
-  try {
-    await Deno.stat(`${root}/one/scenarios`);
-    assert(false, "skill scenarios remains");
-  } catch { /* expected */ }
+  assertEquals(
+    await pathExists(`${root}/one/scenarios`),
+    false,
+    "skill scenarios remains",
+  );
   assertEquals(
     await Deno.readTextFile(`${root}/src/scenarios/keep.md`),
     "keep",
@@ -229,8 +232,6 @@ Deno.test("a different skill set that collides with .agents/skills is still a co
     reason: "skill-name-conflict:shared-name",
   });
 });
-const pathExists = (path: string): Promise<boolean> =>
-  Deno.stat(path).then(() => true, () => false);
 Deno.test(".skill-eval-hide paths leave the snapshot while fixtures under them still land", async () => {
   const repo = await Deno.makeTempDir();
   const files: Readonly<Record<string, string>> = {
