@@ -36,12 +36,10 @@ privileged actions:
 third-party source:
 license / permission state:
 copy-vs-adapt decision:
-decision: allowed | disallowed | blocked | deferred — include in the run summary because this branch ran
+decision: allowed | disallowed | blocked | deferred — include in the run summary, or skill-creation's step 7 return, because this branch ran
 required proof:
 public-safe constraints:
 review route:
 ```
 
 Complete when: every sensitive surface in scope carries an allowed, disallowed, blocked, or deferred decision recorded before that surface was outlined or written.
-
-Chat-only sensitive-surface reviews still use these return labels, including license/permission and copy-vs-adapt decisions for third-party source.

@@ -56,5 +56,4 @@ Model-invocable, user-invocable, context load, cognitive load, and router skills
 - Structural proof: evidence that files are valid, parse, package, or validate.
 - Behavior proof: evidence that the skill changes what the agent does.
 - RED/GREEN/REFACTOR: capture baseline failure or proof gap, revise the skill, then tighten the smallest wording that still leaks.
-- Micro-test: a quick wording check with no-guidance control and fresh-context repetitions.
 - Rationalization: the excuse an agent uses to skip the intended behavior under pressure.
