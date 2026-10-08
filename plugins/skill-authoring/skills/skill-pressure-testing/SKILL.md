@@ -1,6 +1,6 @@
 ---
 name: skill-pressure-testing
-description: "Use when proving a skill changes agent behavior, reproducing a recorded skill failure, writing or running pressure scenarios, or checking a skill change against its done bar. Not for reviewing skill text (skill-review)."
+description: "Use when proving a skill changes agent behavior, reproducing a recorded skill failure, writing or running pressure scenarios or evals, or checking a skill change against its done bar. Not for reviewing skill text (skill-review)."
 ---
 
 # Skill Pressure Testing
@@ -32,7 +32,7 @@ MUST load `references/proof-and-claims.md` and return the claim the purpose targ
 
 ### 3. Get the scenarios
 
-Use the active scenarios beside the skill when they exercise the behavior. IF no scenario exercises the behavior, load `references/scenario-authoring.md` and return the new scenario, its checks, and the `validate` result. Completion: every scenario you will run validates, and each one exercises the changed text.
+Use the active scenarios beside the skill when they exercise the behavior. IF no scenario exercises the behavior, load `references/scenario-authoring.md` and return the new scenario, its checks, and the `validate` result. MUST load `references/runner-usage.md` and return the `validate` result for every scenario you will run. Completion: every scenario you will run validates, and each one exercises the changed text.
 
 ### 4. Run
 

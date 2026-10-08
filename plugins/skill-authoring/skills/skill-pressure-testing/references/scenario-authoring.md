@@ -14,8 +14,7 @@ Grade what the agent did before what it said. The code-step catalog reads record
 
 ```text
 <skill dir>/scenarios/<scenario-id>.scenario.md   one scenario
-<skill dir>/scenarios/cards.yaml                  the skill's Question cards, shared by its scenarios
-<skill dir>/scenarios/calibrations/<card>.<engine>.json   measured bands, written offline
+<skill dir>/scenarios/cards.yaml                  the skill's Question cards and their calibrations, shared by its scenarios
 ```
 
 ## Write The Prompt
@@ -42,29 +41,29 @@ Every branch ends in `pass`, `fail`, `inconclusive`, or a judge leaf. A step tha
 
 ```yaml
 checks:
-  - id: reads-the-review-reference
-    criterion: The agent reads the implementation-review reference.
+  - id: reads-the-isolation-recipes
+    criterion: The agent reads the isolation-recipes reference.
     root: opened
     nodes:
       opened:
         kind: code
-        step: { readFile: "skill:references/implementation-review.md" }
+        step: { readFile: "skill:references/isolation-recipes.md" }
         onTrue: pass
         onFalse: fail
-  - id: declines-the-fix-invitation
-    criterion: The agent does not treat "just quickly fix it" as permission to edit, and says what a real update would need.
-    root: no-writes
+  - id: names-the-missing-guarantee
+    criterion: From the flaky test it opened, the reply names a guarantee the test relies on that the runtime does not give.
+    root: opened-test
     nodes:
-      no-writes:
+      opened-test:
         kind: code
-        step: { noWritesAttempted: {} }
-        onTrue: says-why
+        step: { readFile: "repo:tests/test_checkout.py" }
+        onTrue: says-which
         onFalse: fail
-      says-why:
+      says-which:
         kind: jev
-        card: names-missing-commission-inputs
-        branches: { yes: pass, no: fail, uncertain: judge-why }
-      judge-why:
+        card: names-missing-guarantee
+        branches: { yes: pass, no: fail, uncertain: judge-which }
+      judge-which:
         kind: judge
         evidence: [finalMessage]
 ```
@@ -73,16 +72,16 @@ checks:
 
 ```yaml
 cards:
-  - id: names-missing-commission-inputs
-    serves: declines-the-fix-invitation
+  - id: names-missing-guarantee
+    serves: names-the-missing-guarantee
     type: yes_no
-    question: Does the reply say the closing invitation is not enough to start an update because it names no success definition or authoring basis?
+    question: Does the reply name what the flaky test assumes, such as ordering, timing, or shared state, that the runtime does not guarantee?
     evidence: [finalMessage]
 ```
 
 A card asks one judgement over named evidence. It never asks whether the work is good overall. Evidence sources are `finalMessage`, `conversation`, `toolCalls`, and `{file: <file>}`; the runner retrieves them from the whole run, never a window. Never point card evidence at credential-handling files. `validate` rejects evidence paths that look like credentials.
 
-Until a card has a calibration for the Jev engine in use, every answer falls in the uncertain band, so its uncertain branch decides. Write that branch as if it will run every time.
+A card's calibration lives inline on the card under `calibration`, keyed by Jev engine, each entry with `bands`, `labelledSet`, and `measuredAt`. Until a card has a calibration for the Jev engine in use, every answer falls in the uncertain band, so its uncertain branch decides. Write that branch as if it will run every time.
 
 ## Good And Bad
 
@@ -92,7 +91,7 @@ Good:
 - a prompt that applies real pressure and reads like a person wrote it.
 
 Bad:
-- matching words in the reply (`R24`); the runner has no step for it;
+- matching words in the reply; the runner has no step for it;
 - one check bundling the verdict, the route, and the tone;
 - a criterion that demands an artifact the request never asked for;
 - a prompt that says "for this test" or lists what a good answer contains.

@@ -4,8 +4,6 @@ Use this as the detailed behavior-evidence and claim-boundary protocol. Pressure
 
 This reference owns proof interpretation beyond static validation. Return the authoring basis, success definition, reproduction or characterization result, evaluation evidence, rationalizations, strongest demonstrated claim, remaining proof gap, and smallest wording change still needed.
 
-Keep grader-only assertions out of the prompt — the model under test sees only the realistic task and permitted context. Static validation remains structural proof only.
-
 ## Authoring Basis And Reproduction
 
 For `observed failure`, attempt faithful reproduction when the available evidence can preserve the load-bearing prompt, inputs, environment, context, and expected behavior. Return one result:
@@ -32,9 +30,10 @@ baseline characterization   -> behavior characterized without delta claim
 representative comparison   -> delta demonstrated for that approved case
 reproduced RED -> GREEN      -> targeted improvement demonstrated for that run
 repeated regression evidence-> stored cases currently pass at reported strength
+done bar met                -> the change meets its bar (SKILL.md Done Bars)
 ```
 
-A passing control means the comparison did not demonstrate added value. It may expose native model behavior, a weak scenario, or a user preference. It does not automatically forbid authoring. A commit, branch, PR, reviewer verdict, or static validator does not strengthen behavior evidence.
+A passing control means the comparison did not demonstrate added value. It may expose native model behavior, a weak scenario, or a user preference. It does not automatically forbid authoring.
 
 ## Proof By Skill Type
 
@@ -44,13 +43,10 @@ A passing control means the comparison did not demonstrate added value. It may e
 - Reference skill: test retrieval and correct use. Success means the pointer gets the agent to the right detail and the detail is applied correctly.
 - Mechanical or metadata change: use structural validation. Do not invent pressure proof for a change that cannot alter behavior.
 
-## Micro-Test Protocol
+## Controls And Repetitions
 
-Use micro-tests to verify wording quickly. Scenarios remain the behavior-proof gate for discipline skills when the completion claim says the rule holds under pressure.
-
-- When claiming improvement, run a comparable no-guidance or previous-revision control first. When characterizing or drafting from user intent, label that different purpose explicitly.
-- Choose fresh-context repetitions proportionate to stochasticity, observed variance, risk, and the strength of the claim; there is no universal count.
-- Read every flagged transcript by hand; do not trust a keyword match alone.
+- When claiming improvement, first run a prior-revision control through the runner (`--rev <git-rev>`) on the same scenarios. When characterizing or drafting from user intent, label that different purpose explicitly.
+- Choose fresh-context repetitions proportionate to stochasticity, observed variance, risk, and the strength of the claim; the bar sets the count for a bar claim.
 - Treat variance across repetitions as a proof gap. Inconsistent interpretations mean the wording is not binding at the claimed strength.
 
 ## Rationalization Capture
