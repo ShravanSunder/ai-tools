@@ -12,7 +12,10 @@ import { evaluateRun } from "./qa/evaluate-run.ts";
 import { NoEngineJev } from "./jev/jev-port.ts";
 import { AcpxJudge } from "./judge/acpx-judge.ts";
 import { lintSkills } from "./lint/lint-skills.ts";
-import { assessDoneBar } from "./done-bar/assess-done-bar.ts";
+import {
+  assessDoneBar,
+  type DoneBarInput,
+} from "./done-bar/assess-done-bar.ts";
 import {
   type BatchRun,
   summarizeBatch,
@@ -52,6 +55,14 @@ const revision = (): Revision => {
     ? { kind: "working-tree" }
     : { kind: "commit", value: raw };
 };
+const doneBarKinds: readonly DoneBarInput["kind"][] = [
+  "new-from-intent",
+  "fix-for-recorded-failure",
+];
+const parseDoneBarKind = (
+  raw: string | undefined,
+): DoneBarInput["kind"] | undefined =>
+  doneBarKinds.find((kind) => kind === (raw ?? "new-from-intent"));
 const printJson = (valueToPrint: unknown): void =>
   console.log(JSON.stringify(valueToPrint, null, 2));
 const invalidSkillSetReason = async (
@@ -273,6 +284,15 @@ async function main(): Promise<number> {
     )).exitCode;
   }
   if (command === "done-bar") {
+    const kind = parseDoneBarKind(value("--kind", false));
+    if (!kind) {
+      console.error(
+        `unknown --kind ${value("--kind", false)}; use ${
+          doneBarKinds.join(" or ")
+        }`,
+      );
+      return 2;
+    }
     if (loaded.kind !== "loaded") {
       printJson(loaded);
       return 2;
@@ -285,9 +305,6 @@ async function main(): Promise<number> {
       printJson({ kind: "invalid", errors: selectionErrors });
       return 2;
     }
-    const kind = (value("--kind", false) ?? "new-from-intent") as
-      | "new-from-intent"
-      | "fix-for-recorded-failure";
     const selected = loaded.scenarios.filter((scenario) =>
       scenario.frontmatter.status === "active"
     );

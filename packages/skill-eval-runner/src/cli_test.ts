@@ -227,3 +227,34 @@ Deno.test("a fix-bar done-bar with more than one selected scenario exits 2 askin
     assertEquals(resultWritten, false);
   }
 });
+Deno.test("done-bar with an unknown --kind exits 2 before any Run or output", async () => {
+  const repo = await Deno.makeTempDir();
+  const skillDir = `${repo}/skills/sample-skill`;
+  await writeSkillWithScenario(skillDir, "active");
+  const firstScenario = await Deno.readTextFile(
+    `${skillDir}/scenarios/active-case.scenario.md`,
+  );
+  await Deno.writeTextFile(
+    `${skillDir}/scenarios/second-case.scenario.md`,
+    firstScenario.replaceAll("active-case", "second-case"),
+  );
+  const cacheHome = await Deno.makeTempDir();
+  const result = await runCli([
+    "done-bar",
+    "--kind",
+    "fix",
+    "--repo",
+    repo,
+    "--skill",
+    skillDir,
+    "--base",
+    "HEAD",
+  ], { XDG_CACHE_HOME: cacheHome });
+  assertEquals(result.code, 2);
+  assertStringIncludes(result.output, "unknown --kind fix");
+  const resultWritten = await Deno.stat(`${cacheHome}/skill-evals`).then(
+    () => true,
+    () => false,
+  );
+  assertEquals(resultWritten, false);
+});
