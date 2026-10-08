@@ -300,6 +300,9 @@ export async function prepareEnvironment(
       model: "gpt-6-luna",
       model_reasoning_effort: "medium",
       approvals_reviewer: "user",
+      // Subject shells must not be told where the linked login lives. Confirmed on Codex 0.160.0:
+      // `codex sandbox -c 'shell_environment_policy.exclude=["CODEX_HOME"]' -- env` drops it.
+      shell_environment_policy: { exclude: ["CODEX_HOME"] },
       features: {
         hooks: false,
         remote_plugin: false,

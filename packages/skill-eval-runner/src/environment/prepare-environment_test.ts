@@ -348,3 +348,33 @@ Deno.test("a .skill-eval-hide that hides the skill under test fails before any s
     assertStringIncludes(prepared.reason, "hides the skill under test");
   }
 });
+Deno.test("subject shell commands do not inherit CODEX_HOME", async () => {
+  const repo = await Deno.makeTempDir();
+  await Deno.mkdir(`${repo}/skills/sample-skill`, { recursive: true });
+  await Deno.writeTextFile(`${repo}/skills/sample-skill/SKILL.md`, "skill");
+  await git(repo, "init", "-q");
+  const prepared = await prepareWithFixtureLogin(() =>
+    prepareEnvironment(
+      { repoRoot: repo, skillPath: "skills/sample-skill" },
+      { kind: "working-tree" },
+      [],
+      undefined,
+      "codex-for-fixture",
+    )
+  );
+  assertEquals(prepared.kind, "ready");
+  if (prepared.kind !== "ready") return;
+  try {
+    const subjectConfig: unknown = JSON.parse(
+      prepared.environment.agentEnv.CODEX_CONFIG,
+    );
+    assertEquals(
+      (subjectConfig as {
+        shell_environment_policy?: { exclude?: readonly string[] };
+      }).shell_environment_policy?.exclude,
+      ["CODEX_HOME"],
+    );
+  } finally {
+    await prepared.environment.dispose();
+  }
+});
