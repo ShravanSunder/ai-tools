@@ -54,7 +54,7 @@ done-bar.json                               when done-bar ran
 
 Subject tokens cover only each Run's last model request, not the whole Run. Keep batch directory paths out of public changelogs and PRs.
 
-A Run's verdict is `fail` when any Check failed, else `inconclusive` when any Check could not be settled, else `pass`. A later pass never hides an earlier fail. `execution-failed` means the subject never produced an observation: the agent did not start, timed out, was cancelled, or the model never ran. It says nothing about the skill; fix the cause and rerun.
+A Run's verdict is `fail` when any Check failed, else `inconclusive` when any Check could not be settled, else `pass`. A later pass never hides an earlier fail. `execution-failed` means the subject never produced an observation (the agent did not start, timed out, was cancelled, or the model never ran) or touched the linked login (`credential-exposure`), whose observation is withheld. It says nothing about the skill; fix the cause and rerun.
 
 Read every failed or inconclusive Check's path in `checks.json`, then the reply in `observation.json`. A Check result is evidence about the run, not a verdict on the skill; `proof-and-claims.md` owns what claim it supports.
 

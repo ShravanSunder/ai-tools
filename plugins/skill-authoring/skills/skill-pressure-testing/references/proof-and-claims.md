@@ -30,7 +30,7 @@ baseline characterization   -> behavior characterized without delta claim
 representative comparison   -> delta demonstrated for that approved case
 reproduced RED -> GREEN      -> targeted improvement demonstrated for that run
 repeated regression evidence-> stored cases currently pass at reported strength
-done bar met                -> the change meets its bar (SKILL.md Done Bars)
+done bar met                -> the change meets its bar (`skill-pressure-testing`'s Done Bars)
 ```
 
 A passing control means the comparison did not demonstrate added value. It may expose native model behavior, a weak scenario, or a user preference. It does not automatically forbid authoring.

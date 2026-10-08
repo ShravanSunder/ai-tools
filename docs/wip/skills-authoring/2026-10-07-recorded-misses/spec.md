@@ -45,6 +45,7 @@ Under the same pressure prompts, fresh subjects keep provider depth in a named r
 | New references or mechanisms | none | each fix is a sentence or two in an existing home | must |
 | Done bar | fix-for-recorded-failure per scenario: the recorded fail is the base; 3 fresh passes at head | the owner's bar. Known weakness: a check that already passed 3 of 4 times passes 3 in a row about 42% of the time unchanged, so check-selection and stages-converge passes are weaker evidence; accepted-spec-edit-expires passed 3 of 6 recorded Runs across both revisions, so 3 fresh passes there happen by chance about 12.5% of the time | must |
 | Regression | one fresh Run of every other active scenario of the four skills at head | edits to `SKILL.md` can move other behavior | should |
+| (2026-10-08; supersedes the example sequence in Run C's allocation) Worked convergence example | 4 → 3 → 3 → 4 | the stages-converge scenario uses 3, 2, 2, 3, so an identical example makes a pass show retrieval, not the rule applied (implementation review C3) | must |
 
 ## Per-run surface allocation
 

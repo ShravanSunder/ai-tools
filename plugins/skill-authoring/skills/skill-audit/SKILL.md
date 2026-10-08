@@ -114,4 +114,4 @@ The audit is not done while any of these hold:
 - an update/create recommendation lacks its `SKILL.md` boundary, `references/` depth, `scripts/` need, or pressure coverage;
 - upstream inspiration appears without the local behavior it improves;
 - the existing skills checked, deliberate skips, or priority order are missing from the output;
-- the audit changed a file the user did not explicitly ask it to implement.
+- the audit changed a file other than to implement, on explicit request, a narrow recommendation the audit made.
