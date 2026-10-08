@@ -3,6 +3,7 @@ import { mkdir } from "node:fs/promises";
 import { loadScenarios } from "./scenarios/parse-scenario.ts";
 import {
   checkAgentPrerequisites,
+  loadSnapshotHidePatterns,
   prepareEnvironment,
   resolveSkillSetSource,
 } from "./environment/prepare-environment.ts";
@@ -76,6 +77,18 @@ const missingAgentPrerequisite = async (
   return prerequisites.kind === "failed"
     ? agentPrerequisiteMessages[prerequisites.reason]
     : undefined;
+};
+// Invalid input and an unusable environment stop the command before any Run starts (exit 2).
+const runPreflightError = async (
+  skill: SkillRef,
+  revisions: readonly Revision[],
+  codexPath: string | undefined,
+): Promise<string | undefined> => {
+  const skillSetError = await invalidSkillSetReason(skill, revisions);
+  if (skillSetError) return skillSetError;
+  const hidePatterns = await loadSnapshotHidePatterns(skill);
+  if (hidePatterns.kind === "invalid") return hidePatterns.reason;
+  return await missingAgentPrerequisite(codexPath);
 };
 const runOne = async (
   scenario: import("./contracts/scenario.ts").Scenario,
@@ -231,16 +244,13 @@ async function main(): Promise<number> {
       return 2;
     }
     const runRevision = revision();
-    const skillSetError = await invalidSkillSetReason(skill, [runRevision]);
-    if (skillSetError) {
-      console.error(skillSetError);
-      return 2;
-    }
-    const environmentError = await missingAgentPrerequisite(
+    const preflightError = await runPreflightError(
+      skill,
+      [runRevision],
       value("--codex-path", false),
     );
-    if (environmentError) {
-      console.error(environmentError);
+    if (preflightError) {
+      console.error(preflightError);
       return 2;
     }
     const out = value("--out", false) ??
@@ -329,19 +339,13 @@ async function main(): Promise<number> {
     const head: Revision = headRaw === "working-tree"
       ? { kind: "working-tree" }
       : { kind: "commit", value: headRaw };
-    const skillSetError = await invalidSkillSetReason(skill, [
-      { kind: "commit", value: base },
-      head,
-    ]);
-    if (skillSetError) {
-      console.error(skillSetError);
-      return 2;
-    }
-    const environmentError = await missingAgentPrerequisite(
+    const preflightError = await runPreflightError(
+      skill,
+      [{ kind: "commit", value: base }, head],
       value("--codex-path", false),
     );
-    if (environmentError) {
-      console.error(environmentError);
+    if (preflightError) {
+      console.error(preflightError);
       return 2;
     }
     const baseRun = await runOne(

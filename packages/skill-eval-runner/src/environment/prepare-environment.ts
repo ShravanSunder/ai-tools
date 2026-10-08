@@ -4,7 +4,13 @@ import { copyFile, mkdir, mkdtemp, symlink } from "node:fs/promises";
 import { createRequire } from "node:module";
 import type { Revision, SkillRef } from "../contracts/common.ts";
 import type { ScenarioFixture } from "../contracts/scenario.ts";
-import { removeHiddenPathsFromSnapshot } from "./snapshot-hide-patterns.ts";
+import {
+  hiddenSkillPath,
+  readSnapshotHideList,
+  removeHiddenPathsFromSnapshot,
+  snapshotHideFileName,
+  type SnapshotHidePattern,
+} from "./snapshot-hide-patterns.ts";
 const require = createRequire(import.meta.url);
 export type PreparedEnvironment = {
   snapshotDir: string;
@@ -94,7 +100,7 @@ const applyFixtures = async (
   }
 };
 export type SkillSetSource =
-  | { kind: "snapshot"; relativeSkillSetDir: string }
+  | { kind: "snapshot"; relativeSkillSetDir: string; relativeSkillDir: string }
   | { kind: "live"; skillSetDir: string }
   | { kind: "invalid"; reason: string };
 const realOrResolvedPath = (path: string): Promise<string> =>
@@ -113,7 +119,13 @@ export async function resolveSkillSetSource(
   const relativeSkillSetDir = relative(repoRoot, skillSetDir);
   const outsideRepo = isAbsolute(relativeSkillSetDir) ||
     relativeSkillSetDir === ".." || relativeSkillSetDir.startsWith("../");
-  if (!outsideRepo) return { kind: "snapshot", relativeSkillSetDir };
+  if (!outsideRepo) {
+    return {
+      kind: "snapshot",
+      relativeSkillSetDir,
+      relativeSkillDir: relative(repoRoot, skillDir),
+    };
+  }
   if (revision.kind === "commit") {
     return {
       kind: "invalid",
@@ -122,6 +134,30 @@ export async function resolveSkillSetSource(
     };
   }
   return { kind: "live", skillSetDir };
+}
+export type SnapshotHidePatterns =
+  | { kind: "valid"; patterns: readonly SnapshotHidePattern[] }
+  | { kind: "invalid"; reason: string };
+// The hide list is invalid input when it uses unsupported syntax or would hide the skill under
+// test; the CLI checks it once before any Run, and prepareEnvironment checks it again.
+export async function loadSnapshotHidePatterns(
+  skill: SkillRef,
+): Promise<SnapshotHidePatterns> {
+  const hideList = await readSnapshotHideList(skill.repoRoot);
+  if (hideList.kind === "invalid") {
+    return { kind: "invalid", reason: hideList.errors.join("\n") };
+  }
+  const source = await resolveSkillSetSource(skill, { kind: "working-tree" });
+  const hidden = source.kind === "snapshot"
+    ? hiddenSkillPath(hideList.patterns, source.relativeSkillDir)
+    : undefined;
+  return hidden
+    ? {
+      kind: "invalid",
+      reason:
+        `${snapshotHideFileName} hides the skill under test (${hidden}); remove that pattern`,
+    }
+    : { kind: "valid", patterns: hideList.patterns };
 }
 const exposeSkills = async (
   skillSetDir: string,
@@ -218,6 +254,10 @@ export async function prepareEnvironment(
   if (skillSetSource.kind === "invalid") {
     return { kind: "failed", reason: skillSetSource.reason };
   }
+  const hidePatterns = await loadSnapshotHidePatterns(skill);
+  if (hidePatterns.kind === "invalid") {
+    return { kind: "failed", reason: hidePatterns.reason };
+  }
   const prerequisites = await checkAgentPrerequisites(codexPathOverride);
   if (prerequisites.kind === "failed") return prerequisites;
   const { codexPath, authPath } = prerequisites;
@@ -235,7 +275,7 @@ export async function prepareEnvironment(
       await extractArchive(archive.stdout, snapshot);
     } else await copyTracked(skill.repoRoot, snapshot);
     await removeScenarioDirectoriesFromSnapshot(snapshot);
-    await removeHiddenPathsFromSnapshot(skill.repoRoot, snapshot);
+    await removeHiddenPathsFromSnapshot(snapshot, hidePatterns.patterns);
     // The skill set comes from the snapshot, so it is the run's revision; fixtures land after, so they never join it.
     // A skill set that already lives at the repository's .agents/skills is in place in the snapshot.
     const skillSetInPlace = skillSetSource.kind === "snapshot" &&

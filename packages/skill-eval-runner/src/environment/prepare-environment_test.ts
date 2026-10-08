@@ -322,3 +322,29 @@ Deno.test("the repository's .skill-eval-hide also hides paths at a commit that p
     await prepared.environment.dispose();
   }
 });
+Deno.test("a .skill-eval-hide that hides the skill under test fails before any snapshot", async () => {
+  const repo = await Deno.makeTempDir();
+  await Deno.mkdir(`${repo}/plugin/skills/sample-skill`, { recursive: true });
+  await Deno.mkdir(`${repo}/plugin/skills/sibling-skill`, { recursive: true });
+  await Deno.writeTextFile(`${repo}/plugin/skills/sample-skill/SKILL.md`, "x");
+  await Deno.writeTextFile(`${repo}/plugin/skills/sibling-skill/SKILL.md`, "y");
+  await Deno.writeTextFile(
+    `${repo}/.skill-eval-hide`,
+    "plugin/skills/sample-skill/\n",
+  );
+  await git(repo, "init", "-q");
+  const prepared = await prepareWithFixtureLogin(() =>
+    prepareEnvironment(
+      { repoRoot: repo, skillPath: "plugin/skills/sample-skill" },
+      { kind: "working-tree" },
+      [],
+      undefined,
+      "codex-for-fixture",
+    )
+  );
+  if (prepared.kind === "ready") await prepared.environment.dispose();
+  assertEquals(prepared.kind, "failed");
+  if (prepared.kind === "failed") {
+    assertStringIncludes(prepared.reason, "hides the skill under test");
+  }
+});

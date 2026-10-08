@@ -150,3 +150,34 @@ Deno.test("run rejects named draft and retired scenarios before creating runs", 
     assertStringIncludes(result.output, "only active scenarios run");
   }
 });
+Deno.test("run with an unsupported .skill-eval-hide line exits 2 before any Run", async () => {
+  const repo = await Deno.makeTempDir();
+  const skillDir = `${repo}/skills/sample-skill`;
+  await writeSkillWithScenario(skillDir, "active");
+  await Deno.writeTextFile(
+    `${repo}/.skill-eval-hide`,
+    "docs/ok/\n**/eval-notes.md\n!docs/keep.md\n",
+  );
+  await gitInit(repo);
+  // A login file and a codex path let every other preflight pass, so only the hide list can stop the Run.
+  const fixtureHome = await Deno.makeTempDir();
+  await Deno.writeTextFile(`${fixtureHome}/auth.json`, "{}");
+  const cacheHome = await Deno.makeTempDir();
+  const result = await runCli([
+    "run",
+    "--repo",
+    repo,
+    "--skill",
+    skillDir,
+    "--codex-path",
+    "codex-for-fixture",
+  ], { CODEX_HOME: fixtureHome, XDG_CACHE_HOME: cacheHome });
+  assertEquals(result.code, 2);
+  assertStringIncludes(result.output, ".skill-eval-hide:2: **/eval-notes.md");
+  assertStringIncludes(result.output, ".skill-eval-hide:3: !docs/keep.md");
+  const batchWritten = await Deno.stat(`${cacheHome}/skill-evals`).then(
+    () => true,
+    () => false,
+  );
+  assertEquals(batchWritten, false);
+});
