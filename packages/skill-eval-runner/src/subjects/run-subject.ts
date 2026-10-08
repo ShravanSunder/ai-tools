@@ -13,9 +13,9 @@ import type { Observation } from "../contracts/observation.ts";
 import {
   completedWithoutModelUsage,
   normalizeAssistantMessage,
-  normalizeRuntimeEvents,
   type RecordedRuntimeEvent,
 } from "../runtime/normalize-acp-events.ts";
+import { buildObservedOutcome } from "./observed-outcome.ts";
 import { decideSubjectPermission } from "./permission-policy.ts";
 import type { RunOutcome } from "../contracts/run.ts";
 
@@ -39,6 +39,17 @@ const usageTotals = (
     outputTokens,
     totalTokens: numeric(cumulative.totalTokens) || inputTokens + outputTokens,
   };
+};
+// The subject's isolated Codex home links the user's login. Any reference to it marks the Run.
+const subjectCredentialReferences = async (
+  codexHome: string,
+): Promise<readonly string[]> => {
+  const resolvedCodexHome = await Deno.realPath(codexHome).catch(() =>
+    codexHome
+  );
+  return [
+    ...new Set([codexHome, resolvedCodexHome, "auth.json", "CODEX_HOME"]),
+  ];
 };
 export type SubjectConfig = { runId: string; timeoutMs?: number };
 export async function runSubject(
@@ -146,19 +157,20 @@ export async function runSubject(
         };
       }
       if (index === prompts.length - 1) {
-        const observation: Observation = {
+        return buildObservedOutcome({
           runId: config.runId,
           scenarioId: scenario.frontmatter.scenarioId,
           revision: environment.revision,
-          subject: { model: "gpt-6-luna", effort: "medium" },
           turns,
-          toolCalls: normalizeRuntimeEvents(recordedEvents),
+          recordedEvents,
           permissionRequests,
           finalMessage,
           usage,
           durationMs: Date.now() - startedAt,
-        };
-        return { kind: "observed", runId: config.runId, observation };
+          credentialReferences: await subjectCredentialReferences(
+            environment.codexHome,
+          ),
+        });
       }
     }
     return {

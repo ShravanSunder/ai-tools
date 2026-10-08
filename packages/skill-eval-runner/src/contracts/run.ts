@@ -6,6 +6,8 @@ export const runFailureCauses = [
   "acpx-error",
   "timeout",
   "cancelled",
+  // The subject touched its linked login; the Run's observation is dropped and never counts.
+  "credential-exposure",
 ] as const;
 export type RunFailureCause = typeof runFailureCauses[number];
 export type RunOutcome = {
