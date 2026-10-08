@@ -181,3 +181,49 @@ Deno.test("run with an unsupported .skill-eval-hide line exits 2 before any Run"
   );
   assertEquals(batchWritten, false);
 });
+Deno.test("a fix-bar done-bar with more than one selected scenario exits 2 asking for one --scenario", async () => {
+  const repo = await Deno.makeTempDir();
+  const skillDir = `${repo}/skills/sample-skill`;
+  await writeSkillWithScenario(skillDir, "active");
+  const firstScenario = await Deno.readTextFile(
+    `${skillDir}/scenarios/active-case.scenario.md`,
+  );
+  await Deno.writeTextFile(
+    `${skillDir}/scenarios/second-case.scenario.md`,
+    firstScenario.replaceAll("active-case", "second-case"),
+  );
+  const fixBarArgs = [
+    "done-bar",
+    "--kind",
+    "fix-for-recorded-failure",
+    "--repo",
+    repo,
+    "--skill",
+    skillDir,
+    "--base",
+    "HEAD",
+  ] as const;
+  for (
+    const selection of [[], [
+      "--scenario",
+      "active-case",
+      "--scenario",
+      "second-case",
+    ]] as const
+  ) {
+    const cacheHome = await Deno.makeTempDir();
+    const result = await runCli([...fixBarArgs, ...selection], {
+      XDG_CACHE_HOME: cacheHome,
+    });
+    assertEquals(result.code, 2);
+    assertStringIncludes(
+      result.output,
+      "fix-for-recorded-failure needs exactly one --scenario",
+    );
+    const resultWritten = await Deno.stat(`${cacheHome}/skill-evals`).then(
+      () => true,
+      () => false,
+    );
+    assertEquals(resultWritten, false);
+  }
+});

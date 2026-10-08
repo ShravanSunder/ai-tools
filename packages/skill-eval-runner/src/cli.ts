@@ -285,6 +285,20 @@ async function main(): Promise<number> {
       printJson({ kind: "invalid", errors: selectionErrors });
       return 2;
     }
+    const kind = (value("--kind", false) ?? "new-from-intent") as
+      | "new-from-intent"
+      | "fix-for-recorded-failure";
+    const selected = loaded.scenarios.filter((scenario) =>
+      scenario.frontmatter.status === "active"
+    );
+    if (kind === "fix-for-recorded-failure" && selected.length > 1) {
+      console.error(
+        `fix-for-recorded-failure needs exactly one --scenario; ${selected.length} active scenarios are selected: ${
+          selected.map((scenario) => scenario.frontmatter.scenarioId).join(", ")
+        }`,
+      );
+      return 2;
+    }
     const out = value("--out", false) ??
       join(
         Deno.env.get("XDG_CACHE_HOME") ??
@@ -294,9 +308,6 @@ async function main(): Promise<number> {
         crypto.randomUUID(),
       );
     await mkdir(out, { recursive: true });
-    const kind = (value("--kind", false) ?? "new-from-intent") as
-      | "new-from-intent"
-      | "fix-for-recorded-failure";
     const skillDirectory = skill.skillPath.startsWith("/")
       ? skill.skillPath
       : join(skill.repoRoot, skill.skillPath);
@@ -318,10 +329,7 @@ async function main(): Promise<number> {
       printJson(result);
       return result.kind === "met" ? 0 : 1;
     }
-    const selected = loaded.scenarios.filter((scenario) =>
-      scenario.frontmatter.status === "active"
-    );
-    if (selected.length !== 1) {
+    if (selected.length === 0) {
       const result = {
         kind: "not-evaluable",
         reason: "no-active-scenario",
