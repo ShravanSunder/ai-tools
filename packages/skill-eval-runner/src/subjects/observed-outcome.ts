@@ -5,7 +5,10 @@ import {
   normalizeRuntimeEvents,
   type RecordedRuntimeEvent,
 } from "../runtime/normalize-acp-events.ts";
-import { withholdCredentialReferences } from "./credential-withholding.ts";
+import {
+  describeWithheldToolCalls,
+  withholdCredentialReferences,
+} from "./credential-withholding.ts";
 export type ObservedOutcomeProps = {
   runId: string;
   scenarioId: string;
@@ -16,8 +19,8 @@ export type ObservedOutcomeProps = {
   finalMessage: string;
   usage: Observation["usage"];
   durationMs: number;
-  /** Strings that identify the subject's linked credential: its Codex home path, `auth.json`, `CODEX_HOME`. */
-  credentialReferences: readonly string[];
+  /** The subject's Codex home, which holds its linked login, as given and as resolved. */
+  subjectCodexHomePaths: readonly string[];
 };
 /**
  * Turns a completed subject session into the Run outcome that is written and judged. A session that
@@ -27,16 +30,17 @@ export type ObservedOutcomeProps = {
 export function buildObservedOutcome(props: ObservedOutcomeProps): RunOutcome {
   const withheld = withholdCredentialReferences(
     normalizeRuntimeEvents(props.recordedEvents),
-    props.credentialReferences,
+    props.subjectCodexHomePaths,
   );
-  if (withheld.withheldToolCallIds.length > 0) {
+  if (withheld.withheld.length > 0) {
     return {
       kind: "execution-failed",
       runId: props.runId,
       cause: "credential-exposure",
-      detail: `tool calls ${
-        withheld.withheldToolCallIds.join(", ")
-      } referenced the subject's linked credential; their content was withheld and the Run does not count`,
+      detail:
+        `tool calls named the subject's Codex home, which holds its linked login, so the Run does not count; their input and output were withheld: ${
+          describeWithheldToolCalls(withheld.withheld)
+        }`,
     };
   }
   const observation: Observation = {

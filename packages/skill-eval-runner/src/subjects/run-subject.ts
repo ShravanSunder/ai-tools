@@ -40,16 +40,14 @@ const usageTotals = (
     totalTokens: numeric(cumulative.totalTokens) || inputTokens + outputTokens,
   };
 };
-// The subject's isolated Codex home links the user's login. Any reference to it marks the Run.
-const subjectCredentialReferences = async (
+// The subject's isolated Codex home links the user's login; a tool call naming it marks the Run.
+const subjectCodexHomePaths = async (
   codexHome: string,
 ): Promise<readonly string[]> => {
   const resolvedCodexHome = await Deno.realPath(codexHome).catch(() =>
     codexHome
   );
-  return [
-    ...new Set([codexHome, resolvedCodexHome, "auth.json", "CODEX_HOME"]),
-  ];
+  return [...new Set([codexHome, resolvedCodexHome])];
 };
 export type SubjectConfig = { runId: string; timeoutMs?: number };
 export async function runSubject(
@@ -167,7 +165,7 @@ export async function runSubject(
           finalMessage,
           usage,
           durationMs: Date.now() - startedAt,
-          credentialReferences: await subjectCredentialReferences(
+          subjectCodexHomePaths: await subjectCodexHomePaths(
             environment.codexHome,
           ),
         });
