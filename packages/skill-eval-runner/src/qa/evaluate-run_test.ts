@@ -280,7 +280,13 @@ class ScriptedJev extends NoEngineJev {
 const calibratedEngine = "calibrated-engine";
 const calibratedCards: Scenario["cards"] = [{
   ...scenario.cards[0],
-  calibration: { [calibratedEngine]: { bands: { yes: 0.9, no: 0.1 } } },
+  calibration: {
+    [calibratedEngine]: {
+      bands: { yes: 0.9, no: 0.1 },
+      labelledSet: "usefulness-set",
+      measuredAt: "2026-10-08",
+    },
+  },
 }, {
   id: "choice",
   serves: "choice",
@@ -288,7 +294,13 @@ const calibratedCards: Scenario["cards"] = [{
   question: "Which?",
   options: ["red", "blue"],
   evidence: ["finalMessage"] as const,
-  calibration: { [calibratedEngine]: { bands: { red: 0.9, blue: 0.9 } } },
+  calibration: {
+    [calibratedEngine]: {
+      bands: { red: 0.9, blue: 0.9 },
+      labelledSet: "colour-set",
+      measuredAt: "2026-10-08",
+    },
+  },
 }];
 const yesNoCheck = (id: string): Scenario["checks"][number] => ({
   id,

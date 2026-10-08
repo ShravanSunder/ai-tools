@@ -8,10 +8,15 @@ export const questionCardSchema = z.strictObject({
   options: z.array(z.string()).optional(),
   evidence: z.array(evidenceSourceSchema).min(1),
   combine: z.unknown().optional(),
-  // Keyed by the Jev engine the bands were measured for: a score is trusted only for that engine.
+  // E12 Calibration, keyed by the Jev engine the bands were measured for: a score is trusted only
+  // for that engine, and every entry records the labelled set and the date it was measured on.
   calibration: z.record(
     z.string(),
-    z.strictObject({ bands: z.record(z.string(), z.number()) }),
+    z.strictObject({
+      bands: z.record(z.string(), z.number()),
+      labelledSet: z.string().min(1),
+      measuredAt: z.iso.date(),
+    }),
   ).optional(),
 }).superRefine((c, ctx) => {
   if (c.type === "choice" && (!c.options || c.options.length === 0)) {

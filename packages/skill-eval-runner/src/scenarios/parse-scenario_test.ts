@@ -134,3 +134,33 @@ Deno.test("invalid cards YAML is reported while missing cards YAML is allowed", 
     assert(result.errors.some((error) => error.includes("invalid cards.yaml")));
   }
 });
+Deno.test("a card calibration entry needs its labelled set and measurement date", async () => {
+  const writeCalibratedSkill = async (calibrationEntry: string) => {
+    const dir = await Deno.makeTempDir();
+    const skillName = dir.split("/").at(-1);
+    await Deno.mkdir(`${dir}/scenarios`);
+    await Deno.writeTextFile(
+      `${dir}/scenarios/cards.yaml`,
+      `- id: answer-is-useful\n  serves: answer quality\n  type: yes_no\n  question: Does the answer address the request?\n  evidence: [finalMessage]\n  calibration:\n    measured-engine:\n${calibrationEntry}`,
+    );
+    await Deno.writeTextFile(
+      `${dir}/scenarios/case.scenario.md`,
+      `---\nscenarioId: case\nskill: "${skillName}"\nstatus: active\n---\n## Prompt\nPlease explain.\n## Checks\nchecks:\n  - id: c\n    criterion: x\n    root: a\n    nodes:\n      a: {kind: jev, card: answer-is-useful, branches: {yes: pass, no: fail, uncertain: inconclusive}}`,
+    );
+    return await loadScenarios({ repoRoot: dir, skillPath: dir });
+  };
+  const withoutProvenance = await writeCalibratedSkill(
+    "      bands: {yes: 0.9, no: 0.1}\n",
+  );
+  assertEquals(withoutProvenance.kind, "invalid");
+  if (withoutProvenance.kind === "invalid") {
+    assertStringIncludes(
+      withoutProvenance.errors.join("\n"),
+      "invalid question card",
+    );
+  }
+  const withProvenance = await writeCalibratedSkill(
+    '      bands: {yes: 0.9, no: 0.1}\n      labelledSet: answer-quality-set-1\n      measuredAt: "2026-10-08"\n',
+  );
+  assertEquals(withProvenance.kind, "loaded");
+});
