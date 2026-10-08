@@ -36,7 +36,7 @@ const runCli = async (
 };
 const writeSkillWithScenario = async (
   skillDir: string,
-  status: "active" | "draft",
+  status: "active" | "draft" | "retired",
   prompt = "Answer the question.",
 ): Promise<void> => {
   const skillName = skillDir.split("/").at(-1);
@@ -127,4 +127,26 @@ Deno.test("run with no active scenario selected exits 2 with a message", async (
   const result = await runCli(["run", "--repo", repo, "--skill", skillDir]);
   assertEquals(result.code, 2);
   assertStringIncludes(result.output, "no active scenario");
+});
+Deno.test("run rejects named draft and retired scenarios before creating runs", async () => {
+  const repo = await Deno.makeTempDir();
+  const skillDir = `${repo}/sample-skill`;
+  for (const status of ["draft", "retired"] as const) {
+    await writeSkillWithScenario(skillDir, status);
+    const result = await runCli([
+      "run",
+      "--repo",
+      repo,
+      "--skill",
+      skillDir,
+      "--scenario",
+      `${status}-case`,
+    ]);
+    assertEquals(result.code, 2);
+    assertStringIncludes(
+      result.output,
+      `scenario ${status}-case has status ${status}`,
+    );
+    assertStringIncludes(result.output, "only active scenarios run");
+  }
 });
