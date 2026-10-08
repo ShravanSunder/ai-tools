@@ -19,15 +19,15 @@
 
 Raw signals, investigations, lessons, authoring evidence, and the backlog live under `~/dev/memory-logs/skills/`. See root `AGENTS.md`.
 
-This folder may hold only skill-change proposals:
+This folder may hold only skill specs:
 
-`docs/wip/skills-authoring/<yyyy-mm-dd-name>/proposal.md`
+`docs/wip/skills-authoring/<yyyy-mm-dd-name>/spec.md`
 
 An accepted multi-run spec there is carried run by run by `skill-authoring:skill-orchestrator` (root `AGENTS.md` "Skill Work SOP"). Evidence for that spec stays in `~/dev/memory-logs/skills/authoring/<yyyy-mm-dd-name>/`.
 
 1. Capture the signal in `~/dev/memory-logs/skills/log/` (or investigation/lessons).
 2. Classify with `skill-audit` when the target is unnamed or the portfolio is in question.
 3. If a named skill should change, `skill-authoring:skill-creation` writes its skill spec here and `skill-authoring:skill-orchestrator` carries the change through review, proof, and release.
-4. After the durable change lands, delete or archive the proposal; leave memory-logs as history.
+4. After the durable change lands, delete or archive the skill spec; leave memory-logs as history.
 
 Prefer updating an existing skill over creating a new one unless repeated evidence shows a distinct workflow with stable inputs, procedure, and output.
