@@ -145,7 +145,7 @@ Each requirement names the entities it is written over and the user rows it serv
 
 | ID | Requirement | Entities | Basis |
 |---|---|---|---|
-| R36 | A Run verdict MUST be `execution-failed` when the subject never produced an Observation (permission stop, agent or ACPX failure, timeout, or a turn that ends without the model having run); never `fail`. | E9 | U28 |
+| R36 | A Run verdict MUST be `execution-failed` when the subject never produced an Observation (permission stop, agent or ACPX failure, timeout, or a turn that ends without the model having run), or when its Observation is dropped because the subject touched its linked login (credential exposure); never `fail`. | E9 | U28 |
 | R37 | Otherwise the Run verdict MUST be `fail` if any Check result fails, else `inconclusive` if any is inconclusive, else `pass`. A later passing Check never hides an earlier failing one. | E8, E9 | U27, U28 |
 | R38 | For a `new-from-intent` Skill change, the Done-bar result MUST be `met` only when the changed packages' Jev lint and code checks pass and at least one Run of each active Scenario of each changed package is `pass`. | E10 | U9 |
 | R39 | For a `fix-for-recorded-failure` Skill change, the Done-bar result MUST be `met` only when a Scenario reproduces the recorded failure as `fail` at the revision before the fix, and the same Scenario then has 3 fresh Runs at the fixed revision, all `pass`. | E10 | U9, owner 10-04 |
