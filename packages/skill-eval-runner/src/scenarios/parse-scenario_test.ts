@@ -55,13 +55,13 @@ Deno.test("banned word inflections reject while evaluation is allowed", async ()
   const skillName = dir.split("/").at(-1)!;
   await Deno.writeTextFile(
     `${dir}/scenarios/inflection.scenario.md`,
-    `---\nscenarioId: inflection\nskill: ${skillName}\nstatus: active\n---\n## Prompt\nPlease provide an evaluation of this approach.\n## Checks\nchecks:\n  - id: c\n    criterion: explain\n    root: a\n    nodes:\n      a: {kind: code, step: {toolCallCount: {max: 2}}, onTrue: pass, onFalse: fail}`,
+    `---\nscenarioId: inflection\nskill: "${skillName}"\nstatus: active\n---\n## Prompt\nPlease provide an evaluation of this approach.\n## Checks\nchecks:\n  - id: c\n    criterion: explain\n    root: a\n    nodes:\n      a: {kind: code, step: {toolCallCount: {max: 2}}, onTrue: pass, onFalse: fail}`,
   );
   const allowed = await loadScenarios({ repoRoot: dir, skillPath: dir });
   assertEquals(allowed.kind, "loaded");
   await Deno.writeTextFile(
     `${dir}/scenarios/inflection.scenario.md`,
-    `---\nscenarioId: inflection\nskill: ${skillName}\nstatus: active\n---\n## Prompt\nPlease compare these approaches.\n## Checks\nchecks: []`,
+    `---\nscenarioId: inflection\nskill: "${skillName}"\nstatus: active\n---\n## Prompt\nPlease compare these approaches.\n## Checks\nchecks: []`,
   );
   const rejected = await loadScenarios({ repoRoot: dir, skillPath: dir });
   assertEquals(rejected.kind, "invalid");
@@ -123,9 +123,9 @@ Deno.test("invalid cards YAML is reported while missing cards YAML is allowed", 
   await Deno.mkdir(`${dir}/scenarios`);
   await Deno.writeTextFile(
     `${dir}/scenarios/bad.scenario.md`,
-    `---\nscenarioId: bad\nskill: ${
+    `---\nscenarioId: bad\nskill: "${
       dir.split("/").at(-1)
-    }\nstatus: active\n---\n## Prompt\nPlease explain.\n## Checks\nchecks:\n  - id: c\n    criterion: x\n    root: a\n    nodes:\n      a: {kind: code, step: {toolCallCount: {max: 1}}, onTrue: pass, onFalse: fail}`,
+    }"\nstatus: active\n---\n## Prompt\nPlease explain.\n## Checks\nchecks:\n  - id: c\n    criterion: x\n    root: a\n    nodes:\n      a: {kind: code, step: {toolCallCount: {max: 1}}, onTrue: pass, onFalse: fail}`,
   );
   await Deno.writeTextFile(`${dir}/scenarios/cards.yaml`, "[");
   const result = await loadScenarios({ repoRoot: dir, skillPath: dir });
