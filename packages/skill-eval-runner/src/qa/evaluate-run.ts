@@ -10,8 +10,11 @@ import {
 } from "../contracts/run-verdict.ts";
 import { evaluateCodeStep } from "./code-steps.ts";
 import type { JevAnswer, JevDecisionPort } from "../jev/jev-port.ts";
-import type { JudgeInput, JudgePort } from "../judge/judge-port.ts";
-import type { JudgeVerdict } from "../contracts/judge-verdict.ts";
+import type {
+  JudgeAnswer,
+  JudgeInput,
+  JudgePort,
+} from "../judge/judge-port.ts";
 
 export type EvaluatePorts = { jev: JevDecisionPort; judge: JudgePort };
 type EvaluationState = { judgeRetryCount: number };
@@ -51,7 +54,7 @@ const evidenceList = (
 const askJudge = async (
   judge: JudgePort,
   input: JudgeInput,
-): Promise<JudgeVerdict | { kind: "malformed"; raw: string }> => {
+): Promise<JudgeAnswer> => {
   try {
     return await judge.judge(input);
   } catch (error) {

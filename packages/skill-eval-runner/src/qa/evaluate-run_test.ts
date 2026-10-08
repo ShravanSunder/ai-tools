@@ -496,3 +496,19 @@ Deno.test("a judge session that throws makes only its Check inconclusive, with t
   assertEquals(result.verdict, "inconclusive");
   assertEquals(judge.calls, 2);
 });
+Deno.test("a judge session discarded for touching its login records only the reason, without a retry", async () => {
+  const judge = new FakeJudge({
+    kind: "undecidable",
+    reason: "judge-credential-exposure",
+  });
+  const result = await evaluateRun(scenario, {
+    kind: "observed",
+    runId: "r",
+    observation,
+  }, { jev: new NoEngineJev(), judge });
+  assertEquals(result.checks[1].result, "inconclusive");
+  assertEquals(result.checks[1].path.at(-1)?.judge, {
+    undecidable: "judge-credential-exposure",
+  });
+  assertEquals(judge.calls, 1);
+});

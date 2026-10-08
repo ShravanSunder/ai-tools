@@ -8,7 +8,7 @@ import {
 import {
   describeWithheldToolCalls,
   withholdCredentialReferences,
-} from "./credential-withholding.ts";
+} from "../runtime/credential-withholding.ts";
 export type ObservedOutcomeProps = {
   runId: string;
   scenarioId: string;

@@ -4,29 +4,24 @@ export type JudgeInput = {
   request: string;
   evidence: readonly string[];
 };
+// What one judge call yields: the judge's own verdict, a reply that did not parse, or a session the
+// runner discarded because the judge touched its linked login.
+export type JudgeAnswer =
+  | JudgeVerdict
+  | { kind: "malformed"; raw: string }
+  | { kind: "undecidable"; reason: "judge-credential-exposure" };
 export interface JudgePort {
-  judge(
-    input: JudgeInput,
-  ): Promise<JudgeVerdict | { kind: "malformed"; raw: string }>;
+  judge(input: JudgeInput): Promise<JudgeAnswer>;
 }
 export class FakeJudge implements JudgePort {
   public calls = 0;
-  private readonly verdicts:
-    readonly (JudgeVerdict | { kind: "malformed"; raw: string })[];
-  constructor(
-    verdict:
-      | JudgeVerdict
-      | { kind: "malformed"; raw: string }
-      | readonly (JudgeVerdict | { kind: "malformed"; raw: string })[],
-  ) {
-    this.verdicts = Array.isArray(verdict) ? verdict : [verdict];
+  private readonly answers: readonly JudgeAnswer[];
+  constructor(answer: JudgeAnswer | readonly JudgeAnswer[]) {
+    this.answers = Array.isArray(answer) ? answer : [answer];
   }
-  judge(
-    _input: JudgeInput,
-  ): Promise<JudgeVerdict | { kind: "malformed"; raw: string }> {
-    const verdict =
-      this.verdicts[Math.min(this.calls, this.verdicts.length - 1)];
+  judge(_input: JudgeInput): Promise<JudgeAnswer> {
+    const answer = this.answers[Math.min(this.calls, this.answers.length - 1)];
     this.calls += 1;
-    return Promise.resolve(verdict);
+    return Promise.resolve(answer);
   }
 }

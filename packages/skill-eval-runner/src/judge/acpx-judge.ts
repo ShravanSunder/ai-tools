@@ -7,19 +7,22 @@ import {
   createAgentRegistry,
   createFileSessionStore,
 } from "npm:acpx@0.19.4/runtime";
-import {
-  type JudgeVerdict,
-  judgeVerdictSchema,
-} from "../contracts/judge-verdict.ts";
 import type { PreparedEnvironment } from "../environment/prepare-environment.ts";
 import { buildJudgePrompt } from "./judge-prompt.ts";
-import type { JudgeInput, JudgePort } from "./judge-port.ts";
-import { normalizeAssistantMessage } from "../runtime/normalize-acp-events.ts";
+import type { JudgeAnswer, JudgeInput, JudgePort } from "./judge-port.ts";
+import { judgeAnswerFromSession } from "./judge-session-answer.ts";
+// The judge's own Codex config. Its shell commands are not told where its linked login lives,
+// matching the subject (confirmed on Codex 0.160.0, see prepare-environment.ts).
+export const judgeCodexConfig = {
+  model: "gpt-6-luna",
+  model_reasoning_effort: "high",
+  approvals_reviewer: "user",
+  shell_environment_policy: { exclude: ["CODEX_HOME"] },
+  features: { hooks: false, remote_plugin: false, memories: false },
+} as const;
 export class AcpxJudge implements JudgePort {
   constructor(private readonly environment: PreparedEnvironment) {}
-  async judge(
-    input: JudgeInput,
-  ): Promise<JudgeVerdict | { kind: "malformed"; raw: string }> {
+  async judge(input: JudgeInput): Promise<JudgeAnswer> {
     const root = await mkdtemp(join(tmpdir(), "skill-eval-judge-"));
     const cwd = await mkdtemp(join(tmpdir(), "skill-eval-judge-cwd-"));
     const homeDir = await mkdtemp(join(tmpdir(), "skill-eval-judge-home-"));
@@ -34,12 +37,7 @@ export class AcpxJudge implements JudgePort {
         ...this.environment.agentEnv,
         HOME: homeDir,
         CODEX_HOME: codexHome,
-        CODEX_CONFIG: JSON.stringify({
-          model: "gpt-6-luna",
-          model_reasoning_effort: "high",
-          approvals_reviewer: "user",
-          features: { hooks: false, remote_plugin: false, memories: false },
-        }),
+        CODEX_CONFIG: JSON.stringify(judgeCodexConfig),
       },
       sessionStore: createFileSessionStore({ stateDir: state }),
       agentRegistry: createAgentRegistry({
@@ -67,26 +65,20 @@ export class AcpxJudge implements JudgePort {
       const events: AcpRuntimeEvent[] = [];
       for await (const event of turn.events) {
         const typed = event as AcpRuntimeEvent;
-        if (typed.type === "text_delta" && typed.stream !== "thought") {
-          events.push(typed);
-        }
+        if (typed.type === "text_delta" && typed.stream === "thought") continue;
+        events.push(typed);
       }
       const result = await turn.result;
-      const rawReply = normalizeAssistantMessage(events);
-      if (result.status !== "completed") {
-        return { kind: "malformed", raw: rawReply.slice(0, 300) };
-      }
-      try {
-        const parsed: unknown = JSON.parse(
-          rawReply.trim(),
-        );
-        const verdict = judgeVerdictSchema.safeParse(parsed);
-        return verdict.success
-          ? verdict.data
-          : { kind: "malformed", raw: rawReply.slice(0, 300) };
-      } catch {
-        return { kind: "malformed", raw: rawReply.slice(0, 300) };
-      }
+      return judgeAnswerFromSession({
+        events,
+        completed: result.status === "completed",
+        judgeCodexHomePaths: [
+          ...new Set([
+            codexHome,
+            await Deno.realPath(codexHome).catch(() => codexHome),
+          ]),
+        ],
+      });
     } finally {
       await runtime.shutdown().catch(() => undefined);
       await Deno.remove(root, { recursive: true }).catch(() => undefined);
