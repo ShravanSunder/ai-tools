@@ -138,6 +138,9 @@ export async function resolveSkillSetSource(
 // The snapshot becomes an ordinary one-commit repository, so `git status`, `git log` and HEAD work
 // for the subject. Its git calls never see the user's git identity, signing, hooks or global
 // excludes: global and system config are off, and the author and committer are fixed and neutral.
+// They also run in a cleared environment, so git overrides in the runner's own environment
+// (GIT_DIR, GIT_WORK_TREE, GIT_INDEX_FILE, GIT_OBJECT_DIRECTORY, GIT_CONFIG_PARAMETERS, ...) can
+// never point the snapshot's add and commit at another repository.
 const snapshotGitIdentity = "snapshot";
 const snapshotGitEmail = "snapshot@localhost";
 const snapshotGitEnvironment = {
@@ -163,13 +166,18 @@ const runSnapshotGit = async (
       ...gitArgs,
     ],
     cwd: snapshot,
-    env: snapshotGitEnvironment,
+    clearEnv: true,
+    env: {
+      ...snapshotGitEnvironment,
+      PATH: Deno.env.get("PATH") ?? "/usr/bin:/bin",
+      HOME: dirname(snapshot),
+    },
     stdout: "null",
     stderr: "piped",
   }).output();
   if (output.code !== 0) throw new Error(text(output.stderr));
 };
-const commitSnapshotOnce = async (snapshot: string): Promise<void> => {
+export const commitSnapshotOnce = async (snapshot: string): Promise<void> => {
   await runSnapshotGit(snapshot, ["init", "-q"]);
   await runSnapshotGit(snapshot, ["add", "-A"]);
   await runSnapshotGit(snapshot, [

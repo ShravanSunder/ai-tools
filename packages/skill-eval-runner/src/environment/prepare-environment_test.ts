@@ -1,5 +1,6 @@
 import { assertEquals, assertStringIncludes } from "jsr:@std/assert@1";
 import {
+  commitSnapshotOnce,
   copySharedReferences,
   type EnvironmentResult,
   prepareEnvironment,
@@ -432,4 +433,48 @@ Deno.test("the snapshot is one neutral commit, so HEAD, log and a clean status w
   } finally {
     await prepared.environment.dispose();
   }
+});
+Deno.test("the snapshot commit ignores git overrides in the runner's own environment", async () => {
+  const sentinel = await Deno.makeTempDir();
+  await Deno.writeTextFile(`${sentinel}/sentinel.txt`, "sentinel");
+  await git(sentinel, "init", "-q");
+  await git(sentinel, "add", ".");
+  await git(sentinel, "commit", "-q", "-m", "sentinel");
+  const sentinelHeadBefore = await git(sentinel, "rev-parse", "HEAD");
+  const sentinelIndexBefore = await Deno.readFile(`${sentinel}/.git/index`);
+  const snapshot = await Deno.makeTempDir();
+  await Deno.writeTextFile(`${snapshot}/README.md`, "snapshot content");
+  const overrides = {
+    GIT_DIR: `${sentinel}/.git`,
+    GIT_INDEX_FILE: `${sentinel}/.git/index`,
+  } as const;
+  const previous = Object.fromEntries(
+    Object.keys(overrides).map((name) => [name, Deno.env.get(name)]),
+  );
+  for (const [name, value] of Object.entries(overrides)) {
+    Deno.env.set(name, value);
+  }
+  let commitError: unknown;
+  try {
+    await commitSnapshotOnce(snapshot);
+  } catch (error) {
+    commitError = error;
+  } finally {
+    for (const [name, value] of Object.entries(previous)) {
+      if (value === undefined) Deno.env.delete(name);
+      else Deno.env.set(name, value);
+    }
+  }
+  assertEquals(await git(sentinel, "rev-parse", "HEAD"), sentinelHeadBefore);
+  assertEquals(await git(sentinel, "status", "--porcelain"), "");
+  assertEquals(
+    await Deno.readFile(`${sentinel}/.git/index`),
+    sentinelIndexBefore,
+  );
+  assertEquals(commitError, undefined);
+  assertEquals(
+    await git(snapshot, "log", "-1", "--format=%an <%ae>|%s"),
+    "snapshot <snapshot@localhost>|snapshot",
+  );
+  assertEquals(await git(snapshot, "ls-files"), "README.md");
 });
