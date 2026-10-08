@@ -51,7 +51,7 @@
   `tests/skills/run-skill-pressure-tests.sh --fast --scenario skill-audit-evidence-first --timeout 360`
   passed twice consecutively, each with 1 scenario / 0 failed and all four proof
   assertions passing.
-- `uv run --with pyyaml python /Users/shravansunder/.codex/skills/.system/skill-creator/scripts/quick_validate.py plugins/shravan-dev-workflow/skills/skill-audit`
+- `uv run --with pyyaml python ~/.codex/skills/.system/skill-creator/scripts/quick_validate.py plugins/shravan-dev-workflow/skills/skill-audit`
   passed.
 - Docs identity and reference checks passed:
   `readlink CLAUDE.md`, `git ls-files --stage agents.md CLAUDE.md`, and `rg`
