@@ -2,8 +2,8 @@
 packages/skill-eval-runner/
 tests/skills/
 docs/specs/2026-10-02-skill-authoring-plugin/
-docs/wip/skills-authoring/2026-10-*/
-docs/wip/skills-authoring/2026-10-06-unconverted-scenarios.md
+docs/wip/skills-authoring/
+docs/changelog/2026-09-17-spec-design-domain-entities.md
 docs/changelog/2026-10-06-skill-eval-runner.md
 docs/changelog/2026-10-06-skill-authoring-plugin.md
 docs/changelog/2026-10-07-*.md
