@@ -15,10 +15,10 @@ An implementation plan is a proof route through current authority and repository
    - current distinct Requirements, Specification, and Program Design with a current, complete design review and parent-verified correction evidence under `spec-program-review`'s convergence rule; or
    - for an orchestrated improvement goal or owner-requested delivery of a direct improvement result, the unchanged `plan-improve-repo` return containing an admitted finding pointer, `current-three-artifact-design-ready | implementation-mechanics-only` classification, required evidence pointers, and current applicability anchors.
 2. Reject missing, combined, conflicting, stale, `design-required`, or malformed authority with `revision-requested | blocked`, exact evidence, and semantic owner. Do not upgrade an improvement basis.
-4. Establish `requested terminal: plan-only | pr-ready-unmerged` before substantive planning. Use explicit user or orchestrator intent. If a direct request is ambiguous, ask once at entry.
-5. At the same entry boundary, preserve an existing tracking selection or offer once between no tracking and one available named `ops-*` owner. Return a named selection separately for the caller to invoke; no tracking continues immediately.
+3. Establish `requested terminal: plan-only | pr-ready-unmerged` before substantive planning. Use explicit user or orchestrator intent. If a direct request is ambiguous, ask once at entry.
+4. At the same entry boundary, preserve an existing tracking selection or offer once between no tracking and one available named `ops-*` owner. Return a named selection separately for the caller to invoke; no tracking continues immediately.
 
-Completion: the target, governing basis, requested terminal, tracking disposition, and permission to plan or exact non-ready result are explicit.
+Completion: the governing basis, requested terminal, tracking disposition, and permission to plan or exact non-ready result are explicit.
 
 ## Plan the Change
 
