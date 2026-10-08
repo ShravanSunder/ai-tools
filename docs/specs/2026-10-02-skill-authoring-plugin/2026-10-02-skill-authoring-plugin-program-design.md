@@ -398,8 +398,8 @@ stateDiagram-v2
 **Loader checks on every tree:** every reference resolves; the graph is acyclic; every path ends in a terminal or a judge leaf; every `jev` node names a card the skill's `cards.yaml` declares with the matching type; every file reference resolves in the repository at load time.
 
 **Banding (`R32`):**
-- The QA evaluator, not the Jev tool, turns a score into a band, using `<card>.<engine>.json`.
-- With no Calibration file, or an `unavailable` answer, the band is `uncertain`.
+- The QA evaluator, not the Jev tool, turns a score into a band, using the card's `calibration` entry for the answering engine.
+- With no entry for that engine, or an `unavailable` answer, the band is `uncertain`.
 - The evaluator never passes a Jev answer onward (`R33`).
 
 **The judge prompt** (`runner/src/judge/judge-prompt.ts`) carries the user's request (Prompt and follow-ups), the criterion, and the retrieved evidence. It tells the judge to read the criterion exactly as written and to treat the request as context for scope only: never fail work for lacking something the request did not ask for, and never fail it for departing from the request when the criterion is met (`R25`). The judge replies with exactly one `JudgeVerdict` JSON object, and the Check result records its quote and rationale so every judge decision can be audited. The judge session runs in an empty temporary directory, with its own Codex home, and every permission request rejected. Measured on 2026-10-07: an earlier prompt ("decide only against what the user's request asked") made the judge grade against the request instead of the criterion. Also measured that day: adding "accept wording that means the same thing as the criterion; do not require its exact words" changed none of six replayed decisions (12 calls). The fails that looked literal came from criteria worded stricter than the obligation they were converted from, so the fix belongs in the criterion, checked by passing the real reply and failing a known-bad one; the prompt stays as it is.
@@ -507,7 +507,7 @@ Jev lint cards (duplicated rule, a rule losing its home, trigger overlap; `R19`)
 | owner 10-04 | R29 ACPX library | E6 | subject runner | `acpx/runtime` | `package.json` dependency | none | import failure → exit 2 | V9 |
 | U28 | R30 read-only | E6, E7 | subject runner | permission handler | `Observation.permissionRequests` | none | rejected, recorded | V9 |
 | U8 | R31 follow bands | E5, E8, E15 | QA evaluator | `evaluateRun` | `TreeNode` branches | node→node | — | V6, V7 |
-| U8 | R32 calibrated bands | E12, E15 | QA evaluator | band mapping | `contracts/calibration.ts` | none | no file → uncertain | V7 |
+| U8 | R32 calibrated bands | E12, E15 | QA evaluator | band mapping | the card schema's `calibration` entry | none | no entry for the engine → uncertain | V7 |
 | U8, U20 | R33 judge isolation | E8, E15 | judge-leaf agent | `judge()` input type has no Jev field | `judge/judge-input.ts` | none | — | V8 |
 | U5 | R34 no judge unless leaf | E8, E9 | QA evaluator | tree walk | `CheckResult.decidedBy` | none | — | V7 |
 | U7, U29 | R35 parallel, fresh | E6 | eval CLI | `--parallel` | one environment and session per Run | none | one Run's failure isolated | V9 |
