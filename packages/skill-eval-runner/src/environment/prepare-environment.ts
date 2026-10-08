@@ -135,6 +135,51 @@ export async function resolveSkillSetSource(
   }
   return { kind: "live", skillSetDir };
 }
+// The snapshot becomes an ordinary one-commit repository, so `git status`, `git log` and HEAD work
+// for the subject. Its git calls never see the user's git identity, signing, hooks or global
+// excludes: global and system config are off, and the author and committer are fixed and neutral.
+const snapshotGitIdentity = "snapshot";
+const snapshotGitEmail = "snapshot@localhost";
+const snapshotGitEnvironment = {
+  GIT_CONFIG_GLOBAL: "/dev/null",
+  GIT_CONFIG_NOSYSTEM: "1",
+  GIT_AUTHOR_NAME: snapshotGitIdentity,
+  GIT_AUTHOR_EMAIL: snapshotGitEmail,
+  GIT_COMMITTER_NAME: snapshotGitIdentity,
+  GIT_COMMITTER_EMAIL: snapshotGitEmail,
+} as const;
+const runSnapshotGit = async (
+  snapshot: string,
+  gitArgs: readonly string[],
+): Promise<void> => {
+  const output = await new Deno.Command("git", {
+    args: [
+      "-c",
+      "commit.gpgsign=false",
+      "-c",
+      "core.hooksPath=/dev/null",
+      "-c",
+      "init.defaultBranch=main",
+      ...gitArgs,
+    ],
+    cwd: snapshot,
+    env: snapshotGitEnvironment,
+    stdout: "null",
+    stderr: "piped",
+  }).output();
+  if (output.code !== 0) throw new Error(text(output.stderr));
+};
+const commitSnapshotOnce = async (snapshot: string): Promise<void> => {
+  await runSnapshotGit(snapshot, ["init", "-q"]);
+  await runSnapshotGit(snapshot, ["add", "-A"]);
+  await runSnapshotGit(snapshot, [
+    "commit",
+    "-q",
+    "--allow-empty",
+    "-m",
+    "snapshot",
+  ]);
+};
 export type SnapshotHidePatterns =
   | { kind: "valid"; patterns: readonly SnapshotHidePattern[] }
   | { kind: "invalid"; reason: string };
@@ -289,8 +334,7 @@ export async function prepareEnvironment(
       );
     }
     await applyFixtures(scenarioPath, fixtures, snapshot);
-    const initialized = await run(["git", "init", "-q"], snapshot);
-    if (initialized.code !== 0) throw new Error(text(initialized.stderr));
+    await commitSnapshotOnce(snapshot);
     const homeDir = join(homesRoot, "home"),
       codexHome = join(homesRoot, "codex-home");
     await mkdir(homeDir, { recursive: true, mode: 0o700 });

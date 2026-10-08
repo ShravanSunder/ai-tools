@@ -378,3 +378,58 @@ Deno.test("subject shell commands do not inherit CODEX_HOME", async () => {
     await prepared.environment.dispose();
   }
 });
+Deno.test("the snapshot is one neutral commit, so HEAD, log and a clean status work", async () => {
+  const repo = await Deno.makeTempDir();
+  await Deno.mkdir(`${repo}/skills/sample-skill/scenarios/fixtures`, {
+    recursive: true,
+  });
+  await Deno.writeTextFile(`${repo}/skills/sample-skill/SKILL.md`, "skill");
+  await Deno.writeTextFile(`${repo}/README.md`, "repo");
+  await Deno.writeTextFile(
+    `${repo}/skills/sample-skill/scenarios/fixtures/brief.md`,
+    "brief",
+  );
+  await git(repo, "init", "-q");
+  const prepared = await prepareWithFixtureLogin(() =>
+    prepareEnvironment(
+      { repoRoot: repo, skillPath: "skills/sample-skill" },
+      { kind: "working-tree" },
+      [{ source: "fixtures/brief.md", target: "docs/brief.md" }],
+      `${repo}/skills/sample-skill/scenarios/case.scenario.md`,
+      "codex-for-fixture",
+    )
+  );
+  assertEquals(prepared.kind, "ready");
+  if (prepared.kind !== "ready") return;
+  try {
+    const snapshot = prepared.environment.snapshotDir;
+    const readGit = async (...args: readonly string[]) => {
+      const output = await new Deno.Command("git", {
+        args: [...args],
+        cwd: snapshot,
+        stdout: "piped",
+        stderr: "piped",
+      }).output();
+      return {
+        code: output.code,
+        stdout: new TextDecoder().decode(output.stdout).trim(),
+      };
+    };
+    assertEquals((await readGit("rev-parse", "--verify", "HEAD")).code, 0);
+    assertEquals(await readGit("status", "--porcelain"), {
+      code: 0,
+      stdout: "",
+    });
+    assertEquals(
+      (await readGit("log", "-1", "--format=%an <%ae>|%cn <%ce>|%s")).stdout,
+      "snapshot <snapshot@localhost>|snapshot <snapshot@localhost>|snapshot",
+    );
+    assertEquals(
+      (await readGit("ls-files", "docs/brief.md", ".agents/skills")).stdout
+        .split("\n").includes("docs/brief.md"),
+      true,
+    );
+  } finally {
+    await prepared.environment.dispose();
+  }
+});
