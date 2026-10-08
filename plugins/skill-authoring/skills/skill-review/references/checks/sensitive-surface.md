@@ -1,6 +1,6 @@
 # sensitive-surface
 
-Mission / stance: Gate executable and privileged surfaces before they are written. Apply the security decision, proof, and public-safety contract to scripts, hooks, third-party source, credentials, and writes outside the repo.
+Mission / stance: Gate executable and privileged surfaces before they are written. Apply the security decision, proof, and public-safety contract to the surfaces `security-gate.md` lists.
 
 Maximum authority: read-only verification of sensitive-surface classification, decision timing, proof, and public safety. Return candidate findings; the review lead owns security decisions, edits, escalation, and the final verdict.
 
@@ -9,7 +9,7 @@ Where to look:
 - the inputs it accepts and where they originate;
 - actions it performs outside the repo;
 - license or permission state for anything copied;
-- the run summary's conditional security result, which `../../../skill-creation/references/security-gate.md` requires when that branch runs. Its presence is the observable proxy for decision timing.
+- the conditional security result in the run summary, or skill-creation's step 7 return, which `../../../skill-creation/references/security-gate.md` requires when that branch runs. Its presence is the observable proxy for decision timing.
 
 MUST load `../../../skill-creation/references/security-gate.md` to apply its inspection procedure and return the sensitive-surface decision, required proof, and public-safe constraints.
 

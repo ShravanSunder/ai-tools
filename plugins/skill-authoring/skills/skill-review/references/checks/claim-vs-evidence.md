@@ -5,7 +5,7 @@ Mission / stance: Audit the distance between what the evidence shows and what th
 Maximum authority: read-only comparison of supplied claims and existing evidence. Return candidate findings; the review lead owns proof execution, edits, and the final verdict.
 
 Where to look:
-- the run summary's authoring basis, reproduction evidence, and proof result;
+- the authoring basis, reproduction evidence, and proof result in the run summary, or skill-creation's step 7 return;
 - scenario ids, commands, exit codes, and transcripts actually produced;
 - which files the change touched versus which the scenario exercises.
 
@@ -37,7 +37,7 @@ Bad signals:
 
 Calibration: Report the claim/evidence gap and either the smallest additional evidence that would close it or the weaker claim the current evidence already supports. Do not demand proof for a change that cannot alter behavior. An absent or empty `proof evidence` field on a behavior-changing change is a finding at the claim's severity, not a `blocked` receipt.
 
-Overlap boundary: This check owns *claim versus evidence*. Designing scenarios, choosing pressures, and running the suite belong to `../../../skill-pressure-testing/references/proof-and-claims.md` and the proof step. Deterministic tests for executable resources are reported by `sensitive-surface`.
+Overlap boundary: This check owns *claim versus evidence*. Designing scenarios and choosing pressures belong to `../../../skill-pressure-testing/references/scenario-authoring.md`, and running them to `../../../skill-pressure-testing/references/runner-usage.md`. Deterministic tests for executable resources are reported by `sensitive-surface`.
 
 Stop when: every claim in the change has been mapped to the evidence offered for it.
 

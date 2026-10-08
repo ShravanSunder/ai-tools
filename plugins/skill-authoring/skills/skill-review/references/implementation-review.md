@@ -6,7 +6,7 @@ Return a verdict, changed-file coverage, accepted/rejected/unverified findings, 
 
 ## Lint First
 
-Before any reviewer starts, MUST load `jev-lint.md` and return the lint findings and the Jev-card status for the reviewed skill set. Lint findings join reduction as candidates; lint never accepts or rejects a finding by itself.
+Before any reviewer starts, MUST load `jev-lint.md` with the words the reviewed skill set must not mention (for example another plugin's name) and return the lint findings and the Jev-card status for the reviewed skill set. Lint findings join reduction as candidates; lint never accepts or rejects a finding by itself.
 
 ## Ordered Checks
 
@@ -30,7 +30,7 @@ structure reviewer       placement-and-calls, rule-agreement, trigger-routing
 proof and safety         claim-vs-evidence, sensitive-surface
 ```
 
-Start only reviewers that have a selected check, and always at least two: when the selection fits one family, split it across two agents. Keep the order within each agent so placement and rule agreement see the entire change before the claim comparison.
+Start only reviewers that have a selected check, and always at least two. Keep the order within each agent so placement and rule agreement see the entire change before the claim comparison.
 
 Each reviewer records `complete | partial | blocked` per check and returns candidate findings with anchors. IF a changed surface adds an output or tool shape, load `../../skill-creation/references/shared-shape-design.md` for its consumers and owner. A reviewer walks its checks itself and starts no further agents. Prescribed proof commands may run under the exact grant; the review lead judges the observations.
 
