@@ -343,10 +343,11 @@ export async function prepareEnvironment(
     }
     await applyFixtures(scenarioPath, fixtures, snapshot);
     await commitSnapshotOnce(snapshot);
-    const homeDir = join(homesRoot, "home"),
-      codexHome = join(homesRoot, "codex-home");
+    const homeDir = join(homesRoot, "home");
     await mkdir(homeDir, { recursive: true, mode: 0o700 });
-    await mkdir(codexHome, { recursive: true, mode: 0o700 });
+    // A unique per-Run name (mkdtemp, mode 0700): the credential detector matches this name as a
+    // path segment, so a fixed word such as `codex-home` would trip on ordinary prose.
+    const codexHome = await mkdtemp(join(homesRoot, "codex-home-"));
     await symlink(authPath, join(codexHome, "auth.json"));
     const config = {
       model: "gpt-6-luna",

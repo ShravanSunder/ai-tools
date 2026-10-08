@@ -1,4 +1,6 @@
-import { assertEquals, assertStringIncludes } from "jsr:@std/assert@1";
+import { assert, assertEquals, assertStringIncludes } from "jsr:@std/assert@1";
+import { basename } from "node:path";
+import { buildObservedOutcome } from "../subjects/observed-outcome.ts";
 import {
   commitSnapshotOnce,
   copySharedReferences,
@@ -477,4 +479,75 @@ Deno.test("the snapshot commit ignores git overrides in the runner's own environ
     "snapshot <snapshot@localhost>|snapshot",
   );
   assertEquals(await git(snapshot, "ls-files"), "README.md");
+});
+Deno.test("each Run's Codex home has a unique name, so prose that says codex-home is not a credential read", async () => {
+  const repo = await Deno.makeTempDir();
+  await Deno.mkdir(`${repo}/skills/sample-skill`, { recursive: true });
+  await Deno.writeTextFile(`${repo}/skills/sample-skill/SKILL.md`, "skill");
+  await git(repo, "init", "-q");
+  const prepare = () =>
+    prepareWithFixtureLogin(() =>
+      prepareEnvironment(
+        { repoRoot: repo, skillPath: "skills/sample-skill" },
+        { kind: "working-tree" },
+        [],
+        undefined,
+        "codex-for-fixture",
+      )
+    );
+  const first = await prepare(), second = await prepare();
+  assert(first.kind === "ready" && second.kind === "ready");
+  try {
+    const codexHome = first.environment.codexHome;
+    const codexHomeName = basename(codexHome);
+    assert(codexHomeName !== "codex-home", codexHomeName);
+    assert(
+      codexHomeName !== basename(second.environment.codexHome),
+      "two Runs share a Codex home name",
+    );
+    const resolvedCodexHome = await Deno.realPath(codexHome);
+    const outcomeFor = (command: string, rawOutput: string) =>
+      buildObservedOutcome({
+        runId: "run-1",
+        scenarioId: "scenario-1",
+        revision: { kind: "working-tree" },
+        turns: [],
+        recordedEvents: [{
+          turnIndex: 0,
+          event: {
+            type: "tool_call",
+            text: "",
+            toolCallId: "call-1",
+            title: command,
+            kind: "execute",
+            status: "completed",
+            rawInput: { command: ["/bin/zsh", "-lc", command] },
+            rawOutput,
+          },
+        }],
+        permissionRequests: [],
+        finalMessage: "",
+        usage: { inputTokens: 1, outputTokens: 1, totalTokens: 2 },
+        durationMs: 1,
+        subjectCodexHomePaths: [codexHome, resolvedCodexHome],
+      });
+    assertEquals(
+      outcomeFor(
+        "cat docs/setup.md",
+        "Copy the login into the `codex-home` folder before you start.",
+      ).kind,
+      "observed",
+    );
+    const credentialRead = outcomeFor(
+      `cat $HOME/../${codexHomeName}/auth.json`,
+      "FAKE-CREDENTIAL-FIXTURE-0004",
+    );
+    assertEquals(
+      credentialRead.kind === "execution-failed" && credentialRead.cause,
+      "credential-exposure",
+    );
+  } finally {
+    await first.environment.dispose();
+    await second.environment.dispose();
+  }
 });
