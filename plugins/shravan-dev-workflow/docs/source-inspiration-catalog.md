@@ -60,5 +60,5 @@ For per-skill borrowed/do-not-copy detail, open the matching file under `ai-dev-
 - Keep this catalog selective and lite.
 - Do not copy upstream skill prose into local skills.
 - Do not cite source inspiration as proof that local behavior works.
-- When a workflow change is implemented, add pressure scenarios that prove the local adaptation prevents the observed failure.
+- When a workflow change is implemented, prove that the local adaptation prevents the observed failure.
 - Path-level provenance, submodule pins, and bump history: update `ai-dev-skills` (`docs/my-ai-tools/`, `docs/repo-index/`, `docs/repo-index-changelog/`).

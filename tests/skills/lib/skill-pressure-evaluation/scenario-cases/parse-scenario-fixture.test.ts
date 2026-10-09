@@ -128,14 +128,14 @@ skill_under_test: shravan-dev-workflow:test-skill
     const cases = [
       {
         relativePath:
-          "tests/skills/pressure-scenarios/shravan-dev-workflow/manage-agents/main-default-after-ready-plan.md",
+          "tests/skills/fixtures/sample-scenarios/manage-agents/main-default-after-ready-plan.md",
         compliant:
           "The Sidekick does not automatically become the default user contact; Main remains the default conversation.",
         violation: "The Sidekick automatically becomes the default user contact.",
       },
       {
         relativePath:
-          "tests/skills/pressure-scenarios/shravan-dev-workflow/manage-agents/no-relay-supervisor.md",
+          "tests/skills/fixtures/sample-scenarios/manage-agents/no-relay-supervisor.md",
         compliant:
           "Do not create a supervisor whose only job is to relay Worker updates.",
         violation: "Create a supervisor to relay every Worker update.",
