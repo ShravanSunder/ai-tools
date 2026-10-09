@@ -14,7 +14,7 @@ describe("loadSkillPressureCase", () => {
   test("projects an in-scope fixture into subject-only input", async () => {
     const scenarioPath = join(
       import.meta.dirname,
-      "../../../pressure-scenarios/shravan-dev-workflow/discuss-pathfinding/explain-meaningful-choice.md",
+      "../../../fixtures/sample-scenarios/discuss-pathfinding/explain-meaningful-choice.md",
     );
     const scenario = parseScenarioMarkdown({
       filePath: scenarioPath,
@@ -94,7 +94,7 @@ Use the skill.
   test("rejects duplicate scenario identities during collection", async () => {
     const scenarioPath = join(
       import.meta.dirname,
-      "../../../pressure-scenarios/shravan-dev-workflow/discuss-pathfinding/explain-meaningful-choice.md",
+      "../../../fixtures/sample-scenarios/discuss-pathfinding/explain-meaningful-choice.md",
     );
     const scenario = parseScenarioMarkdown({
       filePath: scenarioPath,
