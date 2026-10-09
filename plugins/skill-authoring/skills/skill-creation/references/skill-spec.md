@@ -2,7 +2,7 @@
 
 This reference owns the skill spec: the proposal for one skill change that steps 1–5 of `skill-creation` produce before any skill file changes. Return the spec in the conversation or as a doc, as the predicates below decide.
 
-Expected inputs: the step 1–5 returns (classification, owner, reusable behavior, success definition, authoring basis and done bar, surface allocation, trigger decision, main path, depth placement).
+Expected inputs: the step 1–5 returns (classification, owner, reusable behavior, success definition, authoring basis and proof posture, surface allocation, trigger decision, main path, depth placement).
 
 ## Conversation or Doc
 
@@ -18,7 +18,7 @@ problem and evidence
 success definition
 decisions table — defaults taken with rationale; the user may strike any row
 per-run surface allocation: trigger / main path / depth / proof
-authoring basis and proof plan, with each run's proof posture and done bar (new-from-intent | fix-for-recorded-failure)
+authoring basis and proof plan, with each run's proof posture
 coordination: base branch and commit, pending edits, version and changelog landing
 non-goals
 run status: per run, proposed | implemented | reviewed | shipped

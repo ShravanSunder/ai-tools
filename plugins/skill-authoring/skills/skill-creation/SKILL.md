@@ -127,7 +127,7 @@ Include every applicable element below. Choose headings and a format that fit th
 
 ## Workflow
 
-Steps 1–6 produce the skill spec: the proposal a reviewer can judge before any skill file changes. Step 7 writes the files inside the accepted spec. Proof and independent implementation review come after this skill: `skill-pressure-testing` proves behavior and `skill-review` reviews the changed files.
+Steps 1–6 produce the skill spec: the proposal a reviewer can judge before any skill file changes. Step 7 writes the files inside the accepted spec. Proof and independent implementation review come after this skill: proof follows `references/proof-and-claims.md`, and `skill-review` reviews the changed files.
 
 A run implementing one slice of an accepted multi-run skill spec reads that spec doc and takes its step 1–6 returns from it, quoting the slice's success definition, authoring basis, surface allocation, proof posture, and the decision rows it must honor, and checks the doc's coordination slot before editing. Before editing, it also confirms the spec's acceptance still covers the spec's current meaning, under the acceptance binding in `../skill-review/references/spec-review.md`: formatting, typo, link, process-only changes and verified remediations keep the acceptance; any other change since acceptance, or one of uncertain effect, goes back to spec review before any skill file is edited. The doc is the commission for that slice, and each slice still names exactly one skill target.
 
@@ -153,14 +153,14 @@ Then classify the change, and classify why you are making it.
 
 Every classification is a claim the next reader can check, and this session makes the call about its own work: `mechanical` names the surfaces the change touches and shows none is in the behavior-changing row; `behavior-changing` names which listed surface the diff alters; `scoped` names its one home and shows each excluded surface is untouched. Edits to `SKILL.md` prose, a reference's rules, or the description are behavior-changing whatever their size — small is not a surface.
 
-Behavior-changing work is either `observed failure` or `user-directed intent`. The basis picks the done bar the change must later meet; `skill-pressure-testing`'s Done Bars define each bar. IF the change is behavior-changing, load `../skill-pressure-testing/references/proof-and-claims.md` and return the proof shape for the skill type; for `observed failure` only, attempt faithful reproduction there, as fresh runs under its steps 3–5, and also return the reproduction result, representative-hypothesis boundary, and available next decisions.
+Behavior-changing work is either `observed failure` or `user-directed intent`. IF the change is behavior-changing, load `references/proof-and-claims.md` and return the proof shape for the skill type; for `observed failure` only, attempt faithful reproduction there, as runs that follow its Running section, and also return the reproduction result, representative-hypothesis boundary, and available next decisions.
 
-- **`user-directed intent`** may draft from an approved success definition without RED. Its done bar is `new-from-intent`.
-- **`observed failure`** attempts faithful reproduction before any causal fix is claimed. Reproduced means a targeted RED, and the done bar is `fix-for-recorded-failure`. Any other result means showing the gap and asking the user to supply evidence and retry, approve a representative hypothesis, author from the success definition with a named proof gap, or defer.
+- **`user-directed intent`** may draft from an approved success definition without RED.
+- **`observed failure`** attempts faithful reproduction before any causal fix is claimed. Reproduced means a targeted RED. Any other result means showing the gap and asking the user to supply evidence and retry, approve a representative hypothesis, author from the success definition with a named proof gap, or defer.
 
 Never manufacture RED, and never let a passing control automatically forbid authoring. "I already know the wording problem" is not a skip.
 
-Completion: authoring basis, done bar, reproduction result when applicable, user decision, and strongest honest proof posture are explicit — and each sourcing return that ran exists. A `mechanical` classification names the surfaces it touched; a `scoped` classification names its one home and shows each excluded surface is untouched.
+Completion: authoring basis, reproduction result when applicable, user decision, and strongest honest proof posture are explicit — and each sourcing return that ran exists. A `mechanical` classification names the surfaces it touched; a `scoped` classification names its one home and shows each excluded surface is untouched.
 
 ### 3. Design the trigger
 
@@ -219,7 +219,7 @@ IF any surface on the sensitive-surface list in `references/security-gate.md` is
 The run is not done while any of these hold:
 
 - `SKILL.md` lacks a mental model or main path;
-- behavior-changing authoring lacks a human-readable success definition, authoring basis, or done bar;
+- behavior-changing authoring lacks a human-readable success definition or authoring basis;
 - an observed-failure path hides a failed, missing, or inconclusive reproduction result instead of returning the user decision;
 - the workflow has branches without observable predicates or return shapes;
 - a promised stage or branch has no teaching owner — an inline body section or a reference that teaches it; a shape-only reference never owns a stage and separately requires a named consumer;

@@ -5,7 +5,7 @@ description: "Use when creating, updating, or fixing one skill end to end: carry
 
 # Skill Orchestrator
 
-A skill change is a small delivery with three gates: an accepted spec before files change, proof before review, and an independent review before ship. This skill carries one change through those gates and keeps the record honest. It does not write the spec, the review, or the proof itself; `skill-creation`, `skill-review`, and `skill-pressure-testing` do, and this skill checks each result before moving on.
+A skill change is a small delivery with three gates: an accepted spec before files change, proof before review, and an independent review before ship. This skill carries one change through those gates and keeps the record honest. It does not write the spec or the review itself; `skill-creation` and `skill-review` do. It runs the proof the spec plans under `skill-creation`'s proof reference, and checks each result before moving on.
 
 ## Practices This Skill Carries
 
@@ -38,7 +38,7 @@ Use `skill-creation` step 7 inside the accepted boundary and return the diff, an
 
 ### 4. Prove
 
-Use `skill-pressure-testing` against the done bar the spec names and return the strongest supported claim, its evidence, and the bar result. Completion: proof ran against the current files, or the user accepted a named proof gap.
+Load `../skill-creation/references/proof-and-claims.md`, run the proof the spec plans, and return the strongest supported claim and its evidence. Completion: proof ran against the current files, or the user accepted a named proof gap.
 
 ### 5. Assess
 
@@ -69,7 +69,7 @@ Return a run summary whenever the run evaluates or edits a skill, commissions re
 target: <owner plugin or folder / skill>
 classification: create | update | evaluate
 outcome: <what changed, verdict, or blocker>
-success and basis: <success definition; observed failure | user-directed intent; done bar>  # create/update only
+success and basis: <success definition; observed failure | user-directed intent>  # create/update only
 run status: <per run: proposed | implemented | reviewed | shipped>
 review: <stages run, checks, and complete | partial | blocked results>                   # only if review ran
 proof: <claim, evidence, and remaining gap>                                              # only if proof ran

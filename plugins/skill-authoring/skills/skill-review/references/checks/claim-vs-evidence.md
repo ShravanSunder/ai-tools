@@ -9,7 +9,7 @@ Where to look:
 - prompts, runs, commands, exit codes, and transcripts actually produced;
 - which files the change touched versus which the runs exercise.
 
-MUST load `../../../skill-pressure-testing/references/proof-and-claims.md` to apply the Evidence And Claim Ladder and return the strongest supported claim and its claim boundary.
+MUST load `../../../skill-creation/references/proof-and-claims.md` to apply the Evidence And Claim Ladder and return the strongest supported claim and its claim boundary.
 
 How to inspect: Map the claim to its evidence, find the strongest claim the evidence actually supports, and compare:
 
@@ -37,7 +37,7 @@ Bad signals:
 
 Calibration: Report the claim/evidence gap and either the smallest additional evidence that would close it or the weaker claim the current evidence already supports. Do not demand proof for a change that cannot alter behavior. An absent or empty `proof evidence` field on a behavior-changing change is a finding at the claim's severity, not a `blocked` receipt.
 
-Overlap boundary: This check owns *claim versus evidence*. Designing and running pressure runs belong to `skill-pressure-testing`. Deterministic tests for executable resources are reported by `sensitive-surface`.
+Overlap boundary: This check owns *claim versus evidence*. Designing and running proof belong to `skill-creation`'s `references/proof-and-claims.md`. Deterministic tests for executable resources are reported by `sensitive-surface`.
 
 Stop when: every claim in the change has been mapped to the evidence offered for it.
 

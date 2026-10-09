@@ -58,7 +58,7 @@ Cover each item with source-backed evidence. When a check result already covers 
 
 The review lead verifies each candidate finding at its anchor against source files, pressure output, and user constraints before accepting it, as `checks/review-schema.md` requires. Reject findings that contradict the current scope, treat length alone as a blocker when the user scoped length out, or ask for broad `skill-audit` work during one-skill authoring. Whoever requested the review retains final disposition.
 
-Accepted findings carry a route to the step that owns them: a spec mismatch to the skill spec (`skill-creation` step 6), wording or placement to implementation (`skill-creation` step 7), proof honesty to `skill-pressure-testing`, an assessment gap to whoever assessed the change, and a ship surface to shipping.
+Accepted findings carry a route to the step that owns them: a spec mismatch to the skill spec (`skill-creation` step 6), wording or placement to implementation (`skill-creation` step 7), proof honesty to whoever ran the proof, an assessment gap to whoever assessed the change, and a ship surface to shipping.
 
 After accepted edits, rerun the narrowest fitting pressure and static proof that can catch the issue, then require a fresh assessment. The same review lead refreshes affected check coverage while the loop converges under the convergence rule in this skill's `SKILL.md`. End early on `great`. On `not-converging`, the lead stops and brings the user the decision.
 

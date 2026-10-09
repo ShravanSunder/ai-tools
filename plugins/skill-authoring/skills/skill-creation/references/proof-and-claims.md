@@ -29,8 +29,7 @@ manual exercise             -> observed in named examples
 baseline characterization   -> behavior characterized without delta claim
 representative comparison   -> delta demonstrated for that approved case
 reproduced RED -> GREEN      -> targeted improvement demonstrated for that run
-repeated regression evidence-> repeated fresh runs of the same prompts pass at reported strength
-done bar met                -> the change meets its bar (`skill-pressure-testing`'s Done Bars)
+repeated regression evidence-> repeated fresh runs of the same prompts and checks pass at reported strength
 ```
 
 A passing control means the comparison did not demonstrate added value. It may expose native model behavior, a weak prompt, or a user preference. It does not automatically forbid authoring.
@@ -46,7 +45,7 @@ A passing control means the comparison did not demonstrate added value. It may e
 ## Controls And Repetitions
 
 - When claiming improvement, first run a prior-revision control on the same prompts and checks: fresh runs that loaded the skill as it was before the change. When characterizing or drafting from user intent, label that different purpose explicitly.
-- Choose fresh-context repetitions proportionate to stochasticity, observed variance, risk, and the strength of the claim; the bar sets the count for a bar claim.
+- Choose fresh-context repetitions proportionate to stochasticity, observed variance, risk, and the strength of the claim; there is no universal count.
 - Treat variance across repetitions as a proof gap. Inconsistent interpretations mean the wording is not binding at the claimed strength.
 
 ## Rationalization Capture
@@ -62,7 +61,7 @@ retest:
 
 ## Running
 
-`skill-pressure-testing`'s `SKILL.md` steps 3–5 own how prompts and checks are written and how fresh runs are started and read. IF you reached this reference from another skill and will run anything, including a reproduction attempt, load `../SKILL.md` and follow its steps 3–5; return each run's loaded skill copy, recorded actions, and check results.
+A run is a fresh agent with no authoring history (a new subagent or session, never a fork or a resume), given only a realistic request that never shows the checks, never says it is a test, and never asks which skills or files the agent used. Write the checks before anything runs, and keep them outside any directory the agent works in. A checkout does not decide which skills the agent loads: from the run's record, confirm which copy of the skill under test it loaded (the `SKILL.md` path it read, or the host's record of the skill it invoked), and take its actions from the host's record of the session, never from its reply. Read every run by hand. IF you cannot start a fresh agent, cannot show which copy it loaded, or have no record of its actions, return that as the proof gap instead of a result.
 
 If no prompt can exercise the behavior or the user defers evaluation, return the named proof gap. Do not fabricate a run merely to satisfy the protocol.
 

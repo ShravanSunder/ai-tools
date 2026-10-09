@@ -17,7 +17,7 @@ ai-tools/
 │   ├── ai-scaffold/                  # Project scaffolding (biome, ruff, vitest, pytest)
 │   ├── dev-workflow-tools/           # Common tool skills, including Peekaboo UI testing
 │   ├── shravan-dev-workflow/         # Spec, review, docs, TUI, and Linear workflow skills
-│   └── skill-authoring/              # Skill creation, review, pressure testing, and audit
+│   └── skill-authoring/              # Skill creation, review, and audit
 ├── observability/                    # Shared local OpenTelemetry and Victoria stack
 ├── agent-scripts/                    # Host agent scripts (not plugin skills)
 │   ├── stop-review/                  # Luna Stop-review; deploy-home-hook.sh copies runtime to ~/.agents/stop-review
@@ -59,7 +59,6 @@ Skill work in this repo uses the `skill-authoring` plugin (`plugins/skill-author
 | Carry one skill change from spec to release | `skill-authoring:skill-orchestrator` |
 | Design or write one named skill and its skill spec; the craft (trigger, main path, depth, steering, platform mechanics, security gate) | `skill-authoring:skill-creation` |
 | Independent review of a skill spec or skill files, with several reviewer agents | `skill-authoring:skill-review` |
-| Prove a skill change against its done bar with fresh agent runs | `skill-authoring:skill-pressure-testing` |
 | Which skills to create, update, merge, or skip | `skill-authoring:skill-audit` |
 
 When doing skill work in this repo:
@@ -68,7 +67,7 @@ When doing skill work in this repo:
 2. If the target is not named, use `skill-audit` for broad portfolio classification or ask for a named target.
 3. Use `skill-orchestrator` to carry a named create or update through spec, review, implementation, proof, and release; `skill-creation` alone for design and writing.
 4. Keep `SKILL.md` compact and progressive. Put depth in `references/` and deterministic mechanics in `scripts/`.
-5. `skill-pressure-testing` owns how a skill change is proven with fresh agent runs.
+5. `skill-creation`'s `references/proof-and-claims.md` owns what a behavior-proof claim may say and how a fresh run must be read to count.
 6. For user-visible plugin behavior changes, update `docs/changelog/`, bump plugin version metadata, and record refresh / reinstall status.
 7. After implementation, run fitting proof and assess the current diff and evidence against the accepted need, spec, ownership, complexity, and integration before independent review. Use `shravan-dev-workflow:implementation-pr-wrapup` for push / PR / checks / review-thread / merge-readiness proof. Refresh installed Codex/Claude caches only as an explicit post-push or release proof step; it is a home-level mutation and not a substitute for PR readiness.
 
@@ -143,7 +142,6 @@ Skills are layered by the role they play: orchestrators run a whole job; phases 
 | skill-orchestrator | `plugins/skill-authoring/skills/skill-orchestrator/` | Carry one skill change from spec through review, implementation, proof, assessment, and release |
 | skill-creation | `plugins/skill-authoring/skills/skill-creation/` | The skill craft and the skill spec: design and write one named skill |
 | skill-review | `plugins/skill-authoring/skills/skill-review/` | Independent review of a skill spec or skill files by several reviewer agents |
-| skill-pressure-testing | `plugins/skill-authoring/skills/skill-pressure-testing/` | Prove skill behavior against its done bar with fresh agent runs |
 | skill-audit | `plugins/skill-authoring/skills/skill-audit/` | Evidence-backed portfolio audits using current plugin inventory, session patterns, and upstream inspirations |
 | presentation-tui | `plugins/shravan-dev-workflow/skills/presentation-tui/` | Hybrid TUI + markdown presentation for monospace terminal/CLI surfaces: design, architecture, comparisons, flows, and multi-section explanations |
 | presentation-webui | `plugins/shravan-dev-workflow/skills/presentation-webui/` | Markdown-first presentation for rendered proportional-font chat surfaces: smallest-view media selection, Mermaid judgment, GFM comparisons |
@@ -195,9 +193,9 @@ Skills encode judgment, house style, and repeatable failure prevention. Prefer i
 - Keep `SKILL.md` concise and progressive. Move heavy examples, rubrics, templates, and long prompt packets into `references/`; use `scripts/` for deterministic mechanics.
 - Human-facing workflow README files may live inside skill folders when the user explicitly requests them. Keep them concise and non-authoritative: link to `SKILL.md` and its references instead of duplicating the runtime contract.
 - Cross-reference other skills by skill name, not fragile installed-cache paths.
-- Prove skill changes against their done bar. A fix for a recorded failure first makes that failure show up in a fresh run at the revision before the fix, then passes three fresh runs of the same prompt and checks. A new skill from user intent may be drafted from its success definition, then shown by fresh runs on realistic prompts.
+- Treat skill writing like TDD for process documentation: first identify the failure the agent shows without the skill, then write the smallest wording that prevents it, then retest and close loopholes.
 - Capture the rationalizations the agent used to go wrong, especially "I already know this", "this is obvious", "I'll verify later", and "the user probably meant..."; turn those into explicit red flags or gates in the skill.
-- For skill behavior changes, prove the change with fresh agent runs through `skill-pressure-testing` before rollout.
+- For skill behavior changes, record the proof and any named proof gap before rollout.
 - Validate each changed skill independently before broad rollout. For workflow skills, include at least one realistic trigger evaluation or copy-paste pressure prompt that proves when the skill should and should not load.
 - Keep artifact ownership explicit: spec, plan, research, and debug skills create their lane artifacts for clear substantial work unless the user asks for chat-only/no-files; `docs-maintain` owns cleanup, archival, promotion, and source-of-truth reconciliation after artifacts exist.
 - Keep parent/subagent ownership explicit: subagents produce bounded evidence or candidate findings; the parent agent verifies, reduces, and owns the final claim.

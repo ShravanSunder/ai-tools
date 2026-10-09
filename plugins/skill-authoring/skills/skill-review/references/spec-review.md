@@ -25,7 +25,7 @@ For a scoped change, the review lead still checks the proposal against the Verdi
 
 `checks/review-schema.md` owns the verdict labels. Here, `great` means accepted to implement, `targeted-revision` means a bounded spec fix before editing, and `significant-rewrite` means the promise, trigger, workflow, or proof route must be redesigned before implementation.
 
-Blocker overrides: a spec cannot be accepted when the target behavior is not one named skill (for a multi-run spec doc: per run in its sequence), the trigger is not a loading condition, the authored body contract or usable main path is incomplete, a reference or dispatched-procedure call is vague or incomplete, a callee owns its entry routing, proposed dispatched work is not a prescribed procedure or widens authority, a promised stage or branch has no teaching owner, a shape-only reference lacks a named consumer, shared shapes lack real consumers or duplicate authority, a hard cutover retains competing owners, a proposed rule, gate, or completion criterion names no failure form, behavior-changing guidance has no proof route or done bar, sensitive surfaces are unclassified, or the proposed text is mostly no-op prose.
+Blocker overrides: a spec cannot be accepted when the target behavior is not one named skill (for a multi-run spec doc: per run in its sequence), the trigger is not a loading condition, the authored body contract or usable main path is incomplete, a reference or dispatched-procedure call is vague or incomplete, a callee owns its entry routing, proposed dispatched work is not a prescribed procedure or widens authority, a promised stage or branch has no teaching owner, a shape-only reference lacks a named consumer, shared shapes lack real consumers or duplicate authority, a hard cutover retains competing owners, a proposed rule, gate, or completion criterion names no failure form, behavior-changing guidance has no proof route, sensitive surfaces are unclassified, or the proposed text is mostly no-op prose.
 
 ## Rubric
 
@@ -37,7 +37,7 @@ Covers what only a whole-spec verdict can judge:
 - authored body: `SKILL.md` will name the mental model or stance, show a scan-visible all-run spine, end each meaningful step or reference pass with checkable completion, and state the overall proof, unresolved-condition, or blocker boundary.
 - shape proposals: apply the returned shared-shape contract; every shared shape names a real consumer.
 - ownership and cutover: every concept has one live owner, superseded paths and duplicate prose are removed without aliases or forwarding stubs, and the spec names all active consumers that must cut over together when ownership changes.
-- proof plan: structural proof and artifact-scoped behavior proof are separated, behavior proof matches the skill type, the done bar matches the authoring basis (`new-from-intent` for user-directed intent, `fix-for-recorded-failure` for a reproduced failure), and the plan preserves the basis the spec records.
+- proof plan: structural proof and artifact-scoped behavior proof are separated, behavior proof matches the skill type, a reproduced failure is proven against that same failure, and the plan preserves the authoring basis the spec records.
 - safety/platform: sensitive surfaces, plugin mechanics, changelog, and cache refresh are routed correctly when in scope.
 
 Cover each item with source-backed evidence. When a check result already covers an item, cite it rather than re-deriving it.
