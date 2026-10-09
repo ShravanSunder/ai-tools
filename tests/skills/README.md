@@ -1,5 +1,7 @@
 # Skill Pressure Tests
 
+> **Status 2026-10-09:** the scenarios were removed while pressure testing is redesigned; this harness, its evaluator library, and its unit tests stay. `pressure-scenarios/` does not exist until a new scenario is added, so `test:evals` exits 1 with nothing to run. The unit tests read sample copies under `fixtures/sample-scenarios/`.
+
 This harness pressure-tests Codex skills through Codex. Most scenarios cover
 `shravan-dev-workflow`; plugin-specific skill scenarios may live here when they
 need the same shortcut-resistance harness.
@@ -78,10 +80,9 @@ minimal metadata needed for its JSON report. `Expected Compliant Behavior`,
 `Failure Signals`, and the `expect_*` assertions are grader-only; showing them
 to the model lets it parrot compliance it never demonstrated.
 
-Scenarios for retired skills use the same
-`retired-pressure-scenarios/<plugin-name>/<skill-name>/<scenario-name>.md`
-shape and are excluded from the active runner. They are preserved as historical
-behavior records, not as proof for current runtime skills.
+Scenarios for retired skills used the same shape under
+`retired-pressure-scenarios/` and were excluded from the active runner; they
+were removed on 2026-10-09 and remain in git history.
 
 Limitations:
 
