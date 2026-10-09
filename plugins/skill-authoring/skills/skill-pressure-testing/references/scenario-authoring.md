@@ -15,6 +15,7 @@ Grade what the agent did before what it said. The code-step catalog reads record
 ```text
 <scenario dir>/<scenario-id>.scenario.md   one scenario
 <scenario dir>/cards.yaml                  the skill's Question cards and their calibrations, shared by its scenarios
+<scenario dir>/fixtures/<file>             a file the scenario's `fixtures:` front matter copies into the snapshot at its `target`
 ```
 
 `<scenario dir>` is `tests/skills/pressure-scenarios/<owner>/<skill>/` in the skill's repository, where `<owner>` is the directory holding the skill set (the plugin for `plugins/<plugin>/skills/<skill>`). `--scenarios <dir>` points the runner at another directory.
@@ -25,7 +26,7 @@ The `## Prompt` section is exactly what the subject receives. Write it the way a
 
 - It may invoke the skill by name (`$skill-creation`) when the scenario tests the body; leave the name out when it tests the trigger. A named skill is put into the agent's context directly, without a file read, so `loadedSkill` only proves anything when the prompt leaves the name out.
 - It never contains the checklist or a hint of it, never asks which skills or files the agent used, and never uses the words eval, test, judge, experiment, rubric, score, compare, benchmark, candidate, or arena. `validate` rejects these words.
-- Files the request needs must exist in the repository snapshot. Point at real paths; a fixture describing a simulated situation lives in the repository under a path a user would plausibly name.
+- Files the request needs must exist in the repository snapshot. Point at real paths; a fixture is a file under `<scenario dir>/fixtures/` that `fixtures:` copies to a path a user would plausibly name.
 
 Use `followUps` in the front matter for scripted later turns in the same session.
 
