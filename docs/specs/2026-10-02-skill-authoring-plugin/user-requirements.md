@@ -1,5 +1,7 @@
 # Skill authoring plugin: Requirements
 
+> **Withdrawn 2026-10-09 (owner decision).** Pressure testing will be redesigned from scratch, so the eval half of this design does not ship. Rows U5–U8, U22–U30 and U34 no longer govern, nor do the Jev-lint half of U4, the portable runner and scenarios-beside-skills half of U11, the eval parts of the goal boundary and acceptable evidence, or resolved question 1. What still governs is the plugin split: U1–U4 (five skills, carved), U9 (the two done bars, as definitions), U10, U12–U21, U31–U33, and U35 (skills install nothing). The withdrawn rows stay here as input to the redesign; the runner built from them is kept unmerged on the `skill-eval-runner` branch.
+
 Owner: Shravan. Requirements author: the skills-evals Lead session. Status: **confirmed by the owner 2026-10-04** (question tool, after the restart). The Specification and Program Design live beside this file once written; this file holds who the plugin is for, what they need, and the boundary of the work. It holds no obligations (`MUST` statements); those belong to the Specification.
 
 Decision trail: the owner's decisions (2026-10-02, 2026-10-04 and 2026-10-06) are recorded in the private coordination thread for this design. The evidence report behind rows U13–U33 is kept privately; its decisive anchors were re-verified.
