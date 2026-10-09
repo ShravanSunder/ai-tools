@@ -40,7 +40,7 @@ How much of the job the brief decides.
 |---|---|---|---|
 | Exact | is a procedure; nothing is left to judge | could a script run it? | only an Exact job can go to a 🔧 Operator |
 | Complete | names the approach; the agent decides only details nothing else depends on | can you name the approach in one sentence? | ready to hand off |
-| Partial | gives only the outcome, so the agent would choose the approach | does the job hide a design choice? | the Lead writes any design choice into the plan, since a design choice never goes to another agent; what stays Partial after that, an approach inside choices nothing else builds on, takes the Partial row of the Worker and Sidekick catalog when it crosses domains or systems |
+| Partial | gives only the outcome, so the agent would choose the approach | does the job hide a design choice? | the Lead writes any design choice into the plan, since a design choice never goes to another agent; what stays Partial after that, an approach inside choices nothing else builds on, takes the Partial row of the 🐒 Sidekick catalog when it crosses domains or systems |
 
 Missing intent or a missing plan is missing input, not Partial.
 
@@ -56,7 +56,7 @@ What the agent must hold in its head to get the job right. Size and module count
 
 ### How they fit
 
-Horizon caps the role, direction decides whether an Operator can take the job, and direction and span pick the catalog row.
+Horizon caps the role. Direction decides whether an Operator can take the job and picks its catalog row. Direction and span pick that role's catalog row.
 
 ## Model Catalog & Roles
 
@@ -99,17 +99,28 @@ A Daily-driver row needs one recorded reason: the owner recommends it, the Lead 
 
 ### 🔧 Operator
 
+| Tier | Model | Thinking Effort | Direction |
+|---|---|---|---|
+| Workhorse | OpenAI Luna | medium | Exact |
+| Workhorse | Claude Haiku | medium | Exact |
+
+### 🛠️ Worker
+
 | Tier | Model | Thinking Effort | Direction | Span |
 |---|---|---|---|---|
-| Workhorse | OpenAI Luna | medium | Exact | Local, Cross-domain, Cross-system |
+| Workhorse | OpenAI Luna | high | Exact | Local |
+| Workhorse | Claude Haiku | high | Exact | Local |
+| Daily driver | OpenAI Sol | medium | Complete | Cross-domain |
+| Daily driver | Claude Opus | medium | Complete | Cross-domain |
 
-### 🛠️ Worker and 🐒 Sidekick
+### 🐒 Sidekick
 
 | Tier | Model | Thinking Effort | Direction | Span |
 |---|---|---|---|---|
-| Workhorse | OpenAI Luna | xhigh | Exact, Complete | Local, Cross-domain |
-| Daily driver | OpenAI Sol | medium to high | Partial | Cross-domain, Cross-system |
-| Daily driver | Claude Opus | medium to xhigh | Partial | Cross-domain, Cross-system |
+| Workhorse | OpenAI Luna | xhigh | Exact, Complete | Local |
+| Workhorse | OpenAI Luna | high | Exact, Complete | Local |
+| Daily driver | OpenAI Sol | high to xhigh | Partial | Cross-domain, Cross-system |
+| Daily driver | Claude Opus | high to xhigh | Partial | Cross-domain, Cross-system |
 
 ### 🔎 Review Sidekick
 
