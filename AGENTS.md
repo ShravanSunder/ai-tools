@@ -195,7 +195,7 @@ Skills encode judgment, house style, and repeatable failure prevention. Prefer i
 - Keep `SKILL.md` concise and progressive. Move heavy examples, rubrics, templates, and long prompt packets into `references/`; use `scripts/` for deterministic mechanics.
 - Human-facing workflow README files may live inside skill folders when the user explicitly requests them. Keep them concise and non-authoritative: link to `SKILL.md` and its references instead of duplicating the runtime contract.
 - Cross-reference other skills by skill name, not fragile installed-cache paths.
-- Prove skill changes against their done bar. A fix for a recorded failure first makes that failure show up in a fresh run, then passes three fresh runs. A new skill from user intent may be drafted from its success definition, then shown by fresh runs on realistic prompts.
+- Prove skill changes against their done bar. A fix for a recorded failure first makes that failure show up in a fresh run at the revision before the fix, then passes three fresh runs of the same prompt and checks. A new skill from user intent may be drafted from its success definition, then shown by fresh runs on realistic prompts.
 - Capture the rationalizations the agent used to go wrong, especially "I already know this", "this is obvious", "I'll verify later", and "the user probably meant..."; turn those into explicit red flags or gates in the skill.
 - For skill behavior changes, prove the change with fresh agent runs through `skill-pressure-testing` before rollout.
 - Validate each changed skill independently before broad rollout. For workflow skills, include at least one realistic trigger evaluation or copy-paste pressure prompt that proves when the skill should and should not load.

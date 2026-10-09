@@ -5,17 +5,19 @@ description: "Use when proving a skill changes agent behavior, reproducing a rec
 
 # Skill Pressure Testing
 
-Proof is the observed behavior of fresh agents. A skill change is proven only when fresh agents, given an organic request under realistic pressure, do the right thing, judged from what they did with the cheapest evidence that settles each question. Static validation proves files parse; it never proves behavior. Report the strongest claim the evidence actually reaches, and no further.
+Proof is the observed behavior of fresh agents. A skill change is proven only when fresh agents, given an organic request under realistic pressure, do the right thing, judged from what they did. Static validation proves files parse; it never proves behavior. Report the strongest claim the evidence actually reaches, and no further.
 
 ## Done Bars
 
 Every behavior-changing skill change meets one bar, chosen by its authoring basis:
 
 ```text
-new-from-intent           drafted from the user's intent: fresh runs on realistic
-                          prompts that exercise the changed behavior pass
+new-from-intent           drafted from the user's intent: every changed behavior has at
+                          least one realistic prompt, the prompts and runs per prompt are
+                          fixed before anything runs, and every one of those runs passes
 fix-for-recorded-failure  fixing a failure someone saw: a run shows the failure at the
-                          revision before the fix, then 3 fresh runs pass after it
+                          revision before the fix, then 3 fresh runs of the same prompt,
+                          graded by the same checks, pass after it
 ```
 
 A run that broke before the agent did the work, or whose outcome you cannot read, makes a bar not evaluable until it is rerun; it is never rounded up to met.
@@ -32,11 +34,11 @@ MUST load `references/proof-and-claims.md` and return the claim the purpose targ
 
 ### 3. Write the prompts and checks
 
-Write each prompt the way a real user would ask in that situation, including the pressure that tempts the shortcut ("it's just a label swap", "I already know the fix"). It never contains the checks or a hint of them, and never says it is a test or an eval. Leave the skill's name out when the run tests the trigger. Before anything runs, write the checks: each answers one narrow question about what the agent did (which files it opened, whether it wrote, what it returned), judged only against what the prompt asked. Keep prompts and checks with the run's evidence, where the agent under test cannot read them. Completion: every prompt reads as an organic request, every check is one narrow question, and each prompt exercises the changed text.
+Write each prompt the way a real user would ask in that situation, including the pressure that tempts the shortcut ("it's just a label swap", "I already know the fix"). It never contains the checks or a hint of them, never says it is a test or an eval, and never asks which skills or files the agent used. Leave the skill's name out when the run tests the trigger. Before anything runs, write the checks: each answers one narrow question about what the agent did (which files it opened, whether it wrote, what it returned), judged only against what the prompt asked. Keep prompts and checks outside any directory the agent under test works in. Completion: every prompt reads as an organic request, every check is one narrow question, and each prompt exercises the changed text.
 
 ### 4. Run
 
-Start each run as a fresh agent with no authoring history: a new subagent or session, never a fork or a resume. Give it only the prompt, in a checkout at the revision under test, so the skills it finds are that revision's. IF you cannot start a fresh agent, or cannot control which skill revision it loads, report that as the proof gap instead of running. Completion: each run's transcript and actions are captured, or the gap that stopped it is reported.
+Start each run as a fresh agent with no authoring history, given only the prompt: a new subagent or session, never a fork or a resume. A checkout does not decide which skills it loads; the host's installed plugin skills and instructions load wherever it starts. From the run's record, confirm which copy of each skill under test it loaded: the `SKILL.md` path it read, or the installed copy when the prompt names the skill and the host injects it without a read. Take its actions from the host's record of that session (tool calls, files read, writes attempted), never from its reply. IF you cannot start a fresh agent, cannot show that it loaded the revision under test, or have no record of its actions, report that as the proof gap instead of a result. Completion: each run's loaded skill copy and recorded actions are captured, or the gap that stopped it is reported.
 
 ### 5. Read what happened
 

@@ -6,8 +6,8 @@ Maximum authority: read-only comparison of supplied claims and existing evidence
 
 Where to look:
 - the authoring basis, reproduction evidence, and proof result in the run summary, or skill-creation's step 7 return;
-- scenario ids, commands, exit codes, and transcripts actually produced;
-- which files the change touched versus which the scenario exercises.
+- prompts, runs, commands, exit codes, and transcripts actually produced;
+- which files the change touched versus which the runs exercise.
 
 MUST load `../../../skill-pressure-testing/references/proof-and-claims.md` to apply the Evidence And Claim Ladder and return the strongest supported claim and its claim boundary.
 
@@ -20,7 +20,7 @@ strongest claim supported:
 gap:
 ```
 
-Check that the scenario touches the changed text. A passing suite that never loads the changed section proves nothing about the change, however green it is.
+Check that the runs touch the changed text. A passing suite that never loads the changed section proves nothing about the change, however green it is.
 
 Good signals:
 - the claim matches the highest rung the evidence reaches;
@@ -30,7 +30,7 @@ Good signals:
 
 Bad signals:
 - static, packaging, or schema validation reported as behavior proof;
-- a scenario that does not exercise the changed surface;
+- a run that does not exercise the changed surface;
 - GREEN claimed with no comparable control or previous-revision baseline;
 - a passing control relabeled as RED;
 - a commit, branch, PR, reviewer verdict, or CI run offered as proof strength.

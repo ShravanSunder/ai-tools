@@ -10,7 +10,7 @@ Where to look, when the artifact is **changed files**:
 - `SKILL.md` against every file in `references/`;
 - every declared form, label, status value, or verdict against its real call sites;
 - reference-to-reference restatements of the same rule;
-- pressure scenarios and changelog entries that assert current behavior.
+- proof records and changelog entries that assert current behavior.
 
 IF a term is added, changed, or used in the reviewed surface, load `../../../skill-creation/references/glossary.md` to compare its definition with every use and return its authoritative meaning and any disagreement.
 

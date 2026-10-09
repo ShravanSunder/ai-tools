@@ -46,7 +46,7 @@ Open the diff and the decisive proof yourself before any independent review. Che
 
 - the success definition and the accepted spec, including its run allocation;
 - the four surfaces still aligned, and every changed reference and caller current;
-- proof that observes the claimed behavior, with every flagged result read and static results labeled as static;
+- proof that observes the claimed behavior, with every check read from its run and static results labeled as static;
 - ownership and names that match the spec;
 - no complexity, compatibility path, check, schema, or mechanism outside the accepted boundary;
 - when this run depends on earlier runs of the spec, those runs are at their current revisions and the combined behavior is proven, not only this run's local proof.
