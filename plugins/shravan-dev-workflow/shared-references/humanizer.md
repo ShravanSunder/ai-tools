@@ -6,7 +6,6 @@ Consumers, and only these:
 
 - `docs-maintain` loads this in file mode when it rewrites human sentences in a README, architecture doc, runbook, or changelog.
 - `implementation-pr-wrapup` loads this in embedded mode for Why and Special things to note. The description worker owns that load. The parent does not rewrite those parts.
-- `skills-creation` loads this in file mode when it writes human sentences in the proposal, the `SKILL.md` body, or a teaching reference.
 
 Leave YAML descriptions, schemas, label sets, call-site grammar, code, commands, paths, links, Change outline fences, and work-trail JSONL unchanged. Do not load this from `presentation-tui`, `presentation-webui`, `spec-design`, `program-design`, review packets, or a trigger description.
 

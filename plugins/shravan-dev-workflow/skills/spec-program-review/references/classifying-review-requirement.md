@@ -5,8 +5,6 @@ This reference owns deterministic, reviewer-free local-review classification.
 Expected inputs:
 
 ```text
-target classification: general-domain | runtime-skill-package
-skills-creation parent packet/result identity when target is runtime-skill-package
 requested future mode: specification-only | program-only
 complete covered artifact set
 scope and claimed semantic effect
@@ -20,7 +18,6 @@ Return either:
 
 ```text
 invocation state: complete
-target classification and skills-creation parent packet/result identity when applicable
 requested mode and covered artifacts
 governing-source inventory: each source identity and version,
 authority status, freshness/applicability, and scoped-completeness basis

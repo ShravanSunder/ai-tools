@@ -1,0 +1,4 @@
+interface:
+  display_name: "Skills: Orchestrator"
+  short_description: "Carry one skill change from spec to shipped"
+  default_prompt: "Use $skill-orchestrator to carry this skill change through spec, review, implementation, proof, and release."

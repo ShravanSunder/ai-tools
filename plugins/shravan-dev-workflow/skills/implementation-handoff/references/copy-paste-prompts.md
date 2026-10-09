@@ -2,12 +2,12 @@
 
 Use these when writing `copy-paste-prompt.md` and printing the prompt in chat.
 
-For meaningful general-domain review, `plan identity: none` intentionally returns `blocked-input`; the handoff must route to caller authority or plan creation before asking `implementation-review` to proceed.
+For meaningful review, `plan identity: none` intentionally returns `blocked-input`; the handoff must route to caller authority or plan creation before asking `implementation-review` to proceed.
 
 ## Reviewer Prompt
 
 ```text
-Use <$shravan-dev-workflow:implementation-review for general-domain work | $shravan-dev-workflow:skills-creation for a runtime skill package> to independently review this completed or partial implementation. Review only; do not edit files.
+Use $shravan-dev-workflow:implementation-review to independently review this completed or partial implementation. Review only; do not edit files.
 
 Repo: <absolute repo path>
 Branch/worktree: <branch>
@@ -50,7 +50,7 @@ validation, and proof gaps when a sensitive surface exists>
 Review requirements:
 - Verify against actual code, not this summary.
 - Preserve the exact governing authority, canonical plan record and current meaning, governing planning basis, delivery context, base/reviewed/diff identities, proof identities, constraints, and freshness evidence above.
-- Run the selected owning workflow's fresh-context changed-implementation review route and parent reduction; do not substitute ad hoc review or cross the runtime skill-package boundary.
+- Run `implementation-review`'s fresh-context changed-implementation review route and parent reduction; do not substitute ad hoc review.
 - Return exact anchored findings, proof boundaries, owner routes, and affected review coverage without remediation or PR work.
 ```
 
@@ -90,7 +90,7 @@ Next action:
 <specific next task>
 
 Exact route:
-<implement-plan for a ready delivery plan | implementation-review for general-domain work | skills-creation for a runtime skill package | governing owner/blocker>
+<implement-plan for a ready delivery plan | implementation-review | governing owner/blocker>
 
 Constraints:
 - Stay within the listed write scope.

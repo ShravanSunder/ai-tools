@@ -42,7 +42,7 @@ This skill owns:
 - proof seams and structural enforcement classes;
 - program-design artifacts and author integration self-check.
 
-It does not invent product meaning, observable obligations, entity definitions, task/file order, exact commands, or review verdicts. Requirements owns WHY, for whom, and the authorized boundary; Specification owns WHAT must be observably true and what each entity (`E`) means; Program Design owns HOW the internal system satisfies that fixed observable contract. Design prose uses the Specification's entity terms and never renames them; code identifiers appear in the shape and home cells of the binding and trace tables. Route missing Why/What to `spec-design`, review-only work to `spec-program-review`, planning mechanics to plan creation, and one named runtime-skill package to `skills-creation`.
+It does not invent product meaning, observable obligations, entity definitions, task/file order, exact commands, or review verdicts. Requirements owns WHY, for whom, and the authorized boundary; Specification owns WHAT must be observably true and what each entity (`E`) means; Program Design owns HOW the internal system satisfies that fixed observable contract. Design prose uses the Specification's entity terms and never renames them; code identifiers appear in the shape and home cells of the binding and trace tables. Route missing Why/What to `spec-design`, review-only work to `spec-program-review`, and planning mechanics to plan creation.
 
 ## Terminal Contract
 
@@ -87,8 +87,6 @@ Before recommending a skill, inspect that destination's declared inputs and retu
 ## Workflow
 
 ### 1. Validate authoritative Why/What
-
-Record `target classification: general-domain | runtime-skill-package`. If the target is one named runtime skill package, require the explicit `skills-creation` parent packet/result identity that authorizes this composition. Without it, return the `skills-creation` route and stop before modeling How.
 
 Accept an optional call-scoped `new artifact home` policy. When the caller supplies `<project-root>/docs/specs/`, create any new file-backed Program Design beneath that home and return its exact path. Preserve an authoritative pre-existing Program Design elsewhere; do not relocate or reject it because of the policy. The artifact-home policy applies only to a new output in the current call and is not persisted as workflow state.
 
@@ -273,11 +271,10 @@ Completion: the current artifact has exact passes and gaps; the views above were
 
 This step runs after the owner's reply to step 16, or in the same turn when the owner waived the confirmation and step 16 showed its views.
 
-Call `spec-program-review` using `classify-review-requirement` with: target classification and the exact `skills-creation` parent packet/result identity when the target is a runtime skill package; requested future mode `program-only`; current Requirements, Specification, and Program Design identities; scope and claimed semantic effect; governing-source coverage; matched material-risk predicates; and `caller requirement: required | none` (default `none`). Consume the `review-required | non-substantial` result, decision branch, basis, source coverage, caller requirement, and preserved target/parent identity.
+Call `spec-program-review` using `classify-review-requirement` with: requested future mode `program-only`; current Requirements, Specification, and Program Design identities; scope and claimed semantic effect; governing-source coverage; matched material-risk predicates; and `caller requirement: required | none` (default `none`). Consume the `review-required | non-substantial` result, decision branch, basis, source coverage, caller requirement, and preserved identities.
 
 When required, invoke `spec-program-review` separately in `program-only` mode with fresh context and read-only authority, carrying:
 
-- target classification and the exact `skills-creation` parent packet/result identity when applicable;
 - current distinct Requirements, Specification, and Program Design identities;
 - governing sources, authority states, and coverage;
 - confirmed goal boundary and accepted requirements set;
@@ -342,7 +339,6 @@ Program design settles entity bindings and contract shapes, owners, boundaries, 
 
 Do not return `locally-ready` while any of these hold:
 
-- target classification is missing, or a runtime-skill-package target lacks the explicit `skills-creation` parent packet/result identity;
 - Requirements and Specification lack separate identities for the current medium, either identity is missing, or one combined artifact or record is serving both roles;
 - authoritative Why/What is missing, stale, conflicting, or silently rewritten;
 - the confirmed goal boundary or accepted requirements set is missing, unrecoverable, conflicting, or rebuilt from mutually narrowed current files;
@@ -362,7 +358,7 @@ Do not return `locally-ready` while any of these hold:
 - the current structural realization lacks explicit owner confirmation or a recorded `structural-realization confirmation: waived by owner`;
 - planning would still need to invent an owner, interface, state/failure policy, trust control, or proof seam;
 - required independent review is missing, stale, partial, silent, or blocked;
-- target classification, source/review coverage, self-check, readiness, acceptance, planning, PR, or release narration appears as durable program-design prose instead of returned workflow state;
+- source/review coverage, self-check, readiness, acceptance, planning, PR, or release narration appears as durable program-design prose instead of returned workflow state;
 - Requirements, Specification, or Program Design identities, source coverage, or non-acceptance are missing.
 - a continuation omits a next skill, recommends more than one, or contradicts the terminal mapping above;
 - a pathfinding recommendation lacks an unmade owner-controlled structural choice or omits `program-design` as its return owner;

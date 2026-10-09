@@ -1,0 +1,4 @@
+interface:
+  display_name: "Skills: Creation"
+  short_description: "Design and write one skill and its spec"
+  default_prompt: "Use $skill-creation to design or update one named skill and write its skill spec."

@@ -44,6 +44,6 @@ focused checks            only after reduction names a concrete unresolved
                          risk, one per risk, from the roster in SKILL.md
 ```
 
-The mode-complete check and dispel always run; chunk passes run when the plan composes chunks. Proof-challenge and focused checks run because a named reason selects them; write that reason beside the check and stop when no named unresolved risk selects another. `SKILL.md` §7 owns what counts as a reason.
+The mode-complete check and dispel always run; chunk passes run when the plan composes chunks. Proof-challenge and focused checks run because a named reason selects them; write that reason beside the check and stop when no named unresolved risk selects another. `SKILL.md` §6 (Proof-Challenge, Dispel, and Focused Checks) owns what counts as a reason.
 
 Complete when: every material seam of the target set is covered by the mode-complete check or exactly one chunk with its units unsplit or seamed, every optional check you run has its reason beside it, and any optional check the caller, the author, or reduction proposed that you did not run has the reason it was not needed.

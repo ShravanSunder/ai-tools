@@ -22,7 +22,6 @@ flowchart TD
 
 ## Important Branches
 
-- A runtime-skill package returns to `skills-creation` unless an accepted composition explicitly selected this planner.
 - Missing or stale design returns to the design owner; planning does not repair design.
 - Direct planning establishes `plan-only` versus `pr-ready-unmerged` at entry when intent is ambiguous. Goal orchestration supplies `pr-ready-unmerged` by default.
 - A ready delivery plan continues to implementation without a generic post-plan approval stop; a `plan-only` plan stops at planning.

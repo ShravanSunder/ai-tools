@@ -142,7 +142,6 @@ describe("goal delivery intent hard cutover", () => {
     const implementationReviewResults = readPluginFile(
       "skills/implementation-review/references/finding-and-reduction.md",
     );
-    const skillsCreation = readPluginFile("skills/skills-creation/SKILL.md");
 
     expect(designReview).toContain(
       "Prefer one independent review-and-correction round",
@@ -177,16 +176,31 @@ describe("goal delivery intent hard cutover", () => {
     expect(implementationReview).toContain(
       "The convergence rule and the accepted boundary live in `references/finding-and-reduction.md`",
     );
-    expect(skillsCreation).toContain(
-      "Proposal review prefers one independent review and one remediation",
+  });
+
+  test("skill authoring keeps one convergence rule, in skill-review", () => {
+    const skillAuthoringRoot = path.join(repoRoot, "plugins/skill-authoring/skills");
+    const readSkillAuthoringFile = (relativePath: string): string =>
+      readFileSync(path.join(skillAuthoringRoot, relativePath), "utf8");
+    const skillReview = readSkillAuthoringFile("skill-review/SKILL.md");
+    const convergenceRuleOpening = "Return `not-converging` when either holds:";
+
+    expect(skillReview).toContain(convergenceRuleOpening);
+    expect(skillReview).toContain(
+      "A finding the review lead verified closed in an earlier review is accepted again. A finding whose correction never closed is still open, which is not a recurrence.",
     );
-    expect(skillsCreation).toContain(convergenceRecurrenceText);
-    expect(skillsCreation).toContain(convergenceNoProgressText);
-    expect(skillsCreation).toContain(convergenceBaselineText);
-    expect(skillsCreation).toContain(acceptedBoundaryText);
-    expect(skillsCreation).toContain(
-      "IF a review stage returns `not-converging` or a semantic change outside the accepted boundary, the Lead loads `../../shared-references/owner-decision-brief.md` and returns the brief",
+    expect(skillReview).toContain(convergenceNoProgressText);
+    expect(skillReview).toContain(convergenceBaselineText);
+    expect(skillReview).toContain(
+      "A correction is inside the accepted boundary when it changes no design meaning, scope, contract, or user decision. Only those corrections get further review rounds automatically.",
     );
+    for (const otherSkill of [
+      "skill-orchestrator/SKILL.md",
+      "skill-creation/SKILL.md",
+      "skill-audit/SKILL.md",
+    ]) {
+      expect(readSkillAuthoringFile(otherSkill)).not.toContain(convergenceRuleOpening);
+    }
   });
 
   test("uses distinct durable, project-temporary, and OS-temporary artifact homes", () => {
@@ -227,7 +241,6 @@ describe("goal delivery intent hard cutover", () => {
       "manage-agents/no-relay-supervisor.md",
       "spec-program-review/one-review-one-remediation.md",
       "implementation-review/stops-when-not-converging.md",
-      "skills-creation/review-stages-converge.md",
     ];
 
     for (const scenarioPath of scenarioPaths) {

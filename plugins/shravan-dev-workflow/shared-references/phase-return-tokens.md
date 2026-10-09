@@ -10,7 +10,7 @@ When a phase, practice, or shared reference must send work elsewhere, it returns
 | `ready-for-planning` | reviewed design identities |
 | `plan-defect` | plan anchor, defect, evidence, and the plan's existing `originating planner` field |
 | `ready-for-implementation` | plan path and revision |
-| `ready-for-review` | diff, proof, assessment, and the classification `general-domain \| runtime-skill-package` |
+| `ready-for-review` | diff, proof, and assessment |
 
 A Specification gap (missing observable behavior, contract, or proof obligation) and a Program Design gap (missing structure that realizes an accepted Specification) stay two tokens; do not merge them.
 

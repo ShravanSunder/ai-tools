@@ -61,7 +61,7 @@ Every file in `skills-creation` and `skill-audit` was read in full on 2026-10-06
 
 | Today | Lines | New home | Edit on the way |
 |---|---|---|---|
-| `skills-creation/SKILL.md` craft: mental model, four surfaces, invocation, information hierarchy, call grammar, progressive disclosure, leading words, steering, what belongs in `SKILL.md` | 10–128 | `skill-creation/SKILL.md` | role emojis and Operator dispatch removed; the call grammar keeps only the reference forms |
+| `skills-creation/SKILL.md` craft: mental model, four surfaces, invocation, information hierarchy, call grammar, progressive disclosure, leading words, steering, what belongs in `SKILL.md` | 10–128 | `skill-creation/SKILL.md` | role emojis removed; the Operator dispatch form becomes "a helper agent running a prescribed procedure" |
 | `skills-creation/SKILL.md` steps 1–5 (promise and success, authoring basis and proof posture, trigger, main path, depth) and step 7 (implement) | 176–247, 253–255 | `skill-creation/SKILL.md` | `discuss-pathfinding` / `practices-research` become "ask the user" / "read the sources"; humanizer loads deleted |
 | `skills-creation/SKILL.md` lifecycle: two review stages, convergence rule, accepted boundary, run summary, workflow intro, steps 6, 8, 9, 10, completion blockers | 130–174, 249–251, 257–317 | `skill-orchestrator/SKILL.md` | owner brief becomes "bring the decision to the user"; trace lines deleted |
 | `review/spec-review.md` "Spec Artifact" (the Skill spec doc and its slots) | 9–27 | `skill-creation/references/skill-spec.md` | gains the run-status slot (`R8`) |
@@ -108,6 +108,10 @@ Probed with a throwaway script: Deno 2.9.6 from npm, `acpx@0.19.4` `acpx/runtime
 - `CODEX_HOME` and `HOME` pointed at fresh temporary directories, plus `features.remote_plugin = false`, leave only the snapshot's skills and Codex's bundled skills (`imagegen`, `openai-docs`, `skill-creator`, `skill-installer`); input tokens drop from 31k to 3k. `features.skip_host_skill_discovery` changes nothing. A symlinked `auth.json` is enough to log in.
 - A write attempt in the read-only sandbox reaches the client's permission handler as an `execute` request; rejecting it fails the tool call and leaves the snapshot unchanged.
 - The adapter's bundled Codex rejects `gpt-6-luna` with HTTP 400 inside the reply text while the turn reports `completed` with empty `model_usage`.
+- A prompt that names a skill explicitly (`$name`) gets that `SKILL.md` injected into context with no tool call, and the subject follows it; a skill found through its description is read with a visible tool call.
+- Run inside another agent's Codex sandbox, the runner's subjects see plain reads escalate to permission requests (nested sandboxes); run from a normal shell, the same scenario reads with no requests. The runner refuses to start inside a Codex sandbox.
+- `pnpm dlx file:<dir>` installs the package under `node_modules`, where Deno will not strip TypeScript types, so the `bin` shim copies `src/` to a temporary directory, links the package's own installed dependencies beside it, and starts Deno there.
+- With `features.multi_agent_v2.enabled = true` an isolated subject can start a helper agent; the parent's events show it as an `other` tool call titled `Start subagent <name>` plus a `wait`, while the helper's own reads stay in its own thread.
 
 ## Where each entity lives
 
@@ -161,6 +165,9 @@ status: active                                 # draft | active | retired
 allowWrites: false                             # first pass accepts only false
 timeoutSeconds: 600                            # optional
 followUps: []                                  # optional scripted user turns, same session
+fixtures:                                      # optional: files the request points at, placed in the snapshot
+  - source: fixtures/example-spec.md           # relative to this scenarios/ folder
+    target: docs/wip/skills-authoring/2026-08-02-example/spec.md   # repo-relative path in the snapshot
 ---
 
 ## Prompt
@@ -185,7 +192,7 @@ checks:
 ```
 ````
 
-Sections other than `## Prompt` and `## Checks` are allowed and ignored by the runner; nothing but the Prompt and follow-ups reaches the subject (`R22`). File references in steps and evidence are strings: `skill:<path>` (the scenario's skill), `skill(<name>):<path>` (a sibling skill in the same set), `repo:<path>`.
+Sections other than `## Prompt` and `## Checks` are allowed and ignored by the runner; nothing but the Prompt and follow-ups reaches the subject (`R22`). Banned words match as whole words and their simple inflections, case-insensitively (`test`, `tests`, `testing`; `evaluate` is allowed). A fixture's target must stay inside the snapshot and must not already exist there. File references in steps and evidence are strings: `skill:<path>` (the scenario's skill), `skill(<name>):<path>` (a sibling skill in the same set), `repo:<path>`.
 
 ### Contract shapes the runner exposes
 
@@ -193,8 +200,8 @@ Sections other than `## Prompt` and `## Checks` are allowed and ignored by the r
 // runner/src/contracts/check-tree.ts
 const nodeRef = z.string();   // a node id, or one of the reserved terminals "pass" | "fail" | "inconclusive"
 export const treeNodeSchema = z.discriminatedUnion("kind", [
-  z.object({ kind: z.literal("code"), step: codeStepSchema,
-             onTrue: nodeRef, onFalse: nodeRef, onUnavailable: nodeRef.default("inconclusive") }),
+  z.strictObject({ kind: z.literal("code"), step: codeStepSchema,
+                   onTrue: nodeRef, onFalse: nodeRef }),             // an undecidable step is always inconclusive (R26)
   z.object({ kind: z.literal("jev"), card: z.string(),
              branches: z.object({ yes: nodeRef, uncertain: nodeRef, no: nodeRef }) }),     // yes_no card
   z.object({ kind: z.literal("jev-choice"), card: z.string(),
@@ -265,12 +272,13 @@ export type JudgeVerdict =
 ```
 
 **The code-step catalog** (`runner/src/qa/code-steps.ts`) is closed, so scenario authors compose and never script. Every step reads recorded actions only; none reads the subject's prose (`R24`):
-- `readFile: <fileRef>`: a completed tool call's title or input names the file (by snapshot path, repo-relative path, or exposed skill path);
-- `loadedSkill: <name?>`: `readFile` of that skill's `SKILL.md` (default: the scenario's skill);
+- `readFile: <fileRef>`: the subject read the file's content: a completed `read` tool call on it, or a completed command segment that reads the named file's content: `cat`, `head`, `tail`, `less`, `more`, `nl`, `bat`, `awk`, `sed` without `-i`, or `rg`/`grep` searching inside it. Listing or naming modes are not reads: `echo`, `ls`, `test`, `wc`, `rg --files`, `rg -l`/`--files-with-matches`, `grep -l`, `grep -c`. Authored references keep their `skill:<relative-path>` form; when matching, the resolved path must include the skill's directory name (exposed or repo-relative), so another skill's file of the same name does not match;
+- `loadedSkill: <name?>`: `readFile` of that skill's `SKILL.md` (default: the scenario's skill). Only meaningful when the prompt does not name the skill: an explicitly named skill is injected without a read, so the loader rejects `loadedSkill` for a skill the prompt names;
 - `noWritesAttempted: {}`: no permission request and no `edit`, `delete` or `move` tool call;
-- `toolCallCount: {max: n}`.
+- `toolCallCount: {max: n}`;
+- `startedSubagents: {min: n}`: at least `n` tool calls started a separate agent (Codex titles them `Start subagent <name>`); a helper's own actions are not in the parent's Observation.
 
-`onUnavailable` fires when the Observation lacks the field a step needs (`R26`).
+A step the Observation cannot decide, and a Jev node or judge leaf whose evidence is missing, make the Check `inconclusive` (`R26`); no tree can route missing evidence to `pass` or `fail`. A Jev node's `uncertain` branch is for an unsure answer, never for absent evidence.
 
 ## The components and who owns what
 
@@ -300,10 +308,10 @@ export type JudgeVerdict =
 
 ### How the subject environment is built (R30, R51)
 
-1. **Snapshot.** `working-tree` (default) copies every tracked and untracked-not-ignored file (`git ls-files -co --exclude-standard -z`) into a fresh temporary directory; a commit revision uses `git archive <rev> | tar -x`. The snapshot is then made a one-commit git repository so the agent sees an ordinary checkout. The repository under test is never written.
-2. **Expose the skill set.** The skill under test's parent directory is its skill set (for plugins, `<plugin>/skills/`). Every sibling directory holding a `SKILL.md` is copied to `<snapshot>/.agents/skills/<name>/`; a `shared-references/` beside the skill set is copied to `<snapshot>/.agents/shared-references/`, so `../../shared-references/` paths still resolve. A skill already under `.agents/skills/` or `.codex/skills/` is used in place. A name that already exists there is `failed(skill-name-conflict)`.
+1. **Snapshot.** `working-tree` (default) copies every tracked and untracked-not-ignored file (`git ls-files -co --exclude-standard -z`) into a fresh temporary directory; a commit revision uses `git archive <rev> | tar -x`. Every skill's `scenarios/` folder is removed from the snapshot, so no subject can read a checklist (`R25`); then the Scenario's fixtures are copied to their targets. The snapshot is then made a one-commit git repository so the agent sees an ordinary checkout. The repository under test is never written.
+2. **Expose the skill set.** The skill under test's parent directory is its skill set (for plugins, `<plugin>/skills/`). Every sibling directory holding a `SKILL.md` is copied, without its `scenarios/` folder, to `<snapshot>/.agents/skills/<name>/`; a `shared-references/` beside the skill set is copied to `<snapshot>/.agents/shared-references/`, so `../../shared-references/` paths still resolve. A skill already under `.agents/skills/` or `.codex/skills/` is used in place. A name that already exists there is `failed(skill-name-conflict)`.
 3. **Isolate the agent home.** Fresh `0700` directories for `CODEX_HOME` and `HOME`; `CODEX_HOME/auth.json` is a symlink to the user's `${CODEX_HOME:-~/.codex}/auth.json`. The runner checks only that the link target exists; it never reads, copies, or logs it (security decision: allowed, link only). No file-based login → `failed(no-agent-login)`.
-4. **Launch settings.** Agent argv `[node, <codex-acp@1.6.2 bin from the runner's own dependencies>]`; environment `CODEX_HOME`, `HOME`, `CODEX_PATH` (`--codex-path`, else `codex` on `PATH`, else `failed(codex-not-found)`), `INITIAL_AGENT_MODE=read-only`, and `CODEX_CONFIG` = `{model, model_reasoning_effort, approvals_reviewer: "user", features: {hooks: false, remote_plugin: false}}`.
+4. **Launch settings.** Agent argv `[node, <codex-acp@1.6.2 bin from the runner's own dependencies>]`; environment `CODEX_HOME`, `HOME`, `CODEX_PATH` (`--codex-path`, else `codex` on `PATH`, else `failed(codex-not-found)`), `INITIAL_AGENT_MODE=read-only`, and `CODEX_CONFIG` = `{model, model_reasoning_effort, approvals_reviewer: "user", features: {hooks: false, remote_plugin: false, multi_agent_v2: {enabled: true}}}`. Subagents are on because `skill-review` and `skill-orchestrator` must start separate agents.
 5. **Dispose.** The runner deletes only the temporary directories it created, after the Run's files are written.
 
 ## One run, from command to verdict
@@ -491,7 +499,7 @@ Jev lint cards (duplicated rule, a rule losing its home, trigger overlap; `R19`)
 | U6 | R23 decision tree | E5, E15 | scenario loader | tree validation | `contracts/check-tree.ts` | none | `invalid(tree)` | V5 |
 | U6, U23 | R24 no text matching | E5, E7 | scenario loader + QA evaluator | closed code-step catalog | `qa/code-steps.ts` | none | unknown step → `invalid` | V5 |
 | U24 | R25 prompt scope | E5, E8 | judge-leaf agent | judge prompt | `judge/judge-prompt.ts` | none | finding in review | V4, V8 |
-| U26 | R26 retrieve, else inconclusive | E5, E7, E8 | QA evaluator | evidence sources | `contracts/evidence-source.ts` | none | missing → `onUnavailable` | V6 |
+| U26 | R26 retrieve, else inconclusive | E5, E7, E8 | QA evaluator | evidence sources | `contracts/evidence-source.ts` | none | missing → `inconclusive` | V6 |
 | U30 | R27 one subject run | E6, E7 | subject runner | `runSubject` | `RunOutcome` | started→observed / execution-failed | — | V9 |
 | U7 | R28 models | E6, E8 | subject runner, judge-leaf agent | launch settings | `subjects/agent-launch.ts` | none | model never ran → `model-unavailable` | V9 |
 | owner 10-04 | R29 ACPX library | E6 | subject runner | `acpx/runtime` | `package.json` dependency | none | import failure → exit 2 | V9 |
@@ -531,8 +539,8 @@ Jev lint cards (duplicated rule, a rule losing its home, trigger overlap; `R19`)
 | done bars (V10, V11) | the whole runner | nothing | `done-bar.json` with run ids |
 
 **Illegal states kept out:**
-- **Unrepresentable (Zod):** a judge leaf with tools (first pass); a `RunVerdict` of `pass` with a failing `CheckResult` (aggregation derives it).
-- **Rejected at the loader:** a regex or `expect_*` field, a banned word, a tree that cannot reach a terminal, an unknown card or step, an evidence file matching the credential pattern, `allowWrites: true` (first pass).
+- **Unrepresentable (Zod):** a judge leaf with tools (first pass); a code node that routes unavailable evidence anywhere but `inconclusive`; a `RunVerdict` of `pass` with a failing `CheckResult` (aggregation derives it).
+- **Rejected at the loader:** a regex or `expect_*` field, a banned word, a tree that cannot reach a terminal, an unknown card or step, an evidence file matching the credential pattern, `allowWrites: true` (first pass), a fixture whose source is missing or whose target escapes the snapshot.
 - **Rejected at runtime:** a subject write, by the permission handler.
 
 ## Open items

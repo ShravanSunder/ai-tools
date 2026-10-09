@@ -49,7 +49,7 @@ Synthesis:
 - unresolved:
 
 Return Token:
-<requirements-gap | specification-gap | program-design-gap | ready-for-planning | ready-for-implementation | ready-for-review (general-domain | runtime-skill-package) | none: evidence complete, the caller decides | blocked: gap>
+<requirements-gap | specification-gap | program-design-gap | ready-for-planning | ready-for-implementation | ready-for-review | none: evidence complete, the caller decides | blocked: gap>
 ```
 
 Keep raw source notes in the same tmp folder when another reader needs them to inspect a claim.
