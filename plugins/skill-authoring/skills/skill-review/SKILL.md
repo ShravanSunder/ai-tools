@@ -26,7 +26,7 @@ Name the stage, the target (spec path and revision, or the files), and who asked
 
 ### 2. Run the stage
 
-IF the stage is spec review, load `references/spec-review.md` and return its per-check statuses, findings, verdict, and implementation decision. IF the stage is implementation review or an evaluation of existing files, load `references/implementation-review.md` and return its lint result, per-check statuses, findings, verdict, and ship decision.
+IF the stage is spec review, load `references/spec-review.md` and return its per-check statuses, findings, verdict, and implementation decision. IF the stage is implementation review or an evaluation of existing files, load `references/implementation-review.md` and return its per-check statuses, findings, verdict, and ship decision.
 
 Start each reviewer agent the stage names in its own session with no authoring history. Give it the target, the check references it walks by path, and `references/checks/review-schema.md`, and ask for candidate findings with anchors only. Use the host's own way to start an agent. If the host cannot start a separate agent, stop and tell the user: a review without a second agent is not a review. When the selected checks fit one family, split them across two agents.
 
@@ -34,7 +34,7 @@ Completion: every selected check has a status from the agent that walked it.
 
 ### 3. Verify and reduce
 
-Open the anchor of every candidate, from reviewers and from lint. MUST load `references/checks/review-schema.md` and return each candidate's state. An absence claim is verified only by opening the file where the item would be. Merge duplicates, settle conflicts by reading the artifact, rank, and name the first fix. Completion: every candidate has a state, and every accepted finding was verified at its anchor before acceptance.
+Open the anchor of every candidate. MUST load `references/checks/review-schema.md` and return each candidate's state. An absence claim is verified only by opening the file where the item would be. Merge duplicates, settle conflicts by reading the artifact, rank, and name the first fix. Completion: every candidate has a state, and every accepted finding was verified at its anchor before acceptance.
 
 ### 4. Return
 
@@ -67,5 +67,4 @@ Do not return a clean result while any of these hold:
 - an accepted finding was not verified at its anchor before acceptance;
 - a required check is missing, `partial`, or `blocked` without a recorded closure;
 - reviewer agreement or reviewer count stood in for verification;
-- lint did not run on an implementation review and the gap is not recorded;
 - a round ran after `not-converging`, or outside the accepted boundary without the user's decision.

@@ -45,7 +45,7 @@ A passing control means the comparison did not demonstrate added value. It may e
 
 ## Controls And Repetitions
 
-- When claiming improvement, first run a prior-revision control through the runner (`--rev <git-rev>`) on the same scenarios. When characterizing or drafting from user intent, label that different purpose explicitly.
+- When claiming improvement, first run a prior-revision control on the same prompts: fresh agents in a checkout at the revision before the change. When characterizing or drafting from user intent, label that different purpose explicitly.
 - Choose fresh-context repetitions proportionate to stochasticity, observed variance, risk, and the strength of the claim; the bar sets the count for a bar claim.
 - Treat variance across repetitions as a proof gap. Inconsistent interpretations mean the wording is not binding at the claimed strength.
 
@@ -60,11 +60,11 @@ smallest wording change:
 retest:
 ```
 
-## Running Scenarios
+## Running
 
-`runner-usage.md` owns the commands and how to read their results; `scenario-authoring.md` owns how to write a scenario.
+`SKILL.md`'s workflow owns how prompts are written and how fresh runs are started and read.
 
-If no suitable executable scenario exists or the user defers evaluation, return the named proof gap. Do not fabricate a scenario merely to satisfy the protocol.
+If no prompt can exercise the behavior or the user defers evaluation, return the named proof gap. Do not fabricate a run merely to satisfy the protocol.
 
 Return the current proof and every remaining gap to whoever assesses the change before independent implementation review. A reviewer consumes this demonstrated behavior and may challenge it; review does not create the missing proof.
 

@@ -42,11 +42,11 @@ Do not add a reading digest, hash, line count, or chunk range. Findings carry so
 
 ## Check Finding
 
-`check` is the check name from `references/checks/`, or `lint:<rule-or-card>` for a finding raised by `skill-eval-runner lint`.
+`check` is the check name from `references/checks/`.
 
 ```text
 check:
-raised by:        reviewer agent <family> | lint rule <id> | Jev lint card <id>
+raised by:        reviewer agent <family>
 finding:
 property:         teaching | trigger | rule agreement | placement | claim strength | safety
 severity:         blocker | important | minor | observation
@@ -84,7 +84,6 @@ reviewers:
 - agent:
   family:
   checks:
-lint: ran | not-run: <reason>; Jev cards: ran | not-run: <reason>
 checks:
 - name:
   status: complete | partial | blocked

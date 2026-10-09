@@ -37,7 +37,7 @@ Bad signals:
 
 Calibration: Report the claim/evidence gap and either the smallest additional evidence that would close it or the weaker claim the current evidence already supports. Do not demand proof for a change that cannot alter behavior. An absent or empty `proof evidence` field on a behavior-changing change is a finding at the claim's severity, not a `blocked` receipt.
 
-Overlap boundary: This check owns *claim versus evidence*. Designing scenarios and choosing pressures belong to `../../../skill-pressure-testing/references/scenario-authoring.md`, and running them to `../../../skill-pressure-testing/references/runner-usage.md`. Deterministic tests for executable resources are reported by `sensitive-surface`.
+Overlap boundary: This check owns *claim versus evidence*. Designing and running pressure runs belong to `skill-pressure-testing`. Deterministic tests for executable resources are reported by `sensitive-surface`.
 
 Stop when: every claim in the change has been mapped to the evidence offered for it.
 

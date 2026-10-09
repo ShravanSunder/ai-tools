@@ -85,8 +85,8 @@ Skill authoring for any repository, standalone from the workflow plugin. Provide
 
 - **skill-orchestrator** skill -- carries one skill change from spec through review, implementation, proof, assessment, and release
 - **skill-creation** skill -- the skill craft and the skill spec: designs and writes one named skill
-- **skill-review** skill -- independent review of a skill spec or skill files by several reviewer agents plus lint
-- **skill-pressure-testing** skill -- proves skill behavior with fresh Luna runs through the `packages/skill-eval-runner` package, and owns the scenario method
+- **skill-review** skill -- independent review of a skill spec or skill files by several reviewer agents
+- **skill-pressure-testing** skill -- proves skill behavior against its done bar with fresh agent runs, read by hand
 - **skill-audit** skill -- audits current skills, session evidence, and upstream inspirations before recommending create/update/merge/skip decisions
 
 - [agent-router plugin](agent-router/) — agent collaboration, shared message boards, wake-ups and schedules; canonical skill maintained in codex-router.

@@ -22,7 +22,7 @@
   "interface": {
     "displayName": "Skill Authoring",
     "shortDescription": "Create, review, pressure-test, and audit skills",
-    "longDescription": "Use Skill Authoring to carry a skill change from spec to release, design and write one skill with its skill spec, review it with independent agents and lint, prove its behavior with fresh Luna runs through a portable eval runner, and audit which skills a repository should create, update, merge, or skip.",
+    "longDescription": "Use Skill Authoring to carry a skill change from spec to release, design and write one skill with its skill spec, review it with independent agents, prove its behavior with fresh agent runs, and audit which skills a repository should create, update, merge, or skip.",
     "developerName": "Shravan Sunder",
     "category": "Developer Tools",
     "capabilities": [

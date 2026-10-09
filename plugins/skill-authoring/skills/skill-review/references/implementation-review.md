@@ -4,10 +4,6 @@ Review one of two targets. For implemented behavior-changing delivery, review af
 
 Return a verdict, changed-file coverage, accepted/rejected/unverified findings, smallest edits, targeted retest, and ship decision.
 
-## Lint First
-
-Before any reviewer starts, MUST load `jev-lint.md` with the words the reviewed skill set must not mention (for example another plugin's name) and return the lint findings and the Jev-card status for the reviewed skill set. Lint findings join reduction as candidates; lint never accepts or rejects a finding by itself.
-
 ## Ordered Checks
 
 The artifact is changed or existing skill files. For a scoped wording change, select the check that owns the targeted failure form and `rule-agreement`, and record all other checks `complete` with `not selected: <reason>`; this holds at implementation review as at spec review, and a request for the full review treatment does not widen it to the table row. For an unscoped change, select checks by touched surface:
