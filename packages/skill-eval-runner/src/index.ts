@@ -1,5 +1,6 @@
 export * from "./contracts/index.ts";
 export * from "./scenarios/parse-scenario.ts";
+export * from "./scenarios/scenario-directory.ts";
 export * from "./qa/evaluate-run.ts";
 export * from "./qa/code-steps.ts";
 export * from "./jev/jev-port.ts";

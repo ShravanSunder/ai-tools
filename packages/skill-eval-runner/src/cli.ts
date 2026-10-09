@@ -1,6 +1,7 @@
 import { join } from "node:path";
 import { mkdir } from "node:fs/promises";
 import { loadScenarios } from "./scenarios/parse-scenario.ts";
+import { resolveScenarioDirectory } from "./scenarios/scenario-directory.ts";
 import {
   checkAgentPrerequisites,
   loadSnapshotHidePatterns,
@@ -225,6 +226,7 @@ async function main(): Promise<number> {
   const skill = repoSkill();
   const loaded = await loadScenarios(
     skill,
+    resolveScenarioDirectory(skill, value("--scenarios", false)),
     scenarioIds.length > 0 ? scenarioIds : undefined,
   );
   if (command === "validate") {

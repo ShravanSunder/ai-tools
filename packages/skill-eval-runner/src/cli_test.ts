@@ -34,33 +34,106 @@ const runCli = async (
     output: `${decoder.decode(output.stdout)}${decoder.decode(output.stderr)}`,
   };
 };
+interface SkillWithScenarioProps {
+  skillDir: string;
+  scenarioDir: string;
+  status: "active" | "draft" | "retired";
+  prompt?: string;
+}
 const writeSkillWithScenario = async (
-  skillDir: string,
-  status: "active" | "draft" | "retired",
-  prompt = "Answer the question.",
+  props: SkillWithScenarioProps,
 ): Promise<void> => {
+  const { skillDir, scenarioDir, status } = props;
   const skillName = skillDir.split("/").at(-1);
-  await Deno.mkdir(`${skillDir}/scenarios`, { recursive: true });
+  await Deno.mkdir(skillDir, { recursive: true });
+  await Deno.mkdir(scenarioDir, { recursive: true });
   await Deno.writeTextFile(
     `${skillDir}/SKILL.md`,
     `---\nname: ${skillName}\ndescription: Use when answering.\n---\nAnswer.\n`,
   );
   await Deno.writeTextFile(
-    `${skillDir}/scenarios/${status}-case.scenario.md`,
-    `---\nscenarioId: ${status}-case\nskill: ${skillName}\nstatus: ${status}\n---\n## Prompt\n${prompt}\n## Checks\nchecks:\n  - id: c\n    criterion: answer\n    root: a\n    nodes:\n      a: {kind: code, step: {toolCallCount: {max: 1}}, onTrue: pass, onFalse: fail}`,
+    `${scenarioDir}/${status}-case.scenario.md`,
+    `---\nscenarioId: ${status}-case\nskill: ${skillName}\nstatus: ${status}\n---\n## Prompt\n${
+      props.prompt ?? "Answer the question."
+    }\n## Checks\nchecks:\n  - id: c\n    criterion: answer\n    root: a\n    nodes:\n      a: {kind: code, step: {toolCallCount: {max: 1}}, onTrue: pass, onFalse: fail}`,
   );
 };
+// A plugin skill and its scenarios at the default location the runner discovers on its own.
+const pluginSkillPaths = (
+  repo: string,
+): { skillDir: string; scenarioDir: string } => ({
+  skillDir: `${repo}/plugins/sample-plugin/skills/sample-skill`,
+  scenarioDir:
+    `${repo}/tests/skills/pressure-scenarios/sample-plugin/sample-skill`,
+});
+Deno.test("validate finds a plugin skill's scenarios under tests/skills/pressure-scenarios/<plugin>/<skill>", async () => {
+  const repo = await Deno.makeTempDir();
+  await writeSkillWithScenario({ ...pluginSkillPaths(repo), status: "active" });
+  const result = await runCli([
+    "validate",
+    "--repo",
+    repo,
+    "--skill",
+    "plugins/sample-plugin/skills/sample-skill",
+  ]);
+  assertEquals(result.code, 0);
+  assertStringIncludes(result.output, '"scenarioId": "active-case"');
+});
+Deno.test("--scenarios loads scenarios from the named directory instead of the default", async () => {
+  const repo = await Deno.makeTempDir();
+  const { skillDir } = pluginSkillPaths(repo);
+  await writeSkillWithScenario({
+    skillDir,
+    scenarioDir: `${repo}/evals/sample-skill`,
+    status: "active",
+  });
+  const result = await runCli([
+    "validate",
+    "--repo",
+    repo,
+    "--skill",
+    "plugins/sample-plugin/skills/sample-skill",
+    "--scenarios",
+    "evals/sample-skill",
+  ]);
+  assertEquals(result.code, 0);
+  assertStringIncludes(result.output, '"scenarioId": "active-case"');
+});
+Deno.test("a missing scenario directory is invalid input that names the path it looked for", async () => {
+  const repo = await Deno.makeTempDir();
+  const { skillDir } = pluginSkillPaths(repo);
+  await writeSkillWithScenario({
+    skillDir,
+    scenarioDir: `${skillDir}/scenarios`,
+    status: "active",
+  });
+  const result = await runCli([
+    "validate",
+    "--repo",
+    repo,
+    "--skill",
+    "plugins/sample-plugin/skills/sample-skill",
+  ]);
+  assertEquals(result.code, 2);
+  assertStringIncludes(
+    result.output,
+    `scenario directory not found: ${repo}/tests/skills/pressure-scenarios/sample-plugin/sample-skill`,
+  );
+});
 Deno.test("run at a commit with a skill set outside the repository exits 2 before any Run", async () => {
   const repo = await Deno.makeTempDir();
   const outside = await Deno.makeTempDir();
   const skillDir = `${outside}/skills/outside-skill`;
-  await writeSkillWithScenario(skillDir, "active");
+  const scenarioDir = `${outside}/scenarios/outside-skill`;
+  await writeSkillWithScenario({ skillDir, scenarioDir, status: "active" });
   const result = await runCli([
     "run",
     "--repo",
     repo,
     "--skill",
     skillDir,
+    "--scenarios",
+    scenarioDir,
     "--rev",
     "HEAD",
   ]);
@@ -80,8 +153,13 @@ const gitInit = async (repo: string): Promise<void> => {
 };
 Deno.test("done-bar with invalid scenarios exits 2 and prints the loader errors", async () => {
   const repo = await Deno.makeTempDir();
-  const skillDir = `${repo}/skills/sample-skill`;
-  await writeSkillWithScenario(skillDir, "active", "Run a test of this.");
+  const { skillDir, scenarioDir } = pluginSkillPaths(repo);
+  await writeSkillWithScenario({
+    skillDir,
+    scenarioDir,
+    status: "active",
+    prompt: "Run a test of this.",
+  });
   const result = await runCli([
     "done-bar",
     "--kind",
@@ -96,8 +174,8 @@ Deno.test("done-bar with invalid scenarios exits 2 and prints the loader errors"
 });
 Deno.test("run exits 2 before any Run when Codex is missing or has no login", async () => {
   const repo = await Deno.makeTempDir();
-  const skillDir = `${repo}/skills/sample-skill`;
-  await writeSkillWithScenario(skillDir, "active");
+  const { skillDir, scenarioDir } = pluginSkillPaths(repo);
+  await writeSkillWithScenario({ skillDir, scenarioDir, status: "active" });
   await gitInit(repo);
   const missingCodex = await runCli([
     "run",
@@ -122,8 +200,8 @@ Deno.test("run exits 2 before any Run when Codex is missing or has no login", as
 });
 Deno.test("run with no active scenario selected exits 2 with a message", async () => {
   const repo = await Deno.makeTempDir();
-  const skillDir = `${repo}/skills/sample-skill`;
-  await writeSkillWithScenario(skillDir, "draft");
+  const { skillDir, scenarioDir } = pluginSkillPaths(repo);
+  await writeSkillWithScenario({ skillDir, scenarioDir, status: "draft" });
   const result = await runCli(["run", "--repo", repo, "--skill", skillDir]);
   assertEquals(result.code, 2);
   assertStringIncludes(result.output, "no active scenario");
@@ -131,14 +209,17 @@ Deno.test("run with no active scenario selected exits 2 with a message", async (
 Deno.test("run rejects named draft and retired scenarios before creating runs", async () => {
   const repo = await Deno.makeTempDir();
   const skillDir = `${repo}/sample-skill`;
+  const scenarioDir = `${repo}/scenario-files`;
   for (const status of ["draft", "retired"] as const) {
-    await writeSkillWithScenario(skillDir, status);
+    await writeSkillWithScenario({ skillDir, scenarioDir, status });
     const result = await runCli([
       "run",
       "--repo",
       repo,
       "--skill",
       skillDir,
+      "--scenarios",
+      "scenario-files",
       "--scenario",
       `${status}-case`,
     ]);
@@ -152,8 +233,8 @@ Deno.test("run rejects named draft and retired scenarios before creating runs", 
 });
 Deno.test("run with an unsupported .skill-eval-hide line exits 2 before any Run", async () => {
   const repo = await Deno.makeTempDir();
-  const skillDir = `${repo}/skills/sample-skill`;
-  await writeSkillWithScenario(skillDir, "active");
+  const { skillDir, scenarioDir } = pluginSkillPaths(repo);
+  await writeSkillWithScenario({ skillDir, scenarioDir, status: "active" });
   await Deno.writeTextFile(
     `${repo}/.skill-eval-hide`,
     "docs/ok/\n**/eval-notes.md\n!docs/keep.md\n",
@@ -183,13 +264,15 @@ Deno.test("run with an unsupported .skill-eval-hide line exits 2 before any Run"
 });
 Deno.test("a fix-bar done-bar with more than one selected scenario exits 2 asking for one --scenario", async () => {
   const repo = await Deno.makeTempDir();
-  const skillDir = `${repo}/skills/sample-skill`;
-  await writeSkillWithScenario(skillDir, "active");
+  const { skillDir } = pluginSkillPaths(repo);
+  // done-bar reads the scenarios from --scenarios, so both cases must load from there.
+  const scenarioDir = `${repo}/evals/sample-skill`;
+  await writeSkillWithScenario({ skillDir, scenarioDir, status: "active" });
   const firstScenario = await Deno.readTextFile(
-    `${skillDir}/scenarios/active-case.scenario.md`,
+    `${scenarioDir}/active-case.scenario.md`,
   );
   await Deno.writeTextFile(
-    `${skillDir}/scenarios/second-case.scenario.md`,
+    `${scenarioDir}/second-case.scenario.md`,
     firstScenario.replaceAll("active-case", "second-case"),
   );
   const fixBarArgs = [
@@ -200,6 +283,8 @@ Deno.test("a fix-bar done-bar with more than one selected scenario exits 2 askin
     repo,
     "--skill",
     skillDir,
+    "--scenarios",
+    scenarioDir,
     "--base",
     "HEAD",
   ] as const;
@@ -229,13 +314,13 @@ Deno.test("a fix-bar done-bar with more than one selected scenario exits 2 askin
 });
 Deno.test("done-bar with an unknown --kind exits 2 before any Run or output", async () => {
   const repo = await Deno.makeTempDir();
-  const skillDir = `${repo}/skills/sample-skill`;
-  await writeSkillWithScenario(skillDir, "active");
+  const { skillDir, scenarioDir } = pluginSkillPaths(repo);
+  await writeSkillWithScenario({ skillDir, scenarioDir, status: "active" });
   const firstScenario = await Deno.readTextFile(
-    `${skillDir}/scenarios/active-case.scenario.md`,
+    `${scenarioDir}/active-case.scenario.md`,
   );
   await Deno.writeTextFile(
-    `${skillDir}/scenarios/second-case.scenario.md`,
+    `${scenarioDir}/second-case.scenario.md`,
     firstScenario.replaceAll("active-case", "second-case"),
   );
   const cacheHome = await Deno.makeTempDir();

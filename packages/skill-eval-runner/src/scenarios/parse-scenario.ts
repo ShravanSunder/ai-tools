@@ -1,5 +1,5 @@
 import { parse as parseYaml } from "npm:yaml@2.9.1";
-import { basename } from "node:path";
+import { basename, join } from "node:path";
 import { type CheckTree, checkTreeSchema } from "../contracts/check-tree.ts";
 import {
   type QuestionCard,
@@ -11,6 +11,7 @@ import {
   type ScenarioLoadResult,
 } from "../contracts/scenario.ts";
 import { resolveFileReference } from "./file-references.ts";
+import { resolveSkillDirectory } from "./scenario-directory.ts";
 import type { SkillRef } from "../contracts/common.ts";
 
 const forbiddenPromptPatterns = [
@@ -116,30 +117,31 @@ const inspectTree = (
   walk(tree.root);
   return errors;
 };
+// Loads the skill's scenarios from `scenarioDirectory`; `resolveScenarioDirectory` picks it.
 export async function loadScenarios(
   skill: SkillRef,
+  scenarioDirectory: string,
   ids?: readonly string[],
 ): Promise<ScenarioLoadResult> {
   const errors: string[] = [];
-  let skillDir = skill.skillPath;
-  if (!skillDir.startsWith("/")) skillDir = `${skill.repoRoot}/${skillDir}`;
+  const skillName = basename(resolveSkillDirectory(skill));
   const entries: string[] = [];
   try {
-    for await (const e of Deno.readDir(`${skillDir}/scenarios`)) {
+    for await (const e of Deno.readDir(scenarioDirectory)) {
       if (e.isFile && e.name.endsWith(".scenario.md")) {
-        entries.push(`${skillDir}/scenarios/${e.name}`);
+        entries.push(join(scenarioDirectory, e.name));
       }
     }
   } catch {
     return {
       kind: "invalid",
-      errors: [`scenario directory not found: ${skillDir}/scenarios`],
+      errors: [`scenario directory not found: ${scenarioDirectory}`],
     };
   }
   const cards = new Map<string, QuestionCard>();
   try {
     const cardText = await Deno.readTextFile(
-      `${skillDir}/scenarios/cards.yaml`,
+      join(scenarioDirectory, "cards.yaml"),
     );
     const parsed = parseYaml(cardText);
     const cardValues = Array.isArray(parsed)
@@ -173,11 +175,9 @@ export async function loadScenarios(
       errors.push(`${path}: invalid frontmatter: ${frontmatter.error.message}`);
       continue;
     }
-    if (frontmatter.data.skill !== basename(skillDir)) {
+    if (frontmatter.data.skill !== skillName) {
       errors.push(
-        `${path}: skill must equal scenario skill directory ${
-          basename(skillDir)
-        }`,
+        `${path}: skill must equal the skill directory name ${skillName}`,
       );
     }
     if (ids && !ids.includes(frontmatter.data.scenarioId)) continue;
@@ -232,12 +232,11 @@ export async function loadScenarios(
     }
     if (!sections.prompt) errors.push(`${path}: missing Prompt`);
     for (const fixture of frontmatter.data.fixtures) {
-      const scenarioDirectory = path.slice(0, path.lastIndexOf("/"));
-      const sourcePath = `${scenarioDirectory}/${fixture.source}`;
+      const sourcePath = join(scenarioDirectory, fixture.source);
       if (
         fixture.source.startsWith("/") ||
         fixture.source.split("/").includes("..")
-      ) errors.push(`${path}: fixture source escapes scenarios`);
+      ) errors.push(`${path}: fixture source escapes the scenario directory`);
       if (
         fixture.target.startsWith("/") ||
         fixture.target.split("/").includes("..")

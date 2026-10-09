@@ -1,9 +1,14 @@
 import { assert, assertEquals, assertStringIncludes } from "jsr:@std/assert@1";
 import { loadScenarios } from "./parse-scenario.ts";
-const fixture =
-  new URL("../../test-fixtures/sample-skill/", import.meta.url).pathname;
-Deno.test("loads the new scenario shape and cards", async () => {
-  const result = await loadScenarios({ repoRoot: fixture, skillPath: fixture });
+import { resolveScenarioDirectory } from "./scenario-directory.ts";
+const fixtureRepo =
+  new URL("../../test-fixtures/sample-repo/", import.meta.url).pathname;
+Deno.test("loads the new scenario shape and cards from the default scenario directory", async () => {
+  const skill = {
+    repoRoot: fixtureRepo,
+    skillPath: "plugins/sample-plugin/skills/sample-skill",
+  };
+  const result = await loadScenarios(skill, resolveScenarioDirectory(skill));
   assertEquals(result.kind, "loaded");
   if (result.kind === "loaded") {
     assertEquals(result.scenarios.length, 1);
@@ -28,7 +33,10 @@ for (
     const dir = await Deno.makeTempDir();
     await Deno.mkdir(`${dir}/scenarios`);
     await Deno.writeTextFile(`${dir}/scenarios/bad.scenario.md`, body);
-    const result = await loadScenarios({ repoRoot: dir, skillPath: dir });
+    const result = await loadScenarios(
+      { repoRoot: dir, skillPath: dir },
+      `${dir}/scenarios`,
+    );
     assertEquals(result.kind, "invalid");
     if (result.kind === "invalid") {
       assertStringIncludes(result.errors.join("\n"), expected);
@@ -42,7 +50,10 @@ Deno.test("rejects unknown card and cyclic tree", async () => {
     `${dir}/scenarios/bad.scenario.md`,
     `---\nscenarioId: bad\nskill: bad\nstatus: active\n---\n## Prompt\nPlease explain this\n## Checks\nchecks:\n  - id: c\n    criterion: x\n    root: a\n    nodes:\n      a: {kind: jev, card: missing, branches: {yes: a, no: fail, uncertain: fail}}`,
   );
-  const result = await loadScenarios({ repoRoot: dir, skillPath: dir });
+  const result = await loadScenarios(
+    { repoRoot: dir, skillPath: dir },
+    `${dir}/scenarios`,
+  );
   assertEquals(result.kind, "invalid");
   if (result.kind === "invalid") {
     assert(result.errors.some((e) => e.includes("unknown card")));
@@ -57,13 +68,19 @@ Deno.test("banned word inflections reject while evaluation is allowed", async ()
     `${dir}/scenarios/inflection.scenario.md`,
     `---\nscenarioId: inflection\nskill: "${skillName}"\nstatus: active\n---\n## Prompt\nPlease provide an evaluation of this approach.\n## Checks\nchecks:\n  - id: c\n    criterion: explain\n    root: a\n    nodes:\n      a: {kind: code, step: {toolCallCount: {max: 2}}, onTrue: pass, onFalse: fail}`,
   );
-  const allowed = await loadScenarios({ repoRoot: dir, skillPath: dir });
+  const allowed = await loadScenarios(
+    { repoRoot: dir, skillPath: dir },
+    `${dir}/scenarios`,
+  );
   assertEquals(allowed.kind, "loaded");
   await Deno.writeTextFile(
     `${dir}/scenarios/inflection.scenario.md`,
     `---\nscenarioId: inflection\nskill: "${skillName}"\nstatus: active\n---\n## Prompt\nPlease compare these approaches.\n## Checks\nchecks: []`,
   );
-  const rejected = await loadScenarios({ repoRoot: dir, skillPath: dir });
+  const rejected = await loadScenarios(
+    { repoRoot: dir, skillPath: dir },
+    `${dir}/scenarios`,
+  );
   assertEquals(rejected.kind, "invalid");
 });
 Deno.test("rejects invalid scenario fixtures", async () => {
@@ -73,7 +90,10 @@ Deno.test("rejects invalid scenario fixtures", async () => {
     `${dir}/scenarios/bad.scenario.md`,
     `---\nscenarioId: bad\nskill: bad\nstatus: active\nfixtures:\n  - source: missing.md\n    target: ../escape.md\n---\n## Prompt\nPlease explain this.\n## Checks\nchecks: []`,
   );
-  const result = await loadScenarios({ repoRoot: dir, skillPath: dir });
+  const result = await loadScenarios(
+    { repoRoot: dir, skillPath: dir },
+    `${dir}/scenarios`,
+  );
   assertEquals(result.kind, "invalid");
   if (result.kind === "invalid") {
     assert(
@@ -89,7 +109,10 @@ Deno.test("rejects loadedSkill when prompt names the skill explicitly", async ()
     `${dir}/scenarios/explicit.scenario.md`,
     `---\nscenarioId: explicit\nskill: sample-skill\nstatus: active\n---\n## Prompt\nUse $sample-skill to answer this request.\n## Checks\nchecks:\n  - id: c\n    criterion: read\n    root: a\n    nodes:\n      a: {kind: code, step: {loadedSkill: sample-skill}, onTrue: pass, onFalse: fail}`,
   );
-  const result = await loadScenarios({ repoRoot: dir, skillPath: dir });
+  const result = await loadScenarios(
+    { repoRoot: dir, skillPath: dir },
+    `${dir}/scenarios`,
+  );
   assertEquals(result.kind, "invalid");
   if (result.kind === "invalid") {
     assert(result.errors.some((error) => error.includes("explicitly named")));
@@ -106,7 +129,10 @@ Deno.test("loader enforces skill name, nonempty checks, and file evidence rules"
     `${dir}/scenarios/bad.scenario.md`,
     `---\nscenarioId: bad\nskill: wrong\nstatus: active\n---\n## Prompt\nPlease explain.\n## Checks\nchecks: []`,
   );
-  const result = await loadScenarios({ repoRoot: dir, skillPath: dir });
+  const result = await loadScenarios(
+    { repoRoot: dir, skillPath: dir },
+    `${dir}/scenarios`,
+  );
   assertEquals(result.kind, "invalid");
   if (result.kind === "invalid") {
     assert(result.errors.some((error) => error.includes("skill must equal")));
@@ -128,7 +154,10 @@ Deno.test("invalid cards YAML is reported while missing cards YAML is allowed", 
     }"\nstatus: active\n---\n## Prompt\nPlease explain.\n## Checks\nchecks:\n  - id: c\n    criterion: x\n    root: a\n    nodes:\n      a: {kind: code, step: {toolCallCount: {max: 1}}, onTrue: pass, onFalse: fail}`,
   );
   await Deno.writeTextFile(`${dir}/scenarios/cards.yaml`, "[");
-  const result = await loadScenarios({ repoRoot: dir, skillPath: dir });
+  const result = await loadScenarios(
+    { repoRoot: dir, skillPath: dir },
+    `${dir}/scenarios`,
+  );
   assertEquals(result.kind, "invalid");
   if (result.kind === "invalid") {
     assert(result.errors.some((error) => error.includes("invalid cards.yaml")));
@@ -147,7 +176,10 @@ Deno.test("a card calibration entry needs its labelled set and measurement date"
       `${dir}/scenarios/case.scenario.md`,
       `---\nscenarioId: case\nskill: "${skillName}"\nstatus: active\n---\n## Prompt\nPlease explain.\n## Checks\nchecks:\n  - id: c\n    criterion: x\n    root: a\n    nodes:\n      a: {kind: jev, card: answer-is-useful, branches: {yes: pass, no: fail, uncertain: inconclusive}}`,
     );
-    return await loadScenarios({ repoRoot: dir, skillPath: dir });
+    return await loadScenarios(
+      { repoRoot: dir, skillPath: dir },
+      `${dir}/scenarios`,
+    );
   };
   const withoutProvenance = await writeCalibratedSkill(
     "      bands: {yes: 0.9, no: 0.1}\n",
