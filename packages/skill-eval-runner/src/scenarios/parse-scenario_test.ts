@@ -8,7 +8,10 @@ Deno.test("loads the new scenario shape and cards from the default scenario dire
     repoRoot: fixtureRepo,
     skillPath: "plugins/sample-plugin/skills/sample-skill",
   };
-  const result = await loadScenarios(skill, resolveScenarioDirectory(skill));
+  const result = await loadScenarios(
+    skill,
+    await resolveScenarioDirectory(skill),
+  );
   assertEquals(result.kind, "loaded");
   if (result.kind === "loaded") {
     assertEquals(result.scenarios.length, 1);

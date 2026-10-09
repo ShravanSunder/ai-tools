@@ -154,6 +154,38 @@ Deno.test("validate, run and done-bar refuse a --scenarios directory that is or 
     assertEquals(resultWritten, false);
   }
 });
+Deno.test("validate and run refuse --scenarios at the repository root when the skill set is outside it", async () => {
+  const repo = await Deno.makeTempDir();
+  const outside = await Deno.makeTempDir();
+  const skillDir = `${outside}/skills/outside-skill`;
+  await writeSkillWithScenario({
+    skillDir,
+    scenarioDir: `${outside}/scenarios/outside-skill`,
+    status: "active",
+  });
+  for (const command of ["validate", "run"] as const) {
+    const cacheHome = await Deno.makeTempDir();
+    const result = await runCli([
+      command,
+      "--repo",
+      repo,
+      "--skill",
+      skillDir,
+      "--scenarios",
+      repo,
+    ], { XDG_CACHE_HOME: cacheHome });
+    assertEquals(result.code, 2, command);
+    assertStringIncludes(
+      result.output,
+      `--scenarios ${repo} is the repository root ${repo}`,
+    );
+    const resultWritten = await Deno.stat(`${cacheHome}/skill-evals`).then(
+      () => true,
+      () => false,
+    );
+    assertEquals(resultWritten, false);
+  }
+});
 Deno.test("run at a commit with a skill set outside the repository exits 2 before any Run", async () => {
   const repo = await Deno.makeTempDir();
   const outside = await Deno.makeTempDir();

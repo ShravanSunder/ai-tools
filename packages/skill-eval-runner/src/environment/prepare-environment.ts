@@ -102,17 +102,26 @@ const removeFromSnapshot = (
 // `.skill-eval-hide` names it: the whole default scenario root (every skill's scenarios), and the
 // scenario directory in use when `--scenarios` puts it elsewhere. A directory outside the
 // repository is not in the snapshot, and one missing at the run's revision has nothing to remove.
+// A scenario directory at the repository root would remove the whole snapshot; the CLI refuses it
+// as input, so reaching it here is an invariant violation, raised before anything is removed.
 export async function removeScenarioMaterialFromSnapshot(
   snapshot: string,
   repoRoot: string,
   scenarioDirectory: string | undefined,
 ): Promise<void> {
+  const relativeScenarioDirectory = scenarioDirectory === undefined
+    ? undefined
+    : relative(
+      await realOrResolvedPath(repoRoot),
+      await realOrResolvedPath(scenarioDirectory),
+    );
+  if (relativeScenarioDirectory === "") {
+    throw new Error(
+      `invariant: scenario directory ${scenarioDirectory} is the repository root ${repoRoot}; the snapshot is never removed`,
+    );
+  }
   await removeFromSnapshot(snapshot, defaultScenarioRoot);
-  if (!scenarioDirectory) return;
-  const relativeScenarioDirectory = relative(
-    await realOrResolvedPath(repoRoot),
-    await realOrResolvedPath(scenarioDirectory),
-  );
+  if (relativeScenarioDirectory === undefined) return;
   const outsideRepo = isAbsolute(relativeScenarioDirectory) ||
     relativeScenarioDirectory === ".." ||
     relativeScenarioDirectory.startsWith("../");

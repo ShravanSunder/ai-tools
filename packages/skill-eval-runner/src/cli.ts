@@ -3,7 +3,7 @@ import { mkdir } from "node:fs/promises";
 import { loadScenarios } from "./scenarios/parse-scenario.ts";
 import {
   resolveScenarioDirectory,
-  scenarioDirectoryHoldingSkillError,
+  scenarioDirectoryOverrideError,
 } from "./scenarios/scenario-directory.ts";
 import {
   checkAgentPrerequisites,
@@ -228,13 +228,16 @@ async function main(): Promise<number> {
   }
   const skill = repoSkill();
   const scenarioOverride = value("--scenarios", false);
-  const scenarioDirectory = resolveScenarioDirectory(skill, scenarioOverride);
+  const scenarioDirectory = await resolveScenarioDirectory(
+    skill,
+    scenarioOverride,
+  );
   // Invalid input for validate, run and done-bar alike, before any scenario loads or Run starts.
-  const holdingSkillError = scenarioOverride
-    ? await scenarioDirectoryHoldingSkillError(skill, scenarioDirectory)
+  const scenarioOverrideError = scenarioOverride
+    ? await scenarioDirectoryOverrideError(skill, scenarioDirectory)
     : undefined;
-  if (holdingSkillError) {
-    printJson({ kind: "invalid", errors: [holdingSkillError] });
+  if (scenarioOverrideError) {
+    printJson({ kind: "invalid", errors: [scenarioOverrideError] });
     return 2;
   }
   const loaded = await loadScenarios(

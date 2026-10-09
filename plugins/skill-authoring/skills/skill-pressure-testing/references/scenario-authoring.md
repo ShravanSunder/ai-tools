@@ -18,7 +18,7 @@ Grade what the agent did before what it said. The code-step catalog reads record
 <scenario dir>/fixtures/<file>             a file the scenario's `fixtures:` front matter copies into the snapshot at its `target`
 ```
 
-`<scenario dir>` is `tests/skills/pressure-scenarios/<owner>/<skill>/` in the skill's repository, where `<owner>` is the directory holding the skill set (the plugin for `plugins/<plugin>/skills/<skill>`). `--scenarios <dir>` points the runner at another directory.
+`<scenario dir>` is `tests/skills/pressure-scenarios/<owner>/<skill>/` in the skill's repository, where `<owner>` is the directory holding the skill set (the plugin for `plugins/<plugin>/skills/<skill>`). When that directory is not strictly inside the repository (a skill set at `<repo>/skills/` or at the repository root), there is no owner segment and the default is `tests/skills/pressure-scenarios/<skill>/`; `.agents/skills/<skill>` keeps `.agents` as its owner (`tests/skills/pressure-scenarios/.agents/<skill>/`). `--scenarios <dir>` points the runner at another directory.
 
 ## Write The Prompt
 

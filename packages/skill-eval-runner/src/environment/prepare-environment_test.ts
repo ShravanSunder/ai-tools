@@ -1,4 +1,9 @@
-import { assert, assertEquals, assertStringIncludes } from "jsr:@std/assert@1";
+import {
+  assert,
+  assertEquals,
+  assertRejects,
+  assertStringIncludes,
+} from "jsr:@std/assert@1";
 import { basename } from "node:path";
 import { buildObservedOutcome } from "../subjects/observed-outcome.ts";
 import {
@@ -7,6 +12,7 @@ import {
   type EnvironmentResult,
   prepareEnvironment,
   removeScenarioDirectoriesFromSnapshot,
+  removeScenarioMaterialFromSnapshot,
 } from "./prepare-environment.ts";
 const git = async (
   cwd: string,
@@ -168,6 +174,17 @@ Deno.test("a --scenarios directory in use leaves the snapshot while its siblings
   } finally {
     await prepared.environment.dispose();
   }
+});
+Deno.test("a scenario directory at the repository root is an invariant error, never a removal of the snapshot", async () => {
+  const repo = await Deno.makeTempDir();
+  const snapshot = await Deno.makeTempDir();
+  await Deno.writeTextFile(`${snapshot}/README.md`, "repo");
+  await assertRejects(
+    () => removeScenarioMaterialFromSnapshot(snapshot, repo, repo),
+    Error,
+    "is the repository root",
+  );
+  assertEquals(await Deno.readTextFile(`${snapshot}/README.md`), "repo");
 });
 Deno.test("shared references are copied beside the skill set", async () => {
   const root = await Deno.makeTempDir();
