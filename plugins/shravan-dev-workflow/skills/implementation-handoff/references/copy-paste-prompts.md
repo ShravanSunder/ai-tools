@@ -50,7 +50,7 @@ validation, and proof gaps when a sensitive surface exists>
 Review requirements:
 - Verify against actual code, not this summary.
 - Preserve the exact governing authority, canonical plan record and current meaning, governing planning basis, delivery context, base/reviewed/diff identities, proof identities, constraints, and freshness evidence above.
-- Run the selected owning workflow's fresh-context changed-implementation review route and parent reduction; do not substitute ad hoc review.
+- Run `implementation-review`'s fresh-context changed-implementation review route and parent reduction; do not substitute ad hoc review.
 - Return exact anchored findings, proof boundaries, owner routes, and affected review coverage without remediation or PR work.
 ```
 

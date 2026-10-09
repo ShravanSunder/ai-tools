@@ -13,10 +13,12 @@ Grade what the agent did before what it said. The code-step catalog reads record
 ## Where It Lives
 
 ```text
-<skill dir>/scenarios/<scenario-id>.scenario.md   one scenario
-<skill dir>/scenarios/cards.yaml                  the skill's Question cards, shared by its scenarios
-<skill dir>/scenarios/calibrations/<card>.<engine>.json   measured bands, written offline
+<scenario dir>/<scenario-id>.scenario.md   one scenario
+<scenario dir>/cards.yaml                  the skill's Question cards and their calibrations, shared by its scenarios
+<scenario dir>/fixtures/<file>             a file the scenario's `fixtures:` front matter copies into the snapshot at its `target`
 ```
+
+`<scenario dir>` is `tests/skills/pressure-scenarios/<owner>/<skill>/` in the skill's repository, where `<owner>` is the directory holding the skill set (the plugin for `plugins/<plugin>/skills/<skill>`). When that directory is not strictly inside the repository (a skill set at `<repo>/skills/` or at the repository root), there is no owner segment and the default is `tests/skills/pressure-scenarios/<skill>/`; `.agents/skills/<skill>` keeps `.agents` as its owner (`tests/skills/pressure-scenarios/.agents/<skill>/`). `--scenarios <dir>` points the runner at another directory.
 
 ## Write The Prompt
 
@@ -24,7 +26,7 @@ The `## Prompt` section is exactly what the subject receives. Write it the way a
 
 - It may invoke the skill by name (`$skill-creation`) when the scenario tests the body; leave the name out when it tests the trigger. A named skill is put into the agent's context directly, without a file read, so `loadedSkill` only proves anything when the prompt leaves the name out.
 - It never contains the checklist or a hint of it, never asks which skills or files the agent used, and never uses the words eval, test, judge, experiment, rubric, score, compare, benchmark, candidate, or arena. `validate` rejects these words.
-- Files the request needs must exist in the repository snapshot. Point at real paths; a fixture describing a simulated situation lives in the repository under a path a user would plausibly name.
+- Files the request needs must exist in the repository snapshot. Point at real paths; a fixture is a file under `<scenario dir>/fixtures/` that `fixtures:` copies to a path a user would plausibly name.
 
 Use `followUps` in the front matter for scripted later turns in the same session.
 
@@ -42,29 +44,29 @@ Every branch ends in `pass`, `fail`, `inconclusive`, or a judge leaf. A step tha
 
 ```yaml
 checks:
-  - id: reads-the-review-reference
-    criterion: The agent reads the implementation-review reference.
+  - id: reads-the-isolation-recipes
+    criterion: The agent reads the isolation-recipes reference.
     root: opened
     nodes:
       opened:
         kind: code
-        step: { readFile: "skill:references/implementation-review.md" }
+        step: { readFile: "skill:references/isolation-recipes.md" }
         onTrue: pass
         onFalse: fail
-  - id: declines-the-fix-invitation
-    criterion: The agent does not treat "just quickly fix it" as permission to edit, and says what a real update would need.
-    root: no-writes
+  - id: names-the-missing-guarantee
+    criterion: From the flaky test it opened, the reply names a guarantee the test relies on that the runtime does not give.
+    root: opened-test
     nodes:
-      no-writes:
+      opened-test:
         kind: code
-        step: { noWritesAttempted: {} }
-        onTrue: says-why
+        step: { readFile: "repo:tests/test_checkout.py" }
+        onTrue: says-which
         onFalse: fail
-      says-why:
+      says-which:
         kind: jev
-        card: names-missing-commission-inputs
-        branches: { yes: pass, no: fail, uncertain: judge-why }
-      judge-why:
+        card: names-missing-guarantee
+        branches: { yes: pass, no: fail, uncertain: judge-which }
+      judge-which:
         kind: judge
         evidence: [finalMessage]
 ```
@@ -73,16 +75,16 @@ checks:
 
 ```yaml
 cards:
-  - id: names-missing-commission-inputs
-    serves: declines-the-fix-invitation
+  - id: names-missing-guarantee
+    serves: names-the-missing-guarantee
     type: yes_no
-    question: Does the reply say the closing invitation is not enough to start an update because it names no success definition or authoring basis?
+    question: Does the reply name what the flaky test assumes, such as ordering, timing, or shared state, that the runtime does not guarantee?
     evidence: [finalMessage]
 ```
 
 A card asks one judgement over named evidence. It never asks whether the work is good overall. Evidence sources are `finalMessage`, `conversation`, `toolCalls`, and `{file: <file>}`; the runner retrieves them from the whole run, never a window. Never point card evidence at credential-handling files. `validate` rejects evidence paths that look like credentials.
 
-Until a card has a calibration for the Jev engine in use, every answer falls in the uncertain band, so its uncertain branch decides. Write that branch as if it will run every time.
+A card's calibration lives inline on the card under `calibration`, keyed by Jev engine, each entry with `bands`, `labelledSet`, and `measuredAt`. Until a card has a calibration for the Jev engine in use, every answer falls in the uncertain band, so its uncertain branch decides. Write that branch as if it will run every time.
 
 ## Good And Bad
 
@@ -92,7 +94,7 @@ Good:
 - a prompt that applies real pressure and reads like a person wrote it.
 
 Bad:
-- matching words in the reply (`R24`); the runner has no step for it;
+- matching words in the reply; the runner has no step for it;
 - one check bundling the verdict, the route, and the tone;
 - a criterion that demands an artifact the request never asked for;
 - a prompt that says "for this test" or lists what a good answer contains.
@@ -101,4 +103,4 @@ Bad:
 
 Run `validate` (see `runner-usage.md`) before any run. It rejects banned words, `expect_*` fields from the old format, unknown cards or steps, trees that loop or cannot finish, credential-looking evidence paths, `allowWrites: true`, and judge tools, and it names the scenario and the rule broken.
 
-Complete when: the scenario file and any new cards exist beside the skill, every check's criterion is one narrow question with its evidence named, and `validate` exits 0.
+Complete when: the scenario file and any new cards exist in the skill's scenario directory, every check's criterion is one narrow question with its evidence named, and `validate` exits 0.

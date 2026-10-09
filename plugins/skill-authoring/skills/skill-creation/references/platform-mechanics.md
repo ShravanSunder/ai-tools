@@ -1,7 +1,5 @@
 # Platform Mechanics
 
-Handle Codex and Claude skill mechanics without turning platform scaffolding into authoring philosophy.
-
 This reference owns platform scaffolding, manifests, marketplace metadata, validation commands, version/changelog routing, and release/readback status. Return the platform surfaces touched, required static validation, and shipping route.
 
 ## Codex Mechanics

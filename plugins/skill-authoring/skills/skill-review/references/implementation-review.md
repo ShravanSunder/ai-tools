@@ -6,11 +6,11 @@ Return a verdict, changed-file coverage, accepted/rejected/unverified findings, 
 
 ## Lint First
 
-Before any reviewer starts, MUST load `jev-lint.md` and return the lint findings and the Jev-card status for the reviewed skill set. Lint findings join reduction as candidates; lint never accepts or rejects a finding by itself.
+Before any reviewer starts, MUST load `jev-lint.md` with the words the reviewed skill set must not mention (for example another plugin's name) and return the lint findings and the Jev-card status for the reviewed skill set. Lint findings join reduction as candidates; lint never accepts or rejects a finding by itself.
 
 ## Ordered Checks
 
-The artifact is changed or existing skill files. Select checks by touched surface:
+The artifact is changed or existing skill files. For a scoped wording change, select the check that owns the targeted failure form and `rule-agreement`, and record all other checks `complete` with `not selected: <reason>`; this holds at implementation review as at spec review, and a request for the full review treatment does not widen it to the table row. For an unscoped change, select checks by touched surface:
 
 | Reviewed surface | Check references to load |
 | --- | --- |
@@ -20,7 +20,7 @@ The artifact is changed or existing skill files. Select checks by touched surfac
 | Behavior-proof claim | `claim-vs-evidence` |
 | Sensitive surface | `sensitive-surface` |
 
-Each name resolves to `checks/<name>.md`. Deduplicate the selected set. For a scoped wording change, select the check that owns the targeted failure form and `rule-agreement`; record all other checks `complete` with `not selected: <reason>`. For an evaluation of existing files, use current files as the reviewed surface and read them whole. A `create` run reviews new files. Sensitive-surface ownership stays in `../../skill-creation/references/security-gate.md`.
+Each name resolves to `checks/<name>.md`. Deduplicate the selected set. For an evaluation of existing files, use current files as the reviewed surface and read them whole. A `create` run reviews new files. Sensitive-surface ownership stays in `../../skill-creation/references/security-gate.md`.
 
 Then split the selected checks across reviewer agents by family, each agent in its own session with no authoring history, each loading `checks/review-schema.md` first and walking its checks in the order listed:
 
@@ -30,7 +30,7 @@ structure reviewer       placement-and-calls, rule-agreement, trigger-routing
 proof and safety         claim-vs-evidence, sensitive-surface
 ```
 
-Start only reviewers that have a selected check, and always at least two: when the selection fits one family, split it across two agents. Keep the order within each agent so placement and rule agreement see the entire change before the claim comparison.
+Start only reviewers that have a selected check, and always at least two. Keep the order within each agent so placement and rule agreement see the entire change before the claim comparison.
 
 Each reviewer records `complete | partial | blocked` per check and returns candidate findings with anchors. IF a changed surface adds an output or tool shape, load `../../skill-creation/references/shared-shape-design.md` for its consumers and owner. A reviewer walks its checks itself and starts no further agents. Prescribed proof commands may run under the exact grant; the review lead judges the observations.
 

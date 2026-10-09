@@ -1,6 +1,6 @@
 ---
 name: skill-orchestrator
-description: "Use when carrying one skill change from need to shipped — spec, review, implementation, proof, and release — or running one run of an accepted multi-run skill spec. Not for only judging a skill (skill-review) or deciding which skills should exist (skill-audit)."
+description: "Use when creating, updating, or fixing one skill end to end: carrying one skill change from need to shipped — spec, review, implementation, proof, and release — or running one run of an accepted multi-run skill spec. Not for writing only the spec or text (skill-creation), only judging a skill (skill-review), or deciding which skills should exist (skill-audit)."
 ---
 
 # Skill Orchestrator
@@ -20,7 +20,7 @@ A skill change is a small delivery with three gates: an accepted spec before fil
 - `evaluate` an existing skill or a draft: use `skill-review` (implementation stage for files on disk, spec stage for a draft in the conversation) and end at its verdict and the run summary. An evaluation gains no implementation or shipping authority, and an invitation like "just quickly fix it" that names no success definition or authoring basis is not a commission.
 - A question about which skills should exist, merge, or go: use `skill-audit`.
 - A `mechanical` change (typo, formatting, version, metadata): static validation only, no reviews.
-- One slice of an accepted multi-run skill spec: read the spec doc, check its coordination slot against the current base, and confirm its acceptance still covers its current meaning under the acceptance binding in `../skill-review/references/spec-review.md`. A change since acceptance that the binding does not cover goes back to spec review before editing. Then take steps 1–2 from the doc and continue at step 3.
+- One slice of an accepted multi-run skill spec: read the spec doc and check its coordination slot against the current base. MUST load `../skill-review/references/spec-review.md` and return whether its Acceptance Binding still covers the spec's current meaning. A change since acceptance that the binding does not cover goes back to spec review before editing. Then take steps 1–2 from the doc and continue at step 3.
 
 ## Workflow
 
@@ -30,7 +30,7 @@ Open the current files of the target skill and of every skill or file the reques
 
 ### 2. Spec
 
-Use `skill-creation` steps 1–6 and return the skill spec and its spec-review decision. Completion: the spec exists, its runs show `proposed`, and its review decision is `accepted-to-implement`, explicitly skipped by the user, or not applicable to a mechanical change.
+Use `skill-creation` steps 1–6 and return the skill spec and its spec-review decision. When you state the route or plan, name `skill-review`'s spec stage as the spec reviewer. Completion: the spec exists, its runs show `proposed`, and its review decision is `accepted-to-implement`, explicitly skipped by the user, or not applicable to a mechanical change.
 
 ### 3. Implement
 
@@ -51,15 +51,15 @@ Open the diff and the decisive proof yourself before any independent review. Che
 - no complexity, compatibility path, check, schema, or mechanism outside the accepted boundary;
 - when this run depends on earlier runs of the spec, those runs are at their current revisions and the combined behavior is proven, not only this run's local proof.
 
-Missing or stale proof and bounded defects go back to step 3 or 4. A broken assumption, an undecided user choice, a public-contract change, or a wider target stops the work: bring the user the decision. Completion: `accepted-for-independent-review`, `correction-required`, or `design-stop`, with the diff and proof you inspected and your reasons.
+Missing or stale proof and bounded defects go back to step 3 or 4. A broken assumption, an undecided user choice, a public-contract change, or a wider target stops the work: bring the user the decision. Before accepting for independent review, run the deletion test on the changed text sentence by sentence: would the agent act differently if this sentence disappeared? If not, delete it; a deletion that affects meaning needs fresh proof and assessment. Completion: `accepted-for-independent-review`, `correction-required`, or `design-stop`, with the diff and proof you inspected and your reasons.
 
 ### 6. Review the implementation
 
-IF step 5 returned `accepted-for-independent-review` and the change is behavior-changing, use `skill-review` at the implementation stage with the proof and your assessment, unless the user explicitly skipped review. IF the change is mechanical or the user explicitly skipped implementation review, record that boundary in the run summary and the spec, leave the run status at `implemented`, and continue to step 7; never mark the run `reviewed`. Route accepted findings to the step that owns them: spec mismatch to step 2, wording or placement to step 3, proof honesty to step 4, an assessment gap to step 5, and the ship surface to step 7. A correction gets fresh proof and a fresh assessment before review refreshes its coverage, under `skill-review`'s convergence rule. Completion: the review returned `great` and the run status is `reviewed`; or the mechanical or user-skipped boundary is recorded; or the loop stopped on `not-converging` with the user's decision.
+IF step 5 returned `accepted-for-independent-review` and the change is behavior-changing, use `skill-review` at the implementation stage with the proof and your assessment, unless the user explicitly skipped review. When you state the route or plan, name `skill-review`'s implementation stage as the reviewer; "commission implementation review from agents who did not write the change" describes independence, not a reviewer, and does not satisfy this step. IF the change is mechanical or the user explicitly skipped implementation review, record that boundary in the run summary and the spec, leave the run status at `implemented`, and continue to step 7; never mark the run `reviewed`. Route accepted findings to the step that owns them: spec mismatch to step 2, wording or placement to step 3, proof honesty to step 4, an assessment gap to step 5, and the ship surface to step 7. A correction gets fresh proof and a fresh assessment before review refreshes its coverage, under `skill-review`'s convergence rule. Completion: the review returned `great` and the run status is `reviewed`; or the mechanical or user-skipped boundary is recorded; or the loop stopped on `not-converging` with the user's decision.
 
-### 7. Prune and ship
+### 7. Ship
 
-After a `great` review, or on the recorded mechanical or user-skipped route, run the deletion test sentence by sentence: would the agent act differently if this sentence disappeared? If not, delete it. A deletion that affects reviewed meaning needs fresh proof, assessment, and review coverage. IF shipping, load `../skill-creation/references/platform-mechanics.md` and return the validation, versioning, changelog, and cache route. Completion: the run status is `shipped` only once the change is released or merged as the user scoped.
+IF shipping, load `../skill-creation/references/platform-mechanics.md` and return the validation, versioning, changelog, and cache route. Completion: the run status is `shipped` only once the change is released or merged as the user scoped.
 
 ## Run Summary
 

@@ -1,6 +1,6 @@
 {
   "name": "skill-authoring",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Skill authoring for any repository: design and write skills, review them with independent agents, prove their behavior with fresh agent runs, and audit which skills to create, update, merge, or skip.",
   "author": {
     "name": "Shravan Sunder"

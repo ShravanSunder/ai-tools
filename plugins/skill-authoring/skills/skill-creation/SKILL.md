@@ -54,7 +54,7 @@ Placement answers one question: who reads this, and when? The answer picks the c
 | `MUST dispatch` procedure | a helper agent | on reaching the call |
 | `IF ..., dispatch` procedure | a helper agent | when the predicate holds |
 
-Review checks and research are steps the current agent loads and performs. Dispatch is only for a prescribed procedure: a command, watch, or mechanical transform with an observed result. A judgment check is never a dispatched procedure, even when it could be described as independent.
+Review checks and research are steps the current agent loads and performs. Dispatch is only for a prescribed procedure: a command, watch, or mechanical transform with an observed result. A judgment check is never a dispatched procedure, even when it could be described as independent. Independent review is not dispatch: a review skill may start reviewer agents with no authoring history to walk its checks, and its lead verifies their findings.
 
 ### Call Grammar
 
@@ -85,7 +85,7 @@ Two different reasons move material out of `SKILL.md`.
 
 Moving all-run procedure behind `MUST load` does not move the obligation. The obligation, order, decision, required return, invariant, and completion stay visible in `SKILL.md`; the reference owns the detail.
 
-Long examples, provider mechanics, branch-local rubrics, and exceptional procedure always move out. Four things never do: the mental model, the all-run spine, rules every run needs at the decision they govern, and the completion boundary.
+Long examples, provider mechanics, branch-local rubrics, and exceptional procedure always move out; step 5 states the one exception. Four things never do: the mental model, the all-run spine, rules every run needs at the decision they govern, and the completion boundary.
 
 ## Leading Words
 
@@ -125,8 +125,6 @@ Include every applicable element below. Choose headings and a format that fit th
 - **Dispatch, for a prescribed procedure:** fill the procedure form in the Call Grammar above.
 - **Overall completion boundary:** name the proof, unresolved conditions, or blockers that prevent a done claim.
 
-Reference loads and dispatched procedures use the Call Grammar above; placement follows Progressive Disclosure above.
-
 ## Workflow
 
 Steps 1–6 produce the skill spec: the proposal a reviewer can judge before any skill file changes. Step 7 writes the files inside the accepted spec. Proof and independent implementation review come after this skill: `skill-pressure-testing` proves behavior and `skill-review` reviews the changed files.
@@ -139,7 +137,7 @@ Classify the run as `create` or `update`. IF the request is to judge an existing
 
 An invitation like "just quickly fix it" that names neither a success definition nor an authoring basis is not a commission for an `update` run.
 
-Completion: classification, owner, reusable behavior, baseline, success definition, and the surface allocation — which of the four surfaces carries each part of the change — are named.
+Completion: classification, owner, reusable behavior, baseline (the current skill files and behavior the change starts from, or `none`), success definition, and the surface allocation — which of the four surfaces carries each part of the change — are named.
 
 ### 2. Choose the authoring basis and proof posture
 
@@ -155,10 +153,10 @@ Then classify the change, and classify why you are making it.
 
 Every classification is a claim the next reader can check, and this session makes the call about its own work: `mechanical` names the surfaces the change touches and shows none is in the behavior-changing row; `behavior-changing` names which listed surface the diff alters; `scoped` names its one home and shows each excluded surface is untouched. Edits to `SKILL.md` prose, a reference's rules, or the description are behavior-changing whatever their size — small is not a surface.
 
-Behavior-changing work is either `observed failure` or `user-directed intent`. The basis picks the done bar the change must later meet.
+Behavior-changing work is either `observed failure` or `user-directed intent`. The basis picks the done bar the change must later meet; `skill-pressure-testing`'s Done Bars define each bar. IF the change is behavior-changing, load `../skill-pressure-testing/references/proof-and-claims.md` and return the proof shape for the skill type; for `observed failure` only, attempt faithful reproduction there and also return the reproduction result, representative-hypothesis boundary, and available next decisions.
 
-- **`user-directed intent`** may draft from an approved success definition without RED. Its done bar is `new-from-intent`: its checks pass and fresh runs on realistic prompts show the behavior.
-- **`observed failure`** attempts faithful reproduction before any causal fix is claimed. IF the authoring basis is `observed failure`, load `../skill-pressure-testing/references/proof-and-claims.md` to attempt faithful reproduction and return the reproduction result, representative-hypothesis boundary, and available next decisions. Reproduced means a targeted RED, and the done bar is `fix-for-recorded-failure`: the failure shows in a test before the fix and three fresh runs pass after it. Any other result means showing the gap and asking the user to supply evidence and retry, approve a representative hypothesis, author from the success definition with a named proof gap, or defer.
+- **`user-directed intent`** may draft from an approved success definition without RED. Its done bar is `new-from-intent`.
+- **`observed failure`** attempts faithful reproduction before any causal fix is claimed. Reproduced means a targeted RED, and the done bar is `fix-for-recorded-failure`. Any other result means showing the gap and asking the user to supply evidence and retry, approve a representative hypothesis, author from the success definition with a named proof gap, or defer.
 
 Never manufacture RED, and never let a passing control automatically forbid authoring. "I already know the wording problem" is not a skip.
 
@@ -206,15 +204,15 @@ Completion: the mental model is stated before details or exceptions; one all-run
 
 ### 5. Place the depth
 
-Keep all-run obligations, decisions, invariants, required returns, and completion in the body while allowing coherent detailed procedure to have its own owner. MUST load `references/reference-design.md` and return the placement decision plus the ordinary caller/callee contract. Depth must teach: a reference owning a promised stage carries what to inspect, what good and bad look like, and when to stop — written from the step-2 sourcing records or a named source; a reference that only pins output shape (schemas, label sets, packet forms) is ceremony, justified by a named consumer and never a stage's owner. IF several consumers need one stable output shape or a tool validates the structure, load `references/shared-shape-design.md` and return the output or tool shape owner and its consumers. Completion: nothing sits in two homes, every reference exists because a named call site asked for it, every promised stage names its teaching owner — an inline body section or a teaching reference — and advanced shape guidance remains discoverable.
+Keep all-run obligations, decisions, invariants, required returns, and completion in the body while allowing coherent detailed procedure to have its own owner. MUST load `references/reference-design.md` and return the placement decision plus the ordinary caller/callee contract. A draft shown in the conversation still shows each file it would create under its own path: provider mechanics and long examples that Progressive Disclosure moves out appear as their own `references/<name>.md`, called with the load mode the placement decision chose — `IF ..., load` for branch-only detail such as alternative providers, `MUST load` for an all-run module. Showing the draft in chat is not a request to keep that depth inline; only an explicit request for one file keeps it in `SKILL.md`. Asking for the `SKILL.md` draft is not a one-file request. Depth must teach: a reference owning a promised stage carries what to inspect, what good and bad look like, and when to stop — written from the step-2 sourcing records or a named source; a reference that only pins output shape (schemas, label sets, packet forms) is ceremony, justified by a named consumer and never a stage's owner. IF several consumers need one stable output shape or a tool validates the structure, load `references/shared-shape-design.md` and return the output or tool shape owner and its consumers. Completion: nothing sits in two homes, every reference exists because a named call site asked for it, every promised stage names its teaching owner — an inline body section or a teaching reference — and advanced shape guidance remains discoverable.
 
 ### 6. Write the skill spec and get it reviewed
 
-MUST load `references/skill-spec.md` and return the skill spec, in the conversation or as a doc as that reference decides. IF the change is behavior-changing, before any skill file is edited and unless the user explicitly says no review is needed, use `skill-review` at its spec stage and return its implementation decision. Accepted findings inside the settled design return to the step that owns them; a finding that changes design meaning, scope, or a user decision goes to the user first. Completion: the spec is written, and its review decision is `accepted-to-implement`, explicitly skipped by the user, or not applicable because the change is mechanical.
+MUST load `references/skill-spec.md` and return the skill spec, in the conversation or as a doc as that reference decides. IF the change is behavior-changing, before any skill file is edited and unless the user explicitly says no review is needed, use `skill-review` at its spec stage and return its implementation decision. A request explicitly skips review only when it names the spec review and declines it ("skip the spec review"). Wanting speed, "just implement it", or "no extra review ceremony unless the skill requires it" is not a skip: this skill requires the review, so say so and run it. Accepted findings inside the settled design return to the step that owns them; a finding that changes design meaning, scope, contract, or a user decision goes to the user first. Completion: the spec is written, and its review decision is `accepted-to-implement`, explicitly skipped by the user, or not applicable because the change is mechanical.
 
 ### 7. Implement
 
-IF any surface on the sensitive-surface list in `references/security-gate.md` is in scope, load `references/security-gate.md` before outlining or writing the surface and return its allowed, disallowed, blocked, or deferred decision; a `disallowed` or `blocked` decision stops the write. Then edit the skill surface inside the accepted boundary, and update the spec's run status to `implemented`. Completion: compare the implemented diff against the accepted spec boundary; name a deviation when one exists, and name the proof and implementation review still owed.
+IF any surface on the sensitive-surface list in `references/security-gate.md` is in scope, load `references/security-gate.md` before outlining or writing the surface and return its allowed, disallowed, blocked, or deferred decision; a `disallowed` or `blocked` decision stops the write. Then edit the skill surface inside the accepted boundary, and update the spec's run status to `implemented`. Completion: compare the implemented diff against the accepted spec boundary; name a deviation when one exists, and name the proof and implementation review still owed. Return them with the step-2 proof posture and, when the security gate ran, its decision.
 
 ## Completion Blockers
 

@@ -7,10 +7,10 @@ Expected inputs: the reviewed skill set (the folder that holds the skills, such 
 ## Run It
 
 ```bash
-pnpm dlx file:<runner-dir> lint --skill-set <skill-set-dir> [--forbid <word>]...
+pnpm --config.dlx-cache-max-age=0 dlx file:<runner-dir> lint --skill-set <skill-set-dir> [--forbid <word>]...
 ```
 
-`<runner-dir>` is the `packages/skill-eval-runner` folder of the ai-tools checkout; ask the user for that path once if you do not know it. Run it only through `pnpm dlx`; never install the runner, Deno, or anything else. Exit 0 means no findings, 1 means findings, 2 means the input or environment was invalid.
+`<runner-dir>` is the `packages/skill-eval-runner` folder of the ai-tools checkout; ask the user for that path once if you do not know it. Run it only through `pnpm dlx` with that cache flag, so a local runner folder is never served from a stale copy; never install the runner, Deno, or anything else. Exit 0 means no findings, 1 means findings, 2 means the input or environment was invalid.
 
 ## Code Rules
 

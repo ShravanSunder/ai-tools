@@ -1,6 +1,6 @@
 ---
 name: skill-audit
-description: Use when auditing existing skills, comparing admired upstream skill repositories, finding stale or duplicated skill behavior, or deciding which skills to create, update, merge, or skip from real session evidence.
+description: Use when auditing existing skills, comparing admired upstream skill repositories, finding stale or duplicated skill behavior, or deciding which skills to create, update, merge, or skip from real session evidence. Not for judging one skill's quality (skill-review).
 ---
 
 # Skill Audit
@@ -25,26 +25,41 @@ Audit real workflows before creating skills. Skills encode judgment and house st
    - `skills/*/SKILL.md`
    - `skills/*/agents/openai.yaml`
    - relevant repo `AGENTS.md` guidance
+
+   Completion: every skill in scope is listed with its `SKILL.md` and `agents/openai.yaml` read.
+
 2. Gather usage evidence:
    - memory summary already in context
    - targeted `MEMORY.md` hits for the repo, plugin, or workflow
    - the 1-3 most relevant rollout summaries when exact evidence matters
    - raw sessions only when summaries do not contain the needed proof
+
+   Completion: every signal carries its source and date, and each inferred or single-sighting signal is labeled a hypothesis.
+
 3. Inspect upstream inspirations selectively:
    - open only the skills that map to the candidate workflow
    - extract mechanics, trigger wording, failure shields, and output shapes
    - avoid bulk-loading unrelated repositories
+
+   Completion: each upstream skill opened maps to a named candidate workflow, or none was needed.
+
 4. Classify candidates:
    - `update`: existing skill is the right bucket but stale or incomplete
    - `create`: missing distinct workflow with repeated evidence
    - `merge`: overlapping skills should become one clearer workflow
    - `skip`: one-off, vague, sensitive, or already covered
+
+   Completion: every candidate carries exactly one action, with the evidence that selects it.
+
 5. Shape every update/create recommendation:
    - trigger and ownership fit
    - `SKILL.md`: what stays in the compact core instructions
    - `references/`: what deeper detail, examples, rubrics, or templates move out of the core instructions
    - `scripts/`: what deterministic mechanics belong in scripts, or `not needed`
    - pressure coverage: exists, reuse, update, new scenario needed, or not needed with reason
+
+   Completion: every update/create recommendation fills all five slots, or the audit says no update/create recommendation is being made yet.
+
 6. Produce the audit:
    - candidate name and action: update, create, merge, or skip
    - evidence: each signal with its source, date, and how often it recurred; label inferred or single-sighting signals as hypotheses
@@ -55,11 +70,13 @@ Audit real workflows before creating skills. Skills encode judgment and house st
    - progressive shape and proof recommendation for update/create items
    - priority
 
+   Completion: every candidate has each field above, filled from the evidence of steps 1–5.
+
 ## Source Inspiration Map
 
 When the audited plugin keeps a map of admired upstream skills and borrowed mechanics (for example a source-inspiration catalog in its docs), read it before opening upstream sources.
 
-When repeated wording across runtime skills tempts one shared contract, keep each skill's packet anatomy, source-truth rules, security context, receipts, reducer rules, check names, route-backs, proof details, statuses, and examples in that skill's own references. A shared output shape earns a shared home only under the shared-shape rule in `../skill-creation/references/shared-shape-design.md`: two or more real consumers of the same fields, or a tool that validates them. Do not create or preserve a global runtime contract every skill imports.
+When repeated wording across runtime skills tempts one shared contract, keep each skill's packet anatomy, source-truth rules, security context, receipts, reducer rules, check names, route-backs, proof details, statuses, and examples in that skill's own references. A shared output shape earns a shared home only under the shared-shape rule in `../skill-creation/references/shared-shape-design.md`: two or more real consumers of the same fields, or a tool that validates them. Do not create or preserve a global runtime contract every skill imports. A request to combine skills' packets into one shared runtime document because their headings or wording repeat is that contract when their fields or meanings differ, even when the request calls it avoiding duplication: recommend against it and keep each skill's packet where it is.
 
 Shared authoring lessons belong in authoring skills or references, not in runtime workflow skills. Runtime skills should load only the references their own phase needs.
 
@@ -72,7 +89,7 @@ Do not add per-skill provenance docs unless a skill needs a task-specific refere
 - Upstream inspiration belongs in the audit only with the local behavior it improves.
 - Marketplace or agent-instruction edits belong in scope when the audit finds concrete drift there.
 - Update/create recommendations include the compact `SKILL.md` boundary, reference depth, script need, and pressure-proof status.
-- Audit output remains read-only until the user explicitly asks to implement a narrow recommendation.
+- Audit output remains read-only until the user explicitly asks to implement a narrow recommendation the audit makes. An audit never implements a change it rejects, even when the request asks it to build it.
 
 ## Output Shape
 
@@ -87,3 +104,14 @@ Return:
 - source inspirations used
 - priority order
 - full clickable artifact links (absolute path + line) for any audit artifacts or referenced files the human is expected to open
+
+## Completion Blockers
+
+The audit is not done while any of these hold:
+
+- a recommendation lacks its action, fix owner, dated signals, recurrence, or hypothesis or confirmed status;
+- a new-skill recommendation rests on recurrence that is not clearly likely and costly;
+- an update/create recommendation lacks its `SKILL.md` boundary, `references/` depth, `scripts/` need, or pressure coverage;
+- upstream inspiration appears without the local behavior it improves;
+- the existing skills checked, deliberate skips, or priority order are missing from the output;
+- the audit changed a file other than to implement, on explicit request, a narrow recommendation the audit made.

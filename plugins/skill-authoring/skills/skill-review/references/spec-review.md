@@ -65,6 +65,6 @@ proof or retest implication:
 implementation decision: accepted-to-implement | revise-first | restart | skipped-by-user
 ```
 
-The first required revision is the smallest useful spec change. When the revision changes wording, output shape, omitted slots, conditional behavior, invocation, reference retrieval, or completion criteria, name the matching failure form from the wording table in `../../skill-creation/SKILL.md`.
+The first required revision is the smallest useful spec change. IF the revision changes wording, output shape, omitted slots, conditional behavior, invocation, reference retrieval, or completion criteria, load `../../skill-creation/SKILL.md` and return the matching failure form from its wording table.
 
 Complete when: the verdict carries one of the allowed labels, every blocker override is checked, and the implementation decision is explicit.
