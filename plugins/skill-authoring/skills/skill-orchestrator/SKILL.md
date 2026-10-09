@@ -38,7 +38,7 @@ Use `skill-creation` step 7 inside the accepted boundary and return the diff, an
 
 ### 4. Prove
 
-Load `../skill-creation/references/proof-and-claims.md`, run the proof the spec plans, and return the strongest supported claim and its evidence. Completion: proof ran against the current files, or the user accepted a named proof gap.
+MUST load `../skill-creation/references/proof-and-claims.md`, run the proof the spec plans, and return the strongest supported claim and its evidence. Completion: proof ran against the current files, or the user accepted a named proof gap.
 
 ### 5. Assess
 
