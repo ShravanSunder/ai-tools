@@ -1,8 +1,8 @@
 # Unconverted pressure scenarios
 
-Recorded 2026-10-06 when the regex-form pressure runner and its scenarios were deleted. These 317 scenarios exist only in git history (`git show eddbf07a:tests/skills/<path>`). None of them runs, and none may be reported as passing. Converting one means rewriting it in the new form beside its skill (`skill-pressure-testing` owns how).
+Recorded 2026-10-06 when the regex-form pressure runner and its scenarios were deleted. These 317 scenarios exist only in git history (`git show eddbf07a:tests/skills/<path>`). None of them runs, and none may be reported as passing. Converting one means rewriting it in the new form in its skill's scenario directory under `tests/skills/pressure-scenarios/` (`skill-pressure-testing` owns how).
 
-Converted instead: the 16 `skills-creation` and `skill-audit` scenarios (now beside the `skill-authoring` skills) and the proving set `manage-agents-custom-agent-boundary`, `spec-design-define-entities-before-obligations`, `implementation-review-verify-candidate-finding`, `discuss-pathfinding-explain-meaningful-choice`.
+Converted instead: the 16 `skills-creation` and `skill-audit` scenarios (now under `tests/skills/pressure-scenarios/skill-authoring/`) and the proving set `manage-agents-custom-agent-boundary`, `spec-design-define-entities-before-obligations`, `implementation-review-verify-candidate-finding`, `discuss-pathfinding-explain-meaningful-choice`.
 
 | Plugin | Skill | Status | Scenarios |
 | --- | --- | --- | --- |
@@ -45,7 +45,7 @@ Converted instead: the 16 `skills-creation` and `skill-audit` scenarios (now bes
 
 ## Converted scenarios: old id → new id
 
-| Old (regex form, `shravan-dev-workflow`) | New (beside its `skill-authoring` skill) |
+| Old (regex form, `shravan-dev-workflow`) | New (under `tests/skills/pressure-scenarios/skill-authoring/`) |
 | --- | --- |
 | `skills-creation-draft-artifact` | `skill-creation-draft-artifact` |
 | `skills-creation-humanizer-skips-description` | `skill-creation-positive-stance` |

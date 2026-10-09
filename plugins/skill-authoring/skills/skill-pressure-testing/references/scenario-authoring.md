@@ -13,9 +13,11 @@ Grade what the agent did before what it said. The code-step catalog reads record
 ## Where It Lives
 
 ```text
-<skill dir>/scenarios/<scenario-id>.scenario.md   one scenario
-<skill dir>/scenarios/cards.yaml                  the skill's Question cards and their calibrations, shared by its scenarios
+<scenario dir>/<scenario-id>.scenario.md   one scenario
+<scenario dir>/cards.yaml                  the skill's Question cards and their calibrations, shared by its scenarios
 ```
+
+`<scenario dir>` is `tests/skills/pressure-scenarios/<owner>/<skill>/` in the skill's repository, where `<owner>` is the directory holding the skill set (the plugin for `plugins/<plugin>/skills/<skill>`). `--scenarios <dir>` points the runner at another directory.
 
 ## Write The Prompt
 
@@ -100,4 +102,4 @@ Bad:
 
 Run `validate` (see `runner-usage.md`) before any run. It rejects banned words, `expect_*` fields from the old format, unknown cards or steps, trees that loop or cannot finish, credential-looking evidence paths, `allowWrites: true`, and judge tools, and it names the scenario and the rule broken.
 
-Complete when: the scenario file and any new cards exist beside the skill, every check's criterion is one narrow question with its evidence named, and `validate` exits 0.
+Complete when: the scenario file and any new cards exist in the skill's scenario directory, every check's criterion is one narrow question with its evidence named, and `validate` exits 0.

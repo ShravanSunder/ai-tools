@@ -11,4 +11,5 @@
 - No new references, checks, scenarios, or criteria. Manifests: all three plugin manifests and the Claude and Cursor marketplace entries.
 - Validation: `claude plugin validate .` passed; runner `lint` on the skill set found 0 findings; runner `validate` loads all 16 scenarios of the four skills; `tests/skills` 24 passed.
 - Behavior proof: pending; the recorded-failure done bar (fails at the base revision, then three fresh passing Runs at head) and regression Runs are separate. `skill-pressure-testing` has no scenarios, so its own done bar has nothing to run yet.
+- Scenario location (2026-10-09, owner decision): the 16 `skill-authoring` scenarios, with their cards and fixtures, move unchanged to `tests/skills/pressure-scenarios/skill-authoring/<skill>/`, the repository's tests standard; `skill-pressure-testing`, its two references, and the plugin README name that location and the runner's `--scenarios` override.
 - Codex and Claude cache refresh: not run.

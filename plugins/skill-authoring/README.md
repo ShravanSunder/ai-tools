@@ -14,4 +14,4 @@ The plugin stands alone. It names no skill from another plugin; install it besid
 
 ## Evals
 
-Pressure scenarios live beside each skill in `scenarios/`. They run through the separate `skill-eval-runner` package (`packages/skill-eval-runner` in this repository), started with `pnpm --config.dlx-cache-max-age=0 dlx file:<runner-dir>`; nothing is installed. `skill-pressure-testing` owns how to write and run them.
+Pressure scenarios live under `tests/skills/pressure-scenarios/<plugin>/<skill>/` (another repository can name its own directory with `--scenarios`). They run through the separate `skill-eval-runner` package (`packages/skill-eval-runner` in this repository), started with `pnpm --config.dlx-cache-max-age=0 dlx file:<runner-dir>`; nothing is installed. `skill-pressure-testing` owns how to write and run them.

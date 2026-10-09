@@ -19,7 +19,7 @@ flowchart LR
   owner -- "requests a skill change;<br/>reads done-bar results" --> SA
   author -- "invokes the five skills" --> SA
   wfu -- "no link: skill work<br/>starts in skill-authoring" --x SA
-  other -- "skills + scenarios<br/>beside them" --> SA
+  other -- "skills + scenarios<br/>in its scenario directories" --> SA
   SA -- "organic prompt only;<br/>criteria hidden" --> subj
   SA -- "one narrow question<br/>+ retrieved evidence" --> jev
   SA -- "evidence + criterion only;<br/>never Jev's answer" --> judge
@@ -36,7 +36,7 @@ The entity table is normative. Program Design binds these to files, schemas, and
 | E1 | **Skill package** | one directory holding a `SKILL.md`, identified by its repository and its path in that repository; the same path at another revision is the same package at a different revision | belongs to one repository; has 0..n Scenarios (E4); may belong to one plugin (E14) | its references and scripts live inside its own directory | (none) | U1, U3 |
 | E2 | **Skill change** | one owner-authorized change to one or more Skill packages; a later, separately authorized request is a new Skill change even when it touches the same packages | covers 1..n E1; has exactly 1 Skill spec (E3); has 0..n Review findings (E11); has 1 Done-bar result (E10) | its kind is fixed when authorized: `new-from-intent` or `fix-for-recorded-failure` | proposed → implemented → reviewed → shipped; or abandoned from any state before shipped | U9, U13, U15 |
 | E3 | **Skill spec** | one per Skill change: its promise, success definition, authoring basis, which surface (trigger, main path, depth, proof) carries each part, decisions, and runs in order | belongs to exactly one E2 | each run in it carries exactly one of proposed, implemented, reviewed, shipped; a decision once recorded is superseded by a later entry, never rewritten; it is a document whenever the change spans more than one run, carries decisions a later run must honor, or must outlive the session, and otherwise stays in the conversation | (follows its runs) | U4, U10, U13 |
-| E4 | **Scenario** | one pressure scenario for exactly one Skill package, identified by that package plus a scenario id stable across edits | belongs to 1 E1; has 1..n Checks (E5); has 0..n Runs (E6) | stored beside its Skill package; its checklist is never part of what the subject sees | draft → active → retired | U6, U11, U25 |
+| E4 | **Scenario** | one pressure scenario for exactly one Skill package, identified by that package plus a scenario id stable across edits | belongs to 1 E1; has 1..n Checks (E5); has 0..n Runs (E6) | stored in the repository's scenario directory for its Skill package (default `tests/skills/pressure-scenarios/<owner>/<skill>/`); its checklist is never part of what the subject sees | draft → active → retired | U6, U11, U25 |
 | E5 | **Check** | one checklist item in one Scenario, identified by that scenario plus a check id | belongs to 1 E4; is decided by exactly 1 decision tree whose Jev nodes use Question cards (E15) | its decision tree is made of code steps and Jev questions whose branches are named bands (yes / uncertain / no, or high / mid / low); every path ends in pass, fail, inconclusive, or a judge leaf; it names the evidence each node needs | (none) | U6, U8, U26 |
 | E6 | **Run** | one execution of one Scenario against one Skill package revision by one subject configuration; two Runs are fresh when neither shares conversation history with the other | belongs to 1 E4; produces 0..1 Observation (E7) | the subject is a Luna agent | started → observed, or started → execution-failed | U7, U29, U30 |
 | E7 | **Observation** | the recorded behaviour of exactly one Run | belongs to 1 E6; read by every Check result (E8) of that Run | immutable once recorded; holds what the subject did (tool calls, files read, artifacts written) apart from what it said | (none) | U23, U30 |
@@ -119,7 +119,7 @@ Each requirement names the entities it is written over and the user rows it serv
 
 | ID | Requirement | Entities | Basis |
 |---|---|---|---|
-| R21 | A Scenario MUST be stored beside its Skill package and selected by its scenario id. | E4 | U11 |
+| R21 | A Scenario MUST be stored in the repository's scenario directory for its skill (default `tests/skills/pressure-scenarios/<owner>/<skill>/`) and selected by its scenario id. | E4 | U11 |
 | R22 | What the subject sees MUST read as an organic user request: it never contains the checklist, and never the words eval, test, judge, experiment, rubric, score, compare, benchmark, candidate, or arena, nor a question about which skills or files it used. | E4, E6 | U25 |
 | R23 | Every Check MUST be decided by a decision tree of code steps and Jev questions (Question cards), whose every path ends in pass, fail, inconclusive, or a judge leaf, and whose every node names the evidence it needs. | E5, E15 | U6, owner 10-06 |
 | R24 | A Check MUST NOT pass or fail by matching a text pattern against what the subject wrote. A `code` Check inspects recorded actions (tool calls, files read, artifacts written). | E5, E7 | U6, U23 |
@@ -165,7 +165,7 @@ Each requirement names the entities it is written over and the user rows it serv
 | ID | Requirement | Entities | Basis |
 |---|---|---|---|
 | R45 | The runner MUST accept only the new Scenario form; the old form (self-reported fields and `expect_*` patterns) no longer runs. | E4 | U6, U12 |
-| R46 | The 16 Scenarios of `skills-creation` (14) and `skill-audit` (2) MUST exist in the new form beside their packages in the plugin, plus a proving set from `shravan-dev-workflow` Skill packages. | E4 | owner 10-04 |
+| R46 | The 16 Scenarios of `skills-creation` (14) and `skill-audit` (2) MUST exist in the new form in their packages' scenario directories, plus a proving set from `shravan-dev-workflow` Skill packages. | E4 | owner 10-04 |
 | R47 | The remaining old-form Scenarios MUST be marked as not running, and MUST NOT be reported as passing. | E4, E9 | owner 10-04 |
 | R48 | The plugin's own five skills MUST meet their done bar (R38) before the plugin is reported as shipped. | E10 | acceptable evidence |
 

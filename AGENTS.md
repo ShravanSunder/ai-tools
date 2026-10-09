@@ -70,7 +70,7 @@ When doing skill work in this repo:
 2. If the target is not named, use `skill-audit` for broad portfolio classification or ask for a named target.
 3. Use `skill-orchestrator` to carry a named create or update through spec, review, implementation, proof, and release; `skill-creation` alone for design and writing.
 4. Keep `SKILL.md` compact and progressive. Put depth in `references/` and deterministic mechanics in `scripts/`.
-5. Pressure scenarios live beside each skill in `scenarios/` and run through `packages/skill-eval-runner` with `pnpm --config.dlx-cache-max-age=0 dlx file:"$PWD/packages/skill-eval-runner"`; `skill-pressure-testing` owns how.
+5. Pressure scenarios live under `tests/skills/pressure-scenarios/<plugin>/<skill>/` and run through `packages/skill-eval-runner` with `pnpm --config.dlx-cache-max-age=0 dlx file:"$PWD/packages/skill-eval-runner"`; `skill-pressure-testing` owns how.
 6. For user-visible plugin behavior changes, update `docs/changelog/`, bump plugin version metadata, and record refresh / reinstall status.
 7. After implementation, run fitting proof and assess the current diff and evidence against the accepted need, spec, ownership, complexity, and integration before independent review. Use `shravan-dev-workflow:implementation-pr-wrapup` for push / PR / checks / review-thread / merge-readiness proof. Refresh installed Codex/Claude caches only as an explicit post-push or release proof step; it is a home-level mutation and not a substitute for PR readiness.
 
@@ -199,7 +199,7 @@ Skills encode judgment, house style, and repeatable failure prevention. Prefer i
 - Cross-reference other skills by skill name, not fragile installed-cache paths.
 - Prove skill changes against their done bar. A fix for a recorded failure first makes that failure show up in a scenario, then passes three fresh runs. A new skill from user intent may be drafted from its success definition, then shown by passing checks and fresh runs on realistic prompts.
 - Capture the rationalizations the agent used to go wrong, especially "I already know this", "this is obvious", "I'll verify later", and "the user probably meant..."; turn those into explicit red flags or gates in the skill.
-- For skill behavior changes, add or update the pressure scenarios beside the skill (`<skill>/scenarios/`) and run them with `pnpm --config.dlx-cache-max-age=0 dlx file:"$PWD/packages/skill-eval-runner" run` before rollout.
+- For skill behavior changes, add or update the pressure scenarios under `tests/skills/pressure-scenarios/<plugin>/<skill>/` and run them with `pnpm --config.dlx-cache-max-age=0 dlx file:"$PWD/packages/skill-eval-runner" run` before rollout.
 - Validate each changed skill independently before broad rollout. For workflow skills, include at least one realistic trigger evaluation or copy-paste pressure prompt that proves when the skill should and should not load.
 - Keep artifact ownership explicit: spec, plan, research, and debug skills create their lane artifacts for clear substantial work unless the user asks for chat-only/no-files; `docs-maintain` owns cleanup, archival, promotion, and source-of-truth reconciliation after artifacts exist.
 - Keep parent/subagent ownership explicit: subagents produce bounded evidence or candidate findings; the parent agent verifies, reduces, and owns the final claim.

@@ -32,7 +32,7 @@ MUST load `references/proof-and-claims.md` and return the claim the purpose targ
 
 ### 3. Get the scenarios
 
-Use the active scenarios beside the skill when they exercise the behavior. IF no scenario exercises the behavior, load `references/scenario-authoring.md` and return the new scenario, its checks, and the `validate` result. MUST load `references/runner-usage.md` and return the `validate` result for every scenario you will run. Completion: every scenario you will run validates, and each one exercises the changed text.
+Use the skill's active scenarios in its scenario directory (default `tests/skills/pressure-scenarios/<owner>/<skill>/`) when they exercise the behavior. IF no scenario exercises the behavior, load `references/scenario-authoring.md` and return the new scenario, its checks, and the `validate` result. MUST load `references/runner-usage.md` and return the `validate` result for every scenario you will run. Completion: every scenario you will run validates, and each one exercises the changed text.
 
 ### 4. Run
 

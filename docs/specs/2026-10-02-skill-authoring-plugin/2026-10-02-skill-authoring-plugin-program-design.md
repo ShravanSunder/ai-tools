@@ -6,7 +6,7 @@ How the system satisfies the [Specification](2026-10-02-skill-authoring-plugin.m
 
 Two new homes replace one old one:
 
-- the `skill-authoring` **plugin**: five skills, cut out of today's `skills-creation` and `skill-audit` files, plus their scenarios;
+- the `skill-authoring` **plugin**: five skills, cut out of today's `skills-creation` and `skill-audit` files; their scenarios live under `tests/skills/pressure-scenarios/skill-authoring/`;
 - the `skill-eval-runner` **package**: everything that runs and grades scenarios.
 
 `shravan-dev-workflow` loses both skills and every check that treats a skill as special.
@@ -19,7 +19,6 @@ flowchart TB
     REVIEW["skill-review<br/>owns: review checks, Review findings"]
     PRESS["skill-pressure-testing<br/>owns: proof method, scenario method"]
     AUDIT["skill-audit (moved)<br/>owns: Audit recommendations"]
-    SCEN[("scenarios/ beside each skill<br/>Scenario + Check trees + Question cards")]
   end
   subgraph RUNNER["packages/skill-eval-runner (new package: Deno, run with pnpm dlx)"]
     CLI["eval CLI<br/>owns: batch, exit status"]
@@ -33,6 +32,7 @@ flowchart TB
     BAR["done-bar assessor<br/>owns: Done-bar result"]
     REP["batch reporter<br/>owns: report files"]
   end
+  SCEN[("tests/skills/pressure-scenarios/owner/skill/<br/>Scenario + Check trees + Question cards")]
   SDW["plugins/shravan-dev-workflow (modified)<br/>two skills removed, no skill-specific handling"]
   ORCH --> CREATE & REVIEW & PRESS
   REVIEW -- "loads craft references by path" --> CREATE
@@ -51,7 +51,7 @@ flowchart TB
 - The five skills are mostly today's files in new homes. The genuinely new parts are the orchestration skill's own main path, several reviewer agents plus Jev lint in review, the scenario method, and the runner.
 - Grading moves from regexes and one all-criteria judge to one decision tree per Check: code steps over recorded actions, then Jev questions, then a Luna-high judge only at a leaf the tree names.
 - The subject still runs through ACPX, now as a library inside the runner's own Deno process, in an isolated agent home that sees only the snapshot's skills.
-- The old pressure runner, its scenarios, and its schemas are deleted (hard cutover, `R45`). `tests/skills` keeps only its static skill-contract tests.
+- The old pressure runner, its scenarios, and its schemas are deleted (hard cutover, `R45`). `tests/skills` keeps only its static skill-contract tests, plus the new-form scenarios under `pressure-scenarios/`.
 
 ## Where today's files go
 
@@ -86,7 +86,7 @@ Every file in `skills-creation` and `skill-audit` was read in full on 2026-10-06
 | Where the craft lives once review is separate | in `skill-creation`, loaded by review by path | a plugin-wide shared folder. That matches `shravan-dev-workflow`'s convention but leaves the craft with no owning skill | a third skill needs the craft |
 | How review becomes multi-agent | three reviewer agents, each walking a family of checks in its own session, plus Jev lint; one review lead verifies each candidate at its anchor and reduces | one reviewer walking all checks (today's rule at `glossary.md:28`, `implementation-review.md:23`). The owner asked for several reviewers | review cost outweighs findings on small changes |
 | Where grading logic lives | in data: each Check's decision tree and Question cards are declared beside the Scenario; the runner only executes trees | per-scenario TypeScript evaluators. Every scenario would become code | trees need loops or arithmetic the code-step catalog cannot express |
-| What the subject sees | a snapshot of the repository at the chosen revision, minus every skill's `scenarios/` and every path matched by the repository's `.skill-eval-hide` (gitignore-style patterns naming evaluation material: eval specs, eval changelogs, the runner source); the skill set at that same revision exposed as `.agents/skills/`, used in place when it already lives there; and an isolated agent home with only a link to the user's login | the user's real Codex home. Measured: it loads the personal `AGENTS.md`, 19 installed plugins (one of them the old `skills-creation`) and user skills, about 31k input tokens before the prompt. Leaving evaluation docs in the snapshot: measured 2026-10-07, subjects read the fix spec and changelog that described their own checks, then passed. Hiding all of `docs/`: removes context subjects legitimately use, such as changelog conventions | a host has no file-based login; a criterion leaks through skill text itself (a skill-review finding, not a snapshot rule) |
+| What the subject sees | a snapshot of the repository at the chosen revision, minus the scenario directory in use, any `scenarios/` folder beside a skill, and every path matched by the repository's `.skill-eval-hide` (gitignore-style patterns naming evaluation material: eval specs, eval changelogs, the runner source); the skill set at that same revision exposed as `.agents/skills/`, used in place when it already lives there; and an isolated agent home with only a link to the user's login | the user's real Codex home. Measured: it loads the personal `AGENTS.md`, 19 installed plugins (one of them the old `skills-creation`) and user skills, about 31k input tokens before the prompt. Leaving evaluation docs in the snapshot: measured 2026-10-07, subjects read the fix spec and changelog that described their own checks, then passed. Hiding all of `docs/`: removes context subjects legitimately use, such as changelog conventions | a host has no file-based login; a criterion leaks through skill text itself (a skill-review finding, not a snapshot rule) |
 | Which Codex the adapter runs | the user's installed `codex` (`CODEX_PATH`), with `codex-acp@1.6.2` pinned | the adapter's bundled Codex. Measured: it rejects `gpt-6-luna` with a 400 while reporting the turn completed | the adapter pin moves |
 | How Deno starts under `pnpm dlx` | the package `bin` is a Node shim that runs Deno from the package's own `deno` npm dependency | a `#!/usr/bin/env deno` shebang, which needs a global install (`R50`) | `pnpm dlx` gains a runtime selector |
 | Jev before its tool exists | a `JevDecisionPort` with a no-engine adapter that always answers `unavailable`, which falls in the uncertain band (`R32`) | calling OpenRouter Jev directly. That builds the Jev tool here, against the owner's assignment | the Jev tool ships |
@@ -120,9 +120,9 @@ Probed with a throwaway script: Deno 2.9.6 from npm, `acpx@0.19.4` `acpx/runtime
 ```mermaid
 flowchart LR
   E1["E1 Skill package"] --> H1["any repo: skill directory (existing)"]
-  E4["E4 Scenario"] --> H4["skill dir /scenarios/*.scenario.md (new)"]
+  E4["E4 Scenario"] --> H4["tests/skills/pressure-scenarios/owner/skill/*.scenario.md (new)"]
   E5["E5 Check"] --> H4
-  E15["E15 Question card"] --> H15["skill dir /scenarios/cards.yaml (new)"]
+  E15["E15 Question card"] --> H15["tests/skills/pressure-scenarios/owner/skill/cards.yaml (new)"]
   E12["E12 Calibration"] --> H12["card calibration, keyed by engine (new)"]
   E6["E6 Run · E7 Observation · E8 Check result · E9 Run verdict · E10 Done-bar result"] --> HR["runner: report files in the batch dir (new)"]
   E2["E2 Skill change · E3 Skill spec"] --> HC["chat, or repo docs/wip/skills-authoring/date-name/ (existing convention)"]
@@ -142,10 +142,10 @@ flowchart LR
 | E1 Skill package | the repository that holds it | any repo; `plugins/skill-authoring/skills/<skill>/` for the plugin's own (new) | `runner/src/contracts/skill-ref.ts` (new) | `SkillRef {repoRoot, skillPath}` on CLI input | persisted (git) | Zod |
 | E2 Skill change | skill-orchestrator | `plugins/skill-authoring/skills/skill-orchestrator` (new) | the Skill spec's kind field | `kind: "new-from-intent" \| "fix-for-recorded-failure"` passed to `done-bar` | persisted (doc) or chat | Markdown |
 | E3 Skill spec | skill-creation (format); skill-orchestrator updates run status | chat, or `docs/wip/skills-authoring/<date-name>/spec.md` | `skill-creation/references/skill-spec.md` (new; from `spec-review.md:9–27`) | slots: targets and runs, problem and evidence, success, decisions, per-run surfaces, basis and proof plan, coordination, non-goals, run status `{run, state: proposed\|implemented\|reviewed\|shipped}`, review record | persisted or chat | Markdown |
-| E4 Scenario | scenario loader | `<skill dir>/scenarios/<scenario-id>.scenario.md` (new) | `runner/src/contracts/scenario.ts` (new) | `ScenarioFile` (below) | persisted | Zod |
+| E4 Scenario | scenario loader | `<scenario dir>/<scenario-id>.scenario.md`, where `<scenario dir>` defaults to `tests/skills/pressure-scenarios/<owner>/<skill>/` (`<owner>` is the directory holding the skill set, the plugin for `plugins/<plugin>/skills/<skill>`) and `--scenarios <dir>` overrides it (new) | `runner/src/contracts/scenario.ts` (new) | `ScenarioFile` (below) | persisted | Zod |
 | E5 Check | scenario loader (validity); QA evaluator (execution) | inside the Scenario file | `runner/src/contracts/check-tree.ts` (new) | `CheckTree` (below) | persisted | Zod discriminated union on `kind` |
-| E15 Question card | scenario loader | `<skill dir>/scenarios/cards.yaml` (new) | `runner/src/contracts/question-card.ts` (new) | `QuestionCard` (below) | persisted | Zod, Inspector field names |
-| E12 Calibration | QA evaluator (reads); authored offline | inline on the card in `<skill dir>/scenarios/cards.yaml`, keyed by engine (new) | the card schema in `runner/src/contracts/` | `calibration: {<engine>: {bands, labelledSet, measuredAt}}`; a Jev answer from an engine with no entry is uncertain | persisted | Zod |
+| E15 Question card | scenario loader | `<scenario dir>/cards.yaml` (new) | `runner/src/contracts/question-card.ts` (new) | `QuestionCard` (below) | persisted | Zod, Inspector field names |
+| E12 Calibration | QA evaluator (reads); authored offline | inline on the card in `<scenario dir>/cards.yaml`, keyed by engine (new) | the card schema in `runner/src/contracts/` | `calibration: {<engine>: {bands, labelledSet, measuredAt}}`; a Jev answer from an engine with no entry is uncertain | persisted | Zod |
 | E6 Run | subject runner | batch dir | `runner/src/contracts/run.ts` (new) | `RunOutcome` (below) | persisted (report) | Zod |
 | E7 Observation | subject runner | batch dir `runs/<run-id>/observation.json` | `runner/src/contracts/observation.ts` (new) | `Observation` (below) | persisted | Zod |
 | E8 Check result | QA evaluator | batch dir `runs/<run-id>/checks.json` | `runner/src/contracts/check-result.ts` (new) | `CheckResult` (below) | persisted | Zod |
@@ -162,13 +162,13 @@ flowchart LR
 ````markdown
 ---
 scenarioId: skill-creation-draft-artifact      # kebab-case, unique per skill
-skill: skill-creation                          # the skill directory the scenarios/ folder sits in
+skill: skill-creation                          # the name of the skill directory under test
 status: active                                 # draft | active | retired
 allowWrites: false                             # first pass accepts only false
 timeoutSeconds: 600                            # optional
 followUps: []                                  # optional scripted user turns, same session
 fixtures:                                      # optional: files the request points at, placed in the snapshot
-  - source: fixtures/example-spec.md           # relative to this scenarios/ folder
+  - source: fixtures/example-spec.md           # relative to this scenario directory
     target: docs/wip/skills-authoring/2026-08-02-example/spec.md   # repo-relative path in the snapshot
 ---
 
@@ -287,7 +287,7 @@ A step the Observation cannot decide, and a Jev node or judge leaf whose evidenc
 | Component | Owns (one truth) | Lives in | Interface | Consumers | Changes when |
 |---|---|---|---|---|---|
 | eval CLI | batch lifecycle and exit status | `runner/src/cli.ts` | `skill-eval-runner validate \| run \| lint \| done-bar` | the skills, any agent | CLI surface changes |
-| scenario loader | Scenario/Check/Card validity | `runner/src/scenarios/` | `loadScenarios(SkillRef, ids?) → {kind:"loaded", scenarios} \| {kind:"invalid", errors}` | CLI, QA evaluator | scenario format changes |
+| scenario loader | Scenario/Check/Card validity | `runner/src/scenarios/` | `resolveScenarioDirectory(SkillRef, override?) → dir` (default `tests/skills/pressure-scenarios/<owner>/<skill>/`, or `--scenarios`); `loadScenarios(SkillRef, dir, ids?) → {kind:"loaded", scenarios} \| {kind:"invalid", errors}` | CLI, QA evaluator | scenario format changes |
 | subject environment | the snapshot, the exposed skill set, the isolated agent home | `runner/src/environment/` | `prepareEnvironment(SkillRef, revision) → {kind:"ready", env} \| {kind:"failed", reason}` and `env.dispose()` | subject runner, judge-leaf agent | isolation mechanics change |
 | subject runner | Run and Observation | `runner/src/subjects/` | `runSubject(scenario, env, config) → RunOutcome` | CLI, done-bar assessor | ACPX or agent config changes |
 | QA evaluator | Check results and Run verdict | `runner/src/qa/` | `evaluateRun(scenario, outcome, ports) → {checks, verdict}` | CLI, done-bar assessor | tree semantics change |
@@ -310,7 +310,7 @@ A step the Observation cannot decide, and a Jev node or judge leaf whose evidenc
 
 ### How the subject environment is built (R30, R51)
 
-1. **Snapshot.** `working-tree` (default) copies every tracked and untracked-not-ignored file (`git ls-files -co --exclude-standard -z`) into a fresh temporary directory; a commit revision uses `git archive <rev> | tar -x`. Every skill's `scenarios/` folder is removed from the snapshot, and so is every path matched by the repository's `.skill-eval-hide` (read from the live repository so a base and its head hide the same material; unsupported pattern syntax is invalid input before any Run), so no subject can read a checklist or the documents that state one (`R25`). The skill set is exposed next (step 2), then the Scenario's fixtures are copied to their targets, so a fixture lands even under a hidden path. Finally the snapshot becomes a one-commit git repository (`git init`, then one unsigned, hook-free commit `snapshot` by the fixed author `snapshot <snapshot@localhost>`, with the user's git config off, in a cleared environment so git overrides in the runner's own environment cannot redirect it), so `git status`, `git log` and `HEAD` work as in an ordinary checkout. The repository under test is never written.
+1. **Snapshot.** `working-tree` (default) copies every tracked and untracked-not-ignored file (`git ls-files -co --exclude-standard -z`) into a fresh temporary directory; a commit revision uses `git archive <rev> | tar -x`. The scenario directory in use and any `scenarios/` folder beside a skill are removed from the snapshot, and so is every path matched by the repository's `.skill-eval-hide` (read from the live repository so a base and its head hide the same material; unsupported pattern syntax is invalid input before any Run), so no subject can read a checklist or the documents that state one (`R25`). The skill set is exposed next (step 2), then the Scenario's fixtures are copied to their targets, so a fixture lands even under a hidden path. Finally the snapshot becomes a one-commit git repository (`git init`, then one unsigned, hook-free commit `snapshot` by the fixed author `snapshot <snapshot@localhost>`, with the user's git config off, in a cleared environment so git overrides in the runner's own environment cannot redirect it), so `git status`, `git log` and `HEAD` work as in an ordinary checkout. The repository under test is never written.
 2. **Expose the skill set.** The skill under test's parent directory is its skill set (for plugins, `<plugin>/skills/`). The skill set is taken from the snapshot, so it is the run's revision, never the live working tree; a skill set outside the repository with a commit revision is invalid input. Every sibling directory holding a `SKILL.md` is copied, without its `scenarios/` folder, to `<snapshot>/.agents/skills/<name>/`; a `shared-references/` beside the skill set is copied to `<snapshot>/.agents/shared-references/`, so `../../shared-references/` paths still resolve. A skill set already at the repository's `.agents/skills/` is used in place. A different skill set whose name already exists there is `failed(skill-name-conflict)`.
 3. **Isolate the agent home.** Fresh `0700` directories for `CODEX_HOME` and `HOME`; the Codex home gets a unique per-Run name (`codex-home-<random>`), so the credential detector (see Trust boundary) never matches ordinary prose; `CODEX_HOME/auth.json` is a symlink to the user's `${CODEX_HOME:-~/.codex}/auth.json`. The runner checks only that the link target exists; it never reads, copies, or logs it (security decision: allowed, link only). No file-based login → `failed(no-agent-login)`.
 4. **Launch settings.** Agent argv `[node, <codex-acp@1.6.2 bin from the runner's own dependencies>]`; environment `CODEX_HOME`, `HOME`, `CODEX_PATH` (`--codex-path`, else `codex` on `PATH`, else `failed(codex-not-found)`), `INITIAL_AGENT_MODE=read-only`, and `CODEX_CONFIG` = `{model, model_reasoning_effort, approvals_reviewer: "user", shell_environment_policy: {exclude: ["CODEX_HOME"]}, features: {hooks: false, remote_plugin: false, memories: false, multi_agent_v2: {enabled: true}}}`. Subagents are on because `skill-review` and `skill-orchestrator` must start separate agents. The shell exclusion keeps the subject's commands from being told where its linked login lives (see Trust boundary).
@@ -332,7 +332,7 @@ sequenceDiagram
   participant G as judge-leaf agent
   participant P as batch reporter
   A->>C: pnpm dlx file:…/skill-eval-runner run --repo R --skill P --runs N
-  C->>L: loadScenarios(SkillRef)
+  C->>L: loadScenarios(SkillRef, scenario dir)
   L-->>C: loaded | invalid(errors) → exit 2, no subject runs (R22–R24)
   par N runs, fresh sessions (R35)
     C->>E: prepareEnvironment(SkillRef, revision)
@@ -364,7 +364,7 @@ sequenceDiagram
 | Edge | Status | Current | Proposed |
 |---|---|---|---|
 | entry | changed | `pnpm --dir tests/skills run test:evals` → vitest → `evals/skill-pressure.eval.ts` | `pnpm dlx file:…/skill-eval-runner run`; no test framework in the run path |
-| scenario load | changed | `scenario-cases/parse-scenario-fixture.ts` reads `tests/skills/pressure-scenarios/<plugin>/<skill>/*.md` with `expect_*` regex fields | the loader reads `<skill dir>/scenarios/*.scenario.md`; `expect_*` fields are rejected (`R45`) |
+| scenario load | changed | `scenario-cases/parse-scenario-fixture.ts` reads `tests/skills/pressure-scenarios/<plugin>/<skill>/*.md` with `expect_*` regex fields | the loader reads `tests/skills/pressure-scenarios/<owner>/<skill>/*.scenario.md`, or the `--scenarios` directory; `expect_*` fields are rejected (`R45`) |
 | subject prompt | changed | `subject-execution/render-subject-prompt.ts:24` opens with "You are running a Codex skill pressure test" and asks for a self-report JSON | the subject gets the Prompt text only; no wrapper, no self-report (`R22`, `R23`) |
 | subject start | changed | `agent-execution/acpx-codex-agent-runner.ts:286` spawns the `acpx` CLI in the real repo with the user's Codex home | `acpx/runtime` in-process, in the subject environment above; the codex-acp pin and read-only mode are kept |
 | deterministic gate | removed | `evaluators/deterministic/legacy-pressure-assertions.ts` regexes and self-report fields | none; code steps read recorded actions only |
@@ -463,8 +463,8 @@ Jev lint cards (duplicated rule, a rule losing its home, trigger overlap; `R19`)
 
 **Scenario cutover (`R45`–`R47`):**
 - Add `packages/skill-eval-runner/`.
-- Delete the pressure runner from `tests/skills`: `lib/skill-pressure-evaluation/`, `evals/`, `schemas/`, `pressure-scenarios/`, `retired-pressure-scenarios/`, and fixtures used only by them. Keep the static contract tests and their fixtures; remove from them only assertions about the deleted scenario files.
-- Rewrite the 16 moved Scenarios in the new form beside their skills.
+- Delete the pressure runner from `tests/skills`: `lib/skill-pressure-evaluation/`, `evals/`, `schemas/`, `pressure-scenarios/` (old form), `retired-pressure-scenarios/`, and fixtures used only by them. Keep the static contract tests and their fixtures; remove from them only assertions about the deleted scenario files.
+- Rewrite the 16 moved Scenarios in the new form under `tests/skills/pressure-scenarios/skill-authoring/<skill>/`.
 - Rewrite a proving set of four `shravan-dev-workflow` scenarios, one per Check shape: `manage-agents-custom-agent-boundary` (code-heavy), one `spec-design` (judge leaf), one `implementation-review` (several cards), one `discuss-pathfinding` (choice card).
 - List every other old scenario in `docs/wip/skills-authoring/2026-10-06-unconverted-scenarios.md` as not running, so none is reported as passing.
 
@@ -482,7 +482,7 @@ Jev lint cards (duplicated rule, a rule losing its home, trigger overlap; `R19`)
 | U2 | R3 no cross-names | E14 | plugin + sdw | lint `--forbid` + search | lint rules | none: static | lint finding | V2 |
 | U2 | R4 no skill handling in sdw | E14 | sdw skills | none: the check is removed | `phase-return-tokens.md` (modified) | none | none | V3 search |
 | U1, U12 | R5 old names gone | E14 | repo | search | — | none: static | search hit | V2 |
-| U3 | R6 any repo | E1 | eval CLI | `--repo`, `--skill` | `SkillRef` | none | `invalid(unknown-path)` | V1, V5 |
+| U3 | R6 any repo | E1 | eval CLI | `--repo`, `--skill`, `--scenarios` | `SkillRef` | none | `invalid(unknown-path)` | V1, V5 |
 | U10, U14 | R7 read before claiming | E1 | skill-orchestrator | step 1 | orchestrator `SKILL.md` | none: method | review rejects unread claims | V4 |
 | U10, U13 | R8 run status | E2, E3 | skill-creation (format), skill-orchestrator (updates) | Skill spec run status | `skill-creation/references/skill-spec.md` | proposed→implemented→reviewed→shipped | a run not shown shipped is never reported shipped | V4 |
 | U10, U20 | R9 independent check | E2, E11 | skill-review | reviewer agents with no authoring history | `skill-review/SKILL.md` | candidate→verified→accepted/rejected | no second agent → not reviewed | V4 |
@@ -497,7 +497,7 @@ Jev lint cards (duplicated rule, a rule losing its home, trigger overlap; `R19`)
 | U21 | R18 separate properties | E11 | skill-review | check families | `checks/*.md` | none | none | V4 |
 | U22 | R19 narrow Jev lint | E5, E11, E15 | skill lint | `lint` | lint cards; applicability by code | none | Jev unavailable → not-run | V7 |
 | U20 | R20 count ≠ verification | E11 | skill-review lead | reduction rule | `skill-review/SKILL.md` | none | none | V4 |
-| U11 | R21 beside the skill | E4 | scenario loader | discovery | `<skill>/scenarios/*.scenario.md` | none | not found → `invalid` | V5 |
+| U11 | R21 scenario directory | E4 | scenario loader | discovery, `--scenarios` override | `tests/skills/pressure-scenarios/<owner>/<skill>/*.scenario.md` | none | not found → `invalid`, exit 2 | V5 |
 | U25 | R22 organic prompt | E4, E6 | scenario loader | banned-word check | `contracts/scenario.ts` | none | `invalid(banned-word)` | V5 |
 | U6 | R23 decision tree | E5, E15 | scenario loader | tree validation | `contracts/check-tree.ts` | none | `invalid(tree)` | V5 |
 | U6, U23 | R24 no text matching | E5, E7 | scenario loader + QA evaluator | closed code-step catalog | `qa/code-steps.ts` | none | unknown step → `invalid` | V5 |
@@ -522,7 +522,7 @@ Jev lint cards (duplicated rule, a rule losing its home, trigger overlap; `R19`)
 | U32 | R43 fix owner | E13 | skill-audit | `fixOwner` field | same | none | — | V4 |
 | U33 | R44 sourced lessons | E13 | skill-audit | source and date fields | same | none | — | V4 |
 | U6, U12 | R45 new form only | E4 | scenario loader | rejects `expect_*` | `contracts/scenario.ts` | none | `invalid(legacy-form)` | V5 |
-| owner 10-04 | R46 16 + proving set | E4 | plugin + sdw | scenario files | `scenarios/` dirs | draft→active | — | V11 |
+| owner 10-04 | R46 16 + proving set | E4 | plugin + sdw | scenario files | `tests/skills/pressure-scenarios/` dirs | draft→active | — | V11 |
 | owner 10-04 | R47 unconverted listed | E4, E9 | repo | inventory doc | `docs/wip/skills-authoring/2026-10-06-unconverted-scenarios.md` | none | — | V11 |
 | acceptable evidence | R48 own done bars | E10 | done-bar assessor | `assess` over plugin skills | `DoneBarResult` | none | not evaluable until Jev lint | V11 |
 | U34, U35 | R49 own package, pnpm dlx | E14 | eval CLI | `bin` shim → Deno | `packages/skill-eval-runner/package.json` | none | — | V12 |
