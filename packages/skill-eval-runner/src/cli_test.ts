@@ -120,6 +120,40 @@ Deno.test("a missing scenario directory is invalid input that names the path it 
     `scenario directory not found: ${repo}/tests/skills/pressure-scenarios/sample-plugin/sample-skill`,
   );
 });
+Deno.test("validate, run and done-bar refuse a --scenarios directory that is or contains the skill under test", async () => {
+  const repo = await Deno.makeTempDir();
+  const { skillDir, scenarioDir } = pluginSkillPaths(repo);
+  await writeSkillWithScenario({ skillDir, scenarioDir, status: "active" });
+  const cases = [
+    ["validate", repo],
+    ["validate", `${repo}/plugins/sample-plugin/skills`],
+    ["validate", skillDir],
+    ["run", repo],
+    ["done-bar", skillDir],
+  ] as const;
+  for (const [command, holding] of cases) {
+    const cacheHome = await Deno.makeTempDir();
+    const result = await runCli([
+      command,
+      "--repo",
+      repo,
+      "--skill",
+      "plugins/sample-plugin/skills/sample-skill",
+      "--scenarios",
+      holding,
+    ], { XDG_CACHE_HOME: cacheHome });
+    assertEquals(result.code, 2, `${command} --scenarios ${holding}`);
+    assertStringIncludes(
+      result.output,
+      `--scenarios ${holding} is or contains the skill under test ${skillDir}`,
+    );
+    const resultWritten = await Deno.stat(`${cacheHome}/skill-evals`).then(
+      () => true,
+      () => false,
+    );
+    assertEquals(resultWritten, false);
+  }
+});
 Deno.test("run at a commit with a skill set outside the repository exits 2 before any Run", async () => {
   const repo = await Deno.makeTempDir();
   const outside = await Deno.makeTempDir();

@@ -68,30 +68,35 @@ Deno.test("snapshot removes scenarios only beside skills", async () => {
   );
   assertEquals(await Deno.readTextFile(`${root}/one/SKILL.md`), "skill");
 });
-Deno.test("the scenario directory in use leaves the snapshot without .skill-eval-hide while its fixture still lands", async () => {
-  const repo = await Deno.makeTempDir();
-  const scenarioDirectory =
-    "tests/skills/pressure-scenarios/plugin/sample-skill";
-  const files: Readonly<Record<string, string>> = {
-    "plugin/skills/sample-skill/SKILL.md": "skill",
-    [`${scenarioDirectory}/case.scenario.md`]: "checklist",
-    [`${scenarioDirectory}/cards.yaml`]: "cards",
-    [`${scenarioDirectory}/fixtures/brief.md`]: "fixture brief",
-    "tests/skills/contract.test.ts": "keep: only the directory in use leaves",
-  };
+const writeRepositoryFiles = async (
+  repo: string,
+  files: Readonly<Record<string, string>>,
+): Promise<void> => {
   for (const [path, content] of Object.entries(files)) {
     await Deno.mkdir(`${repo}/${path.split("/").slice(0, -1).join("/")}`, {
       recursive: true,
     });
     await Deno.writeTextFile(`${repo}/${path}`, content);
   }
+};
+Deno.test("every skill's scenarios under the default root leave the snapshot without .skill-eval-hide while a fixture still lands", async () => {
+  const repo = await Deno.makeTempDir();
+  const scenarioRoot = "tests/skills/pressure-scenarios/plugin";
+  await writeRepositoryFiles(repo, {
+    "plugin/skills/skill-a/SKILL.md": "skill a",
+    "plugin/skills/skill-b/SKILL.md": "skill b",
+    [`${scenarioRoot}/skill-a/case.scenario.md`]: "skill a checklist",
+    [`${scenarioRoot}/skill-a/fixtures/brief.md`]: "fixture brief",
+    [`${scenarioRoot}/skill-b/case.scenario.md`]: "skill b checklist",
+    "tests/skills/contract.test.ts": "keep: only scenario material leaves",
+  });
   await git(repo, "init", "-q");
   const prepared = await prepareWithFixtureLogin(() =>
     prepareEnvironment(
-      { repoRoot: repo, skillPath: "plugin/skills/sample-skill" },
+      { repoRoot: repo, skillPath: "plugin/skills/skill-a" },
       { kind: "working-tree" },
       [{ source: "fixtures/brief.md", target: "docs/brief.md" }],
-      `${repo}/${scenarioDirectory}/case.scenario.md`,
+      `${repo}/${scenarioRoot}/skill-a/case.scenario.md`,
       "codex-for-fixture",
     )
   );
@@ -100,11 +105,13 @@ Deno.test("the scenario directory in use leaves the snapshot without .skill-eval
   if (prepared.kind !== "ready") return;
   try {
     const snapshot = prepared.environment.snapshotDir;
-    assertEquals(
-      await pathExists(`${snapshot}/${scenarioDirectory}`),
-      false,
-      "the scenario directory in use reached the subject",
-    );
+    for (const skillName of ["skill-a", "skill-b"]) {
+      assertEquals(
+        await pathExists(`${snapshot}/${scenarioRoot}/${skillName}`),
+        false,
+        `${skillName}'s scenarios reached the subject`,
+      );
+    }
     assertEquals(
       await Deno.readTextFile(`${snapshot}/docs/brief.md`),
       "fixture brief",
@@ -114,7 +121,48 @@ Deno.test("the scenario directory in use leaves the snapshot without .skill-eval
       true,
     );
     assertEquals(
-      await pathExists(`${snapshot}/.agents/skills/sample-skill/SKILL.md`),
+      await pathExists(`${snapshot}/.agents/skills/skill-b/SKILL.md`),
+      true,
+    );
+  } finally {
+    await prepared.environment.dispose();
+  }
+});
+Deno.test("a --scenarios directory in use leaves the snapshot while its siblings stay and its fixture lands", async () => {
+  const repo = await Deno.makeTempDir();
+  await writeRepositoryFiles(repo, {
+    "plugin/skills/sample-skill/SKILL.md": "skill",
+    "evals/sample-skill/case.scenario.md": "checklist",
+    "evals/sample-skill/fixtures/brief.md": "fixture brief",
+    "evals/other-skill/case.scenario.md":
+      "keep: a custom root's siblings need a .skill-eval-hide entry",
+  });
+  await git(repo, "init", "-q");
+  const prepared = await prepareWithFixtureLogin(() =>
+    prepareEnvironment(
+      { repoRoot: repo, skillPath: "plugin/skills/sample-skill" },
+      { kind: "working-tree" },
+      [{ source: "fixtures/brief.md", target: "docs/brief.md" }],
+      `${repo}/evals/sample-skill/case.scenario.md`,
+      "codex-for-fixture",
+    )
+  );
+  if (prepared.kind === "failed") assertEquals(prepared.reason, "");
+  assertEquals(prepared.kind, "ready");
+  if (prepared.kind !== "ready") return;
+  try {
+    const snapshot = prepared.environment.snapshotDir;
+    assertEquals(
+      await pathExists(`${snapshot}/evals/sample-skill`),
+      false,
+      "the scenario directory in use reached the subject",
+    );
+    assertEquals(
+      await Deno.readTextFile(`${snapshot}/docs/brief.md`),
+      "fixture brief",
+    );
+    assertEquals(
+      await pathExists(`${snapshot}/evals/other-skill/case.scenario.md`),
       true,
     );
   } finally {

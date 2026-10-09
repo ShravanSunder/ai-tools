@@ -7,7 +7,7 @@ This reference owns how to run the skill eval runner and read what it returns. R
 - **Runner path.** Run it only with `pnpm --config.dlx-cache-max-age=0 dlx file:<runner-dir>`, where `<runner-dir>` is the `packages/skill-eval-runner` folder of the ai-tools checkout. Ask the user for that path once if you do not know it. Never install the runner, Deno, Codex, or anything else. `pnpm dlx` installs nothing into the repository or globally; pnpm keeps a dlx cache. The cache flag matters: without it `pnpm dlx` reuses its first copy of a local folder for a day and runs stale code.
 - **Codex.** Subjects and the judge run on `gpt-6-luna` through Codex. The runner uses the `codex` on `PATH`, or `--codex-path <path>`. The user must be logged in to Codex with a file-based login. The runner links that login into each subject's isolated Codex home; a subject Run that touches it fails as `execution-failed` (`credential-exposure`) and its observation is withheld.
 - **A normal shell.** Start the runner from a shell that is not itself inside an agent's sandbox. Inside a Codex sandbox the subjects' reads are blocked, so the runner refuses to start there; ask the user to run it, or to grant unsandboxed execution through the host's permission prompt; never bypass the sandbox yourself.
-- **Hidden material.** Each subject works in a snapshot of the repository without the scenario directory in use or any `scenarios/` folder beside a skill. List any other path that states live checks (other skills' scenario directories, eval specs, eval changelogs, the runner itself) in `.skill-eval-hide` at the repository root and the runner removes it from every snapshot; the runner package's README documents the syntax.
+- **Hidden material.** Each subject works in a snapshot of the repository without `tests/skills/pressure-scenarios/` (every skill's scenarios), the scenario directory in use, or any `scenarios/` folder beside a skill. List any other path that states live checks (other scenario directories beside a custom `--scenarios` directory, eval specs, eval changelogs, the runner itself) in `.skill-eval-hide` at the repository root and the runner removes it from every snapshot; the runner package's README documents the syntax.
 - **Cost.** Each Run is one subject session (Luna, medium effort) plus one judge session (Luna, high effort) per Check that reaches a judge leaf. Start with `--runs 1`.
 
 ## Commands
@@ -29,7 +29,7 @@ pnpm --config.dlx-cache-max-age=0 dlx file:<runner-dir> done-bar --kind fix-for-
   --scenario <id> --base <rev-before-fix> [--head <rev>]
 ```
 
-The runner reads a skill's scenarios from `tests/skills/pressure-scenarios/<owner>/<skill>/` in `--repo`, where `<owner>` is the directory holding the skill set (the plugin for `plugins/<plugin>/skills/<skill>`); `--scenarios <dir>`, relative to `--repo`, reads them from another directory. A missing scenario directory exits 2 and names the path it looked for.
+The runner reads a skill's scenarios from `tests/skills/pressure-scenarios/<owner>/<skill>/` in `--repo`, where `<owner>` is the directory holding the skill set (the plugin for `plugins/<plugin>/skills/<skill>`); `--scenarios <dir>`, relative to `--repo`, reads them from another directory. A missing scenario directory exits 2 and names the path it looked for; so does a `--scenarios` directory that is or contains the skill under test.
 
 `--rev working-tree` (the default) includes uncommitted edits, so you can prove a change before committing it. The subject runs in a copy; nothing it does reaches the repository.
 

@@ -1,7 +1,10 @@
 import { join } from "node:path";
 import { mkdir } from "node:fs/promises";
 import { loadScenarios } from "./scenarios/parse-scenario.ts";
-import { resolveScenarioDirectory } from "./scenarios/scenario-directory.ts";
+import {
+  resolveScenarioDirectory,
+  scenarioDirectoryHoldingSkillError,
+} from "./scenarios/scenario-directory.ts";
 import {
   checkAgentPrerequisites,
   loadSnapshotHidePatterns,
@@ -224,9 +227,19 @@ async function main(): Promise<number> {
     return result.findings.length ? 1 : 0;
   }
   const skill = repoSkill();
+  const scenarioOverride = value("--scenarios", false);
+  const scenarioDirectory = resolveScenarioDirectory(skill, scenarioOverride);
+  // Invalid input for validate, run and done-bar alike, before any scenario loads or Run starts.
+  const holdingSkillError = scenarioOverride
+    ? await scenarioDirectoryHoldingSkillError(skill, scenarioDirectory)
+    : undefined;
+  if (holdingSkillError) {
+    printJson({ kind: "invalid", errors: [holdingSkillError] });
+    return 2;
+  }
   const loaded = await loadScenarios(
     skill,
-    resolveScenarioDirectory(skill, value("--scenarios", false)),
+    scenarioDirectory,
     scenarioIds.length > 0 ? scenarioIds : undefined,
   );
   if (command === "validate") {

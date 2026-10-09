@@ -4,6 +4,7 @@ import { copyFile, mkdir, mkdtemp, symlink } from "node:fs/promises";
 import { createRequire } from "node:module";
 import type { Revision, SkillRef } from "../contracts/common.ts";
 import type { ScenarioFixture } from "../contracts/scenario.ts";
+import { defaultScenarioRoot } from "../scenarios/scenario-directory.ts";
 import {
   hiddenSkillPath,
   readSnapshotHideList,
@@ -88,14 +89,26 @@ export async function removeScenarioDirectoriesFromSnapshot(
     }
   }
 }
-// The scenario directory in use holds the checklist, so it leaves every snapshot wherever it lives,
-// whether or not `.skill-eval-hide` names it. A directory outside the repository is not in the
-// snapshot, and one missing at the run's revision has nothing to remove.
-export async function removeScenarioDirectoryInUseFromSnapshot(
+const removeFromSnapshot = (
+  snapshot: string,
+  relativePath: string,
+): Promise<void> =>
+  Deno.remove(join(snapshot, relativePath), { recursive: true }).catch(
+    (error) => {
+      if (!(error instanceof Deno.errors.NotFound)) throw error;
+    },
+  );
+// Scenario material states the checks, so it leaves every snapshot whether or not
+// `.skill-eval-hide` names it: the whole default scenario root (every skill's scenarios), and the
+// scenario directory in use when `--scenarios` puts it elsewhere. A directory outside the
+// repository is not in the snapshot, and one missing at the run's revision has nothing to remove.
+export async function removeScenarioMaterialFromSnapshot(
   snapshot: string,
   repoRoot: string,
-  scenarioDirectory: string,
+  scenarioDirectory: string | undefined,
 ): Promise<void> {
+  await removeFromSnapshot(snapshot, defaultScenarioRoot);
+  if (!scenarioDirectory) return;
   const relativeScenarioDirectory = relative(
     await realOrResolvedPath(repoRoot),
     await realOrResolvedPath(scenarioDirectory),
@@ -103,12 +116,9 @@ export async function removeScenarioDirectoryInUseFromSnapshot(
   const outsideRepo = isAbsolute(relativeScenarioDirectory) ||
     relativeScenarioDirectory === ".." ||
     relativeScenarioDirectory.startsWith("../");
-  if (outsideRepo) return;
-  await Deno.remove(join(snapshot, relativeScenarioDirectory), {
-    recursive: true,
-  }).catch((error) => {
-    if (!(error instanceof Deno.errors.NotFound)) throw error;
-  });
+  if (!outsideRepo) {
+    await removeFromSnapshot(snapshot, relativeScenarioDirectory);
+  }
 }
 const applyFixtures = async (
   scenarioDirectory: string,
@@ -350,13 +360,11 @@ export async function prepareEnvironment(
     // A scenario's directory is the folder holding its file; fixtures are read from it on the host.
     const scenarioDirectory = scenarioPath ? dirname(scenarioPath) : undefined;
     await removeScenarioDirectoriesFromSnapshot(snapshot);
-    if (scenarioDirectory) {
-      await removeScenarioDirectoryInUseFromSnapshot(
-        snapshot,
-        skill.repoRoot,
-        scenarioDirectory,
-      );
-    }
+    await removeScenarioMaterialFromSnapshot(
+      snapshot,
+      skill.repoRoot,
+      scenarioDirectory,
+    );
     await removeHiddenPathsFromSnapshot(snapshot, hidePatterns.patterns);
     // The skill set comes from the snapshot, so it is the run's revision; fixtures land after, so they never join it.
     // A skill set that already lives at the repository's .agents/skills is in place in the snapshot.
